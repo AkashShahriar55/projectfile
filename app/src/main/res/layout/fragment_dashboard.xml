@@ -97,7 +97,7 @@
                     android:layout_height="match_parent"
                     android:layout_below="@+id/revbar"
                     android:id="@+id/revBarchart"
-                    android:layout_margin="5dp"
+                    android:layout_margin="4dp"
                     >
 
                 </com.github.mikephil.charting.charts.BarChart>
