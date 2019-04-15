@@ -47,7 +47,7 @@ public class serviceAdapter extends PagerAdapter {
         serviceTitle.setText(services.get(position).getLocation());
 
         container.addView(view,0);
-        return super.instantiateItem(container, position);
+        return view;
     }
 
     @Override

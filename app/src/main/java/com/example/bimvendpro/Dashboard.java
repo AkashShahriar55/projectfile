@@ -3,6 +3,8 @@ package com.example.bimvendpro;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -38,8 +40,9 @@ public class Dashboard extends Fragment {
         // Required empty public constructor
     }
 
+
     ViewPager viewPager;
-    Adapter adapter;
+    serviceAdapter adapter;
     List<serviceNotificationItem> services;
 
     /**
@@ -68,12 +71,24 @@ public class Dashboard extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
+
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+
         services = new ArrayList<>();
         services.add(new serviceNotificationItem("location 1"));
         services.add(new serviceNotificationItem("location 2"));
         services.add(new serviceNotificationItem("location 3"));
         services.add(new serviceNotificationItem("location 4"));
 
+        adapter = new serviceAdapter(services,context);
+
+
+        super.onAttach(context);
     }
 
     @Override
@@ -90,7 +105,12 @@ public class Dashboard extends Fragment {
         }
     }
 
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        viewPager =  getView().findViewById(R.id.viewPager);
+        viewPager.setAdapter(adapter);
+        super.onViewCreated(view, savedInstanceState);
+    }
 
     @Override
     public void onDetach() {

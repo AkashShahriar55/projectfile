@@ -1,21 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Dashboard"
-    android:padding="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
 
-    <android.support.v4.view.ViewPager
-        android:foregroundGravity="center"
-        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_centerInParent="true"
-        android:overScrollMode="never"
-        android:clipToPadding="false"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
 
-    </android.support.v4.view.ViewPager>
+        tools:context=".Dashboard">
 
-</RelativeLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:foregroundGravity="top"
+            android:overScrollMode="never">
+
+        </android.support.v4.view.ViewPager>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/topproducts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            android:layout_below="@+id/viewPager"
+            android:layout_margin="20dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/colorBar">
+
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/revenue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            android:layout_below="@+id/topproducts"
+            android:layout_margin="20dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/colorBar">
+
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+</ScrollView>
