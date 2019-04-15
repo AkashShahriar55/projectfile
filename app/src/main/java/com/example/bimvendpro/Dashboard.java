@@ -4,9 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -33,6 +38,10 @@ public class Dashboard extends Fragment {
         // Required empty public constructor
     }
 
+    ViewPager viewPager;
+    Adapter adapter;
+    List<serviceNotificationItem> services;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -58,6 +67,13 @@ public class Dashboard extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        services = new ArrayList<>();
+        services.add(new serviceNotificationItem("location 1"));
+        services.add(new serviceNotificationItem("location 2"));
+        services.add(new serviceNotificationItem("location 3"));
+        services.add(new serviceNotificationItem("location 4"));
+
     }
 
     @Override
