@@ -12,6 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +119,49 @@ public class Dashboard extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewPager =  getView().findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
+
+        createPieChart(view);
+        createBarChart(view);
+
+
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void createBarChart(View view) {
+        List<BarEntry> barEntries = new ArrayList<>();
+
+        barEntries.add(new BarEntry(0f, 30f));
+        barEntries.add(new BarEntry(1f, 80f));
+        barEntries.add(new BarEntry(2f, 60f));
+        barEntries.add(new BarEntry(3f, 50f));
+        barEntries.add(new BarEntry(4f, 70f));
+
+        BarDataSet barDataSet = new BarDataSet(barEntries,"Revenue (Last 5 months)");
+        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        BarData barData = new BarData(barDataSet);
+
+        BarChart barChart = (BarChart)view.findViewById(R.id.revBarchart);
+        barChart.setData(barData);
+        barChart.invalidate();
+
+    }
+
+    private void createPieChart( View view) {
+        List<PieEntry> pieEntries = new ArrayList<>();
+
+        pieEntries.add(new PieEntry(20f,"Sneckers"));
+        pieEntries.add(new PieEntry(28f,"Twix"));
+        pieEntries.add(new PieEntry(42f,"Coke"));
+        pieEntries.add(new PieEntry(10f,"Sprite"));
+
+        PieDataSet pieDataSet = new PieDataSet(pieEntries,"Top Products");
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        PieData pieData = new PieData(pieDataSet);
+
+
+        PieChart pieChart = (PieChart) view.findViewById(R.id.pieChart);
+        pieChart.setData(pieData);
+        pieChart.invalidate();
     }
 
     @Override
