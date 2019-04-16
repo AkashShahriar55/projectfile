@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Dashboard()).commit();
+        toolbar.setTitle("Dashboard");
     }
 
     @Override
@@ -83,6 +86,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_machines) {
 
         } else if (id == R.id.nav_location) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Location()).commit();
+            toolbar.setTitle("Locations");
 
         } else if (id == R.id.nav_routes) {
 
