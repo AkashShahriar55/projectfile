@@ -1,23 +1,33 @@
 package com.example.bimvendpro;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.logging.Handler;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Inventory.OnFragmentInteractionListener} interface
+ * {@link InventoryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Inventory#newInstance} factory method to
+ * Use the {@link InventoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Inventory extends Fragment {
+public class InventoryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -26,11 +36,13 @@ public class Inventory extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button btn;
 
     private OnFragmentInteractionListener mListener;
 
-    public Inventory() {
+    public InventoryFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -39,11 +51,11 @@ public class Inventory extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Inventory.
+     * @return A new instance of fragment InventoryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Inventory newInstance(String param1, String param2) {
-        Inventory fragment = new Inventory();
+    public static InventoryFragment newInstance(String param1, String param2) {
+        InventoryFragment fragment = new InventoryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -57,7 +69,21 @@ public class Inventory extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+            }
+
+
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        btn=getView().findViewById(R.id.addDataBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeDataToInventory(new InventoryItem("XCO","Tareq","Human",10,20,30,40));
+
+            }
+        });
     }
 
     @Override
@@ -73,6 +99,8 @@ public class Inventory extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+
 
 
 
@@ -95,5 +123,20 @@ public class Inventory extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+
+
+    public void writeDataToInventory(InventoryItem item) {
+        FirebaseUtilClass.getDatabaseReference().child("Inventory").setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                Toast.makeText(InventoryFragment.this.getContext(),"Updated",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(InventoryFragment.this.getContext(),task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
