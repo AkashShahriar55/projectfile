@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,7 +33,7 @@ public class InventoryFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-    private Button addItemButton;
+    private ImageView addImageView;
 
 
     private RecyclerView inventoryItemRecyclerView;
@@ -73,17 +74,17 @@ public class InventoryFragment extends Fragment {
         initializeAddItemButton();
         initializeRecyclerView();
 
-
+        readDataFromFirebase();
 
     }
 
 
     private void initializeAddItemButton() {
-        addItemButton = getView().findViewById(R.id.addDataBtn);
-        addItemButton.setOnClickListener(new View.OnClickListener() {
+        addImageView = getView().findViewById(R.id.addImageView);
+        addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               readDataFromFirebase();
+              // writeDataToFirebase();
             }
         });
     }
@@ -138,23 +139,5 @@ public class InventoryFragment extends Fragment {
         });
     }
 
-    public void writeDataToFirebase(final InventoryItem item) {
-        FirebaseUtilClass.getDatabaseReference().child("Inventory").setValue(item.getCode()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUtilClass.getDatabaseReference().child("Inventory").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
+
 }

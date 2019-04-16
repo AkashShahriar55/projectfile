@@ -9,7 +9,6 @@ public class InventoryItem {
     private int inMachine;
     private int unitPerCase;
     private float lastCost;
-    private float averageCost;
     //private InventoryItemHistory inventoryItemHistory;
 
 
@@ -22,12 +21,11 @@ public class InventoryItem {
         this.inMachine=inMachine;
         this.unitPerCase=unitPerCase;
         this.lastCost=0;
-        this.averageCost=0;
     }
     public InventoryItem(){
 
     }
-    public InventoryItem(String code,String productName,String productType,int inStock,int inWarehouse,int inMachine,int unitPerCase,float lastCost,float averageCost){
+    public InventoryItem(String code,String productName,String productType,int inStock,int inWarehouse,int inMachine,int unitPerCase,float lastCost){
         this.code=code;
         this.productName=productName;
         this.productType=productType;
@@ -36,7 +34,6 @@ public class InventoryItem {
         this.inMachine=inMachine;
         this.unitPerCase=unitPerCase;
         this.lastCost=lastCost;
-        this.averageCost=averageCost;
     }
     public String getCode() {
         return code;
@@ -102,13 +99,6 @@ public class InventoryItem {
         this.lastCost = lastCost;
     }
 
-    public float getAverageCost() {
-        return averageCost;
-    }
-
-    public void setAverageCost(float averageCost) {
-        this.averageCost = averageCost;
-    }
 /*
     public InventoryItemHistory getInventoryItemHistory() {
         return inventoryItemHistory;

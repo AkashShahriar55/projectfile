@@ -36,6 +36,7 @@
 
         <ImageView
             android:layout_width="30dp"
+            android:id="@+id/addImageView"
             android:layout_height="match_parent"
             android:src="@drawable/ic_add"
             android:tint="@color/colorWhite"
@@ -44,7 +45,10 @@
 
     </LinearLayout>
 
-    <include layout="@layout/inventory_item_layout"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/inventory_item_container_recyclerview"
+        android:layout_height="match_parent"/>
 
 
 </LinearLayout>

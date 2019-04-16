@@ -16,9 +16,14 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
 
         public InventoryViewHolder(View view) {
             super(view);
-           // title = (TextView) view.findViewById(R.id.title);
-        //    genre = (TextView) view.findViewById(R.id.genre);
-          //  year = (TextView) view.findViewById(R.id.year);
+            codeTextView=view.findViewById(R.id.inv_code);
+            inMachineTextView=view.findViewById(R.id.inv_machines);
+            inStock=view.findViewById(R.id.inv_stock);
+            inWareHouseTextView=view.findViewById(R.id.inv_warehouse);
+            lastCostTextView=view.findViewById(R.id.inv_lastcost);
+            productNameTextView=view.findViewById(R.id.inv_name);
+            //productTypeTextView=view.findViewById(R.id.inv);
+            unitPerCaseTextView=view.findViewById(R.id.inv_unitpercase);
         }
     }
 
@@ -44,10 +49,12 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
         holder.inWareHouseTextView.setText(String.valueOf(item.getInWarehouse()));
         holder.lastCostTextView.setText(String.valueOf(item.getLastCost()));
         holder.productNameTextView.setText(item.getProductName());
-        holder.productTypeTextView.setText(item.getProductType());
+       // holder.productTypeTextView.setText(item.getProductType());
         holder.unitPerCaseTextView.setText(String.valueOf(item.getUnitPerCase()));
 
     }
+
+
 
     @Override
     public int getItemCount() {
