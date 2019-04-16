@@ -76,14 +76,14 @@ public class InventoryFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        /*btn=getView().findViewById(R.id.addDataBtn);
+        btn=getView().findViewById(R.id.addDataBtn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 writeDataToInventory(new InventoryItem("XCO","Tareq","Human",10,20,30,40));
 
             }
-        });*/
+        });
     }
 
     @Override
