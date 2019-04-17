@@ -10,6 +10,7 @@ import java.util.List;
 
 public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdapter.InventoryViewHolder>{
     private List<InventoryItem> itemList;
+
     public class InventoryViewHolder extends RecyclerView.ViewHolder {
         private TextView codeTextView,inMachineTextView,inStock,inWareHouseTextView,lastCostTextView,productNameTextView,productTypeTextView,unitPerCaseTextView;
 

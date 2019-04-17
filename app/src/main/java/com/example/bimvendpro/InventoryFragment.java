@@ -80,7 +80,7 @@ public class InventoryFragment extends Fragment {
 
 
     private void initializeAddItemButton() {
-        addImageView = getView().findViewById(R.id.addImageView);
+        addImageView = getView().findViewById(R.id.invaddImageView);
         addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +124,8 @@ public class InventoryFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+
+
 
                     itemList.add(dsp.getValue(InventoryItem.class)); //add result into array list
                 }

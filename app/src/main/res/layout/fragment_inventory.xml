@@ -9,9 +9,9 @@
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:background="@color/colorBar"
-        android:padding="15dp">
+        android:padding="10dp">
 
         <EditText
             android:layout_width="wrap_content"
@@ -27,7 +27,9 @@
             android:src="@drawable/ic_search"
             android:tint="@color/colorWhite"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
         <LinearLayout
             android:layout_width="1dp"
             android:layout_height="match_parent"
@@ -36,11 +38,13 @@
 
         <ImageView
             android:layout_width="30dp"
-            android:id="@+id/addImageView"
+            android:id="@+id/invaddImageView"
             android:layout_height="match_parent"
             android:src="@drawable/ic_add"
             android:tint="@color/colorWhite"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
 
     </LinearLayout>
