@@ -9,4 +9,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorCardBack">#660099</color>
     <color name="colorBar">#6600CC</color>
+    <color name="colorLine">#A9333333</color>
 </resources>
