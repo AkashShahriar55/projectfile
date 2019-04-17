@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+
+    <ScrollView
+        android:id="@+id/addItemScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:scrollbars="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                style="@style/addItemDialogueTextView"
+                android:text="Code" />
+
+            <EditText
+                android:id="@+id/codeEditText"
+                style="@style/addItemDialogueEditTextView"
+                android:hint="CX5067" />
+
+            <TextView
+                style="@style/addItemDialogueTextView"
+                android:text="Product Name" />
+
+            <EditText
+                android:id="@+id/productNameEditTExt"
+                style="@style/addItemDialogueEditTextView"
+                android:hint="Sneakers" />
+
+            <TextView
+                style="@style/addItemDialogueTextView"
+                android:text="Product Type" />
+
+            <Spinner
+                android:id="@+id/productTypeSpinner"
+                style="@style/addItemDialogueSpinner"
+                android:entries="@array/food_type" />
+
+            <TextView
+                style="@style/addItemDialogueTextView"
+                android:text="In stock" />
+
+            <EditText
+                android:id="@+id/inStockEditText"
+                style="@style/addItemDialogueEditTextView"
+                android:hint="60" />
+
+            <TextView
+                style="@style/addItemDialogueTextView"
+                android:text="In Warehouse" />
+
+            <EditText
+                android:id="@+id/inWarehouseEditText"
+                style="@style/addItemDialogueEditTextView"
+                android:hint="100" />
+
+            <TextView
+                style="@style/addItemDialogueTextView"
+                android:text="In Machine" />
+
+            <EditText
+                android:id="@+id/inMachineEditText"
+                style="@style/addItemDialogueEditTextView"
+                android:hint="10" />
+
+            <TextView
+                style="@style/addItemDialogueTextView"
+                android:text="Unit per case" />
+
+            <EditText
+                android:id="@+id/unitPerCaseEditText"
+                style="@style/addItemDialogueEditTextView"
+                android:hint="24" />
+
+            <TextView
+                style="@style/addItemDialogueTextView"
+                android:text="Last Cost" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/lastCostEditText"
+                    style="@style/addItemDialogueEditTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_weight=".5"
+                    android:hint="5.25" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelButton"
+            style="@style/addItemDialogueButton"
+            android:text="Cancel" />
+        <Button
+            android:id="@+id/deleteButton"
+            style="@style/addItemDialogueButton"
+            android:text="Delete"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/addButton"
+                style="@style/addItemDialogueButton"
+                android:text="Add" />
+            <ProgressBar
+                android:layout_width="25dp"
+                android:id="@+id/loadingProgressBar"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:translationZ="2dp"
+                android:layout_marginLeft="6dp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -12,29 +12,32 @@ public class InventoryItem {
     //private InventoryItemHistory inventoryItemHistory;
 
 
-    public InventoryItem(String code,String productName,String productType,int inStock,int inWarehouse,int inMachine,int unitPerCase){
-        this.code=code;
-        this.productName=productName;
-        this.productType=productType;
-        this.inStock=inStock;
-        this.inWarehouse=inWarehouse;
-        this.inMachine=inMachine;
-        this.unitPerCase=unitPerCase;
-        this.lastCost=0;
+    public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, int unitPerCase) {
+        this.code = code;
+        this.productName = productName;
+        this.productType = productType;
+        this.inStock = inStock;
+        this.inWarehouse = inWarehouse;
+        this.inMachine = inMachine;
+        this.unitPerCase = unitPerCase;
+        this.lastCost = 0;
     }
-    public InventoryItem(){
+
+    public InventoryItem() {
 
     }
-    public InventoryItem(String code,String productName,String productType,int inStock,int inWarehouse,int inMachine,int unitPerCase,float lastCost){
-        this.code=code;
-        this.productName=productName;
-        this.productType=productType;
-        this.inStock=inStock;
-        this.inWarehouse=inWarehouse;
-        this.inMachine=inMachine;
-        this.unitPerCase=unitPerCase;
-        this.lastCost=lastCost;
+
+    public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, int unitPerCase, float lastCost) {
+        this.code = code;
+        this.productName = productName;
+        this.productType = productType;
+        this.inStock = inStock;
+        this.inWarehouse = inWarehouse;
+        this.inMachine = inMachine;
+        this.unitPerCase = unitPerCase;
+        this.lastCost = lastCost;
     }
+
     public String getCode() {
         return code;
     }
