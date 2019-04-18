@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -74,6 +75,8 @@ public class InventoryFragment extends Fragment {
         initializeAddItemButton();
         initializeRecyclerView();
 
+
+
         readDataFromFirebase();
 
     }
@@ -84,7 +87,7 @@ public class InventoryFragment extends Fragment {
         addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              // writeDataToFirebase();
+              new AddItemDialogue(getContext()).show();
             }
         });
     }
@@ -92,7 +95,7 @@ public class InventoryFragment extends Fragment {
     private void initializeRecyclerView() {
         inventoryItemRecyclerView = getView().findViewById(R.id.inventory_item_container_recyclerview);
 
-        mAdapter = new InventoryItemAdapter(itemList);
+        mAdapter = new InventoryItemAdapter(itemList, getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         inventoryItemRecyclerView.setLayoutManager(mLayoutManager);
         inventoryItemRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -119,7 +122,7 @@ public class InventoryFragment extends Fragment {
     }
 
     public void readDataFromFirebase() {
-        FirebaseUtilClass.getDatabaseReference().child("Inventory").orderByChild("productName").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").orderByChild("productName").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

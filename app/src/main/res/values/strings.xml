@@ -9,5 +9,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_add_location">Map</string>
+
+    <string-array name="food_type">
+        <item>Food</item>
+        <item>Drinks</item>
+    </string-array>
 </resources>
