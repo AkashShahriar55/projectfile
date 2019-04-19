@@ -14,4 +14,20 @@
         <item>Food</item>
         <item>Drinks</item>
     </string-array>
+    <string name="title_activity_add_location">Add Location</string>
+    <string-array name="commission">
+        <item>None</item>
+        <item>% of Gross Sales</item>
+        <item>% of Gross Profit</item>
+    </string-array>
+    <string-array name="days">
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+    </string-array>
+    <string name="title_activity_view_edit_location">Map</string>
 </resources>

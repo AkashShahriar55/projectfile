@@ -1,11 +1,12 @@
 package com.example.bimvendpro;
 
-public class LicationItem {
+import java.io.Serializable;
+
+public class LicationItem implements Serializable {
 
     //basic info
     private String status;
     private String code;
-    private String name;
     private String Address;
     private String city;
     private String state;
@@ -22,25 +23,77 @@ public class LicationItem {
 
     //commission and tax
     private String commissionType;
-    private int commission;
-    private String taxType;
-    private  int tax;
+    private float commission;
+    private  float tax;
+    private String notes;
 
     //working hour
     private String workingHour;
 
+    public float getCommission() {
+        return commission;
+    }
+
+    public float getTax() {
+        return tax;
+    }
+
     //installed machine
-    private String machineCode;
     private int noOfMachines;
 
     //service pattern
     private int intervalDay;
     private String theDay;
 
-    public LicationItem(String status , String code, String name, String address, String city, String state, String zip, String country, String location, String contactName, String contactPhone, String contactEmail) {
-        this.status = "Active";
+    private String lastVisit;
+    private String nextVisit;
+
+    private double longitude;
+    private double latitude;
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setCommission(float commission) {
+        this.commission = commission;
+    }
+
+    public void setTax(float tax) {
+        this.tax = tax;
+    }
+
+    public String getLastVisit() {
+        return lastVisit;
+    }
+
+    public void setLastVisit(String lastVisit) {
+        this.lastVisit = lastVisit;
+    }
+
+    public String getNextVisit() {
+        return nextVisit;
+    }
+
+    public void setNextVisit(String nextVisit) {
+        this.nextVisit = nextVisit;
+    }
+
+    public LicationItem(String status, String code, String address, String city, String state, String zip, String country, String location, String contactName, String contactPhone, String contactEmail, String commissionType, float commission, float tax, String workingHour, int intervalDay, String theDay,double longitude,double latitude,String notes) {
+        this.status = status;
         this.code = code;
-        this.name = name;
         Address = address;
         this.city = city;
         this.state = state;
@@ -50,6 +103,30 @@ public class LicationItem {
         this.contactName = contactName;
         this.contactPhone = contactPhone;
         this.contactEmail = contactEmail;
+        this.commissionType = commissionType;
+        this.commission = commission;
+        this.tax = tax;
+        this.workingHour = workingHour;
+        this.intervalDay = intervalDay;
+        this.theDay = theDay;
+        this.lastVisit = "00-00-00";
+        this.nextVisit = "00-00-00";
+        this.noOfMachines = 0;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.notes = notes;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public LicationItem() {
+
     }
 
     public String getStatus() {
@@ -68,13 +145,6 @@ public class LicationItem {
         this.code = code;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getAddress() {
         return Address;
@@ -156,29 +226,6 @@ public class LicationItem {
         this.commissionType = commissionType;
     }
 
-    public int getCommission() {
-        return commission;
-    }
-
-    public void setCommission(int commission) {
-        this.commission = commission;
-    }
-
-    public String getTaxType() {
-        return taxType;
-    }
-
-    public void setTaxType(String taxType) {
-        this.taxType = taxType;
-    }
-
-    public int getTax() {
-        return tax;
-    }
-
-    public void setTax(int tax) {
-        this.tax = tax;
-    }
 
     public String getWorkingHour() {
         return workingHour;
@@ -188,13 +235,6 @@ public class LicationItem {
         this.workingHour = workingHour;
     }
 
-    public String getMachineCode() {
-        return machineCode;
-    }
-
-    public void setMachineCode(String machineCode) {
-        this.machineCode = machineCode;
-    }
 
     public int getNoOfMachines() {
         return noOfMachines;
