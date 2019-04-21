@@ -9,15 +9,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -75,8 +71,6 @@ public class InventoryFragment extends Fragment {
         initializeAddItemButton();
         initializeRecyclerView();
 
-
-
         readDataFromFirebase();
 
     }
@@ -87,7 +81,8 @@ public class InventoryFragment extends Fragment {
         addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              new AddItemDialogue(getContext()).show();
+                new InventoryItemAddDialogue(getContext(),mAdapter).show();
+
             }
         });
     }
@@ -139,7 +134,7 @@ public class InventoryFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(),databaseError.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

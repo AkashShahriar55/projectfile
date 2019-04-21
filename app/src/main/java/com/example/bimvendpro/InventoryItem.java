@@ -9,7 +9,7 @@ public class InventoryItem {
     private int inMachine;
     private int unitPerCase;
     private float lastCost;
-    //private InventoryItemHistory inventoryItemHistory;
+    //private InventoryItemHistoryProduct inventoryItemHistory;
 
 
     public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, int unitPerCase) {
@@ -103,11 +103,11 @@ public class InventoryItem {
     }
 
 /*
-    public InventoryItemHistory getInventoryItemHistory() {
+    public InventoryItemHistoryProduct getInventoryItemHistory() {
         return inventoryItemHistory;
     }
 
-    public void setInventoryItemHistory(InventoryItemHistory inventoryItemHistory) {
+    public void setInventoryItemHistory(InventoryItemHistoryProduct inventoryItemHistory) {
         this.inventoryItemHistory = inventoryItemHistory;
     }
     */

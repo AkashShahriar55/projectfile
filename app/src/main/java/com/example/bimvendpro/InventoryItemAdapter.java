@@ -1,11 +1,14 @@
 package com.example.bimvendpro;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
@@ -69,10 +72,31 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
         holder.parent.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                new AddItemDialogue(context,item).show();
+
+                String[] colors = {"View History", "Edit"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(item.getProductName());
+                builder.setItems(colors, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                new InventoryItemHistoryDialogue(context,item.getCode()).show();
+                                break;
+                            case 1:
+                                new InventoryItemAddDialogue(context,item,InventoryItemAdapter.this).show();
+
+                                break;
+                        }
+                    }
+                });
+                builder.show();
+
                 return false;
             }
         });
+
         holder.setItem(item);
     }
 

@@ -1,202 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dataContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:id="@+id/dataContainer"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:orientation="vertical"
             android:layout_weight="2"
+            android:orientation="vertical"
             android:padding="10dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="["
+
+                    android:textColor="@color/green"
+                    android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/inv_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:text="code"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:layout_weight="1"/>
+
+                    android:textColor="@color/green"
+                    android:textSize="16sp" />
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="]"
+
+                    android:textColor="@color/green"
+                    android:textSize="16sp" />
                 <TextView
                     android:id="@+id/inv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
                     android:text="Name"
+                    android:textStyle="bold"
                     android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:layout_weight="4"/>
+                    android:textSize="16sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                >
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                   android:paddingRight="10dp"
                     android:text="Type:"
-                    android:textSize="16sp"
-                    android:layout_weight="1"
-                    android:textColor="#000000"/>
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/inv_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Type"
-                    android:textSize="16sp"
-                    android:layout_weight="1"
+                    android:textStyle="bold"
                     android:gravity="center"
-                    android:textColor="@color/colorBlue"/>
+                    android:text="Type"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="14sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                >
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
                     android:text="Unit Per Case:"
                     android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:layout_weight="1"/>
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/inv_unitpercase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="0"
                     android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:layout_weight="1"
-                    />
+                    android:textSize="14sp" />
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                >
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingRight="10dp"
                     android:text="Last Cost:"
                     android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:layout_weight="1"/>
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/inv_lastcost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="00.00"
+                    android:textStyle="bold"
                     android:gravity="center"
+                    android:text="00.00"
                     android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:layout_weight="1"/>
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+
+            android:gravity="right">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1">
+
+                android:orientation="vertical">
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_stock"
-                    android:tint="@color/colorBar"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    />
+
+                    android:src="@drawable/ic_stock"
+                    android:tint="@color/colorBar" />
+
                 <TextView
                     android:id="@+id/inv_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="000"
-                    android:textSize="22sp"
                     android:layout_gravity="center"
+                    android:textColor="#000000"
                     android:gravity="center"
-                    android:layout_weight="1"/>
+                    android:text="000"
+                    android:textSize="19sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_warehouse"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_gravity="center"
-                    android:tint="@color/colorBar"
-                    android:layout_weight="1"/>
+
+                    android:src="@drawable/ic_warehouse"
+                    android:tint="@color/colorBar" />
+
                 <TextView
                     android:id="@+id/inv_warehouse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="000"
-                    android:textSize="22sp"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"/>
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:text="000"
+                    android:textSize="19sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_machines"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:tint="@color/colorBar"/>
+
+                    android:src="@drawable/ic_machines"
+                    android:tint="@color/colorBar" />
+
                 <TextView
                     android:id="@+id/inv_machines"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="000"
-                    android:textSize="22sp"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"/>
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:text="000"
+                    android:textSize="19sp" />
             </LinearLayout>
 
         </LinearLayout>
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorLine"
-        >
+        android:background="@color/colorLine">
 
     </LinearLayout>
 </LinearLayout>

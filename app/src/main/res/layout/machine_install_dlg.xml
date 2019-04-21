@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select location" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <ProgressBar
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/spinnerLoading"
+            android:visibility="gone"/>
+        <Spinner
+            android:id="@+id/machineTypeSpinner"
+
+            style="@style/addItemDialogueSpinner" />
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Installation date" />
+
+    <EditText
+        android:id="@+id/installDateEditText"
+        style="@style/addItemDialogueEditTextView"
+        android:inputType="none" />
+
+    <CalendarView
+        android:id="@+id/installDateCalender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/cancelButton"
+            style="@style/addItemDialogueButton"
+            android:text="Cancel" />
+        <Button
+            android:id="@+id/installButton"
+            style="@style/addItemDialogueButton"
+            android:text="Install" />
+    </LinearLayout>
+
+</LinearLayout>

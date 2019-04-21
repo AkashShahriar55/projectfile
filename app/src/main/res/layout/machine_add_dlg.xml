@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-              >
+                >
 
 
                 <TextView
@@ -33,81 +33,31 @@
 
                 <TextView
                     style="@style/addItemDialogueTextView"
-                    android:text="Product Name" />
+                    android:text="Machine Name" />
 
                 <EditText
-                    android:id="@+id/productNameEditTExt"
+                    android:id="@+id/machineNameEditTExt"
                     style="@style/addItemDialogueEditTextView"
-                    android:hint="Sneakers" />
+                    android:hint="CokeMachine" />
 
                 <TextView
                     style="@style/addItemDialogueTextView"
-                    android:text="Product Type" />
+                    android:text="Machine Type" />
 
                 <Spinner
-                    android:id="@+id/productTypeSpinner"
+                    android:id="@+id/machineTypeSpinner"
                     style="@style/addItemDialogueSpinner"
-                    android:entries="@array/food_type" />
+                    android:entries="@array/machine_type" />
 
                 <TextView
                     style="@style/addItemDialogueTextView"
-                    android:text="In stock" />
+                    android:text="Model" />
 
                 <EditText
-                    android:id="@+id/inStockEditText"
+                    android:id="@+id/modelEditText"
                     style="@style/addItemDialogueEditTextView"
-                    android:hint="60" />
+                    android:hint="Small" />
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="In Warehouse" />
-
-                <EditText
-                    android:id="@+id/inWarehouseEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="100" />
-
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="In Machine" />
-
-                <EditText
-                    android:id="@+id/inMachineEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="10" />
-
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Unit per case" />
-
-                <EditText
-                    android:id="@+id/unitPerCaseEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="24" />
-
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Last Cost" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/lastCostEditText"
-                        style="@style/addItemDialogueEditTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_weight=".5"
-                        android:hint="5.25" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="$" />
-                </LinearLayout>
-
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,7 +82,8 @@
                     <Button
                         android:id="@+id/addButton"
                         style="@style/addItemDialogueButton"
-                        android:text="Add" />
+                        android:text="Add"
+                        android:paddingLeft="20dp"/>
 
                     <ProgressBar
                         android:id="@+id/loadingProgressBar"
@@ -146,6 +97,7 @@
                 </RelativeLayout>
 
             </LinearLayout>
+        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
