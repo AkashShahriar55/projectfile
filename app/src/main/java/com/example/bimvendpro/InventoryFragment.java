@@ -77,7 +77,7 @@ public class InventoryFragment extends Fragment {
 
 
     private void initializeAddItemButton() {
-        addImageView = getView().findViewById(R.id.invaddImageView);
+        addImageView = getView().findViewById(R.id.addImageView);
         addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

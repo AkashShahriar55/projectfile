@@ -35,7 +35,7 @@ public class MachineInstallDialogue extends Dialog {
         super(context);
         this.item=item;
     }
-
+//todo: partial complete
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,11 +91,11 @@ public class MachineInstallDialogue extends Dialog {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-
-                    itemList.add(dsp.getValue(Machine.class)); //add result into array list
+                    //TODO: get location class & add them to spinner
+                 //   itemList.add(dsp.getValue(Machine.class)); //add result into array list
                 }
 
-                mAdapter.notifyDataSetChanged();
+               // mAdapter.notifyDataSetChanged();
 
             }
 
