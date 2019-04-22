@@ -18,12 +18,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MachineFragment extends Fragment {
 
 
     private RecyclerView machineRecyclerView;
+
     private List<Machine> itemList = new ArrayList<>();
     private MachineAdapter mAdapter;
     private ImageView addImageView;
@@ -33,8 +35,8 @@ public class MachineFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -61,26 +63,23 @@ public class MachineFragment extends Fragment {
         addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MachineAddDialogue(getContext(),mAdapter).show();
+                new MachineAddDialogue(getContext()).show();
 
             }
         });
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_machine, container, false);
     }
 
     public void readDataFromFirebase() {
-        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").orderByChild("name").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").orderByChild("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                itemList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-
                     itemList.add(dsp.getValue(Machine.class)); //add result into array list
                 }
 

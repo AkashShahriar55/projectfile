@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,17 +37,17 @@ public class InventoryItemAddDialogue extends Dialog {
     private Button addButton, cancelButton, deleteButton;
     private InventoryItem item;
     private boolean editDlg=false;
-    private InventoryItemAdapter mAdapter;
 
-    public InventoryItemAddDialogue(@NonNull Context context, InventoryItemAdapter mAdapter) {
+
+    public InventoryItemAddDialogue(@NonNull Context context) {
         super(context);
-        this.mAdapter=mAdapter;
+
     }
 
-    public InventoryItemAddDialogue(@NonNull Context context, InventoryItem item, InventoryItemAdapter mAdapter) {
+    public InventoryItemAddDialogue(@NonNull Context context, InventoryItem item) {
         super(context);
         this.item = item;
-        this.mAdapter=mAdapter;
+
     }
 
     public InventoryItemAddDialogue(@NonNull Context context, int themeResId) {
@@ -226,6 +227,7 @@ public class InventoryItemAddDialogue extends Dialog {
             addButton.setText("Update");
             deleteButton.setVisibility(View.VISIBLE);
             editDlg=true;
+            codeEditText.setEnabled(false);
         }
 
 
@@ -377,68 +379,30 @@ public class InventoryItemAddDialogue extends Dialog {
 
     public void writeDataToFirebase(final InventoryItem item) {
         loading();
-        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getCode()).addValueEventListener(new ValueEventListener() {
+
+
+        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getCode()).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if ((dataSnapshot.exists() && editDlg)|| (dataSnapshot.exists() && !editDlg && !item.getCode().equals(InventoryItemAddDialogue.this.item.getCode()))) {
-                    codeEditText.setError("Code already exist. Try with new.");
-                    codeEditText.requestFocus();
-                    notLoading();
-
-                } else {
-
-                    if(editDlg && !item.getCode().equals(InventoryItemAddDialogue.this.item.getCode())){
-                        deleteItem();
-                    }
-
-                    FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
-                                notLoading();
-                                dismiss();
-                            } else {
-                                Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                notLoading();
-                            }
-                        }
-                    });
-                    InventoryItemHistoryProduct item2=new InventoryItemHistoryProduct();
-                    if(!editDlg){
-
-                    }
-                    FirebaseUtilClass.getDatabaseReference().child("Inventory").child("History").child("Product").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-
-                                dismiss();
-                            } else {
-
-                            }
-                        }
-                    });
-
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@android.support.annotation.NonNull DatabaseError databaseError) {
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
+                notLoading();
+                dismiss();
 
             }
 
-
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                notLoading();
+            }
         });
-
 
     }
 
     @Override
     public void dismiss(){
-        mAdapter.notifyDataSetChanged();
+
         super.dismiss();
     }
 }

@@ -27,12 +27,12 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
         public MachineViewHolder(View view) {
             super(view);
             codeTextView = view.findViewById(R.id.machineCode);
-            locationTextView = view.findViewById(R.id.locationTextView);
+            locationTextView = view.findViewById(R.id.machineLocation);
             totalCollectedTextView = view.findViewById(R.id.totalCollected);
             modelTextView = view.findViewById(R.id.machineModel);
             lastVisitTextView = view.findViewById(R.id.lastVisitingDate);
             nameTextView = view.findViewById(R.id.machineName);
-            typeTextView = view.findViewById(R.id.typeTextView);
+            typeTextView = view.findViewById(R.id.machineType);
             installedTextView = view.findViewById(R.id.machineInstallDate);
             inServiceTextView = view.findViewById(R.id.daysInService);
             ventsPerDayTextView = view.findViewById(R.id.ventsPerDay);
@@ -66,13 +66,13 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
     public void onBindViewHolder(MachineViewHolder holder, int position) {
         final Machine item = itemList.get(position);
         holder.codeTextView.setText(item.getCode());
-        holder.locationTextView.setText(item.getLocation());
+        holder.locationTextView.setText(item.getMachineInstall().getLocation());
         holder.totalCollectedTextView.setText(String.valueOf(item.getTotalCollected()));
         holder.modelTextView.setText(item.getModel());
         holder.lastVisitTextView.setText(String.valueOf(item.getLastVisit()));
         holder.nameTextView.setText(item.getName());
         holder.typeTextView.setText(item.getType());
-        holder.installedTextView.setText(String.valueOf(item.getInstallDate()));
+        holder.installedTextView.setText(String.valueOf(item.getMachineInstall().getInstallationDate()));
         holder.inServiceTextView.setText(String.valueOf(item.getDaysInService()));
         holder.ventsPerDayTextView.setText(String.valueOf(item.getVendsPerDay()));
         holder.parent.setOnLongClickListener(new View.OnLongClickListener() {
@@ -88,10 +88,10 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:
-                                new MachineInstallDialogue(context,item.getMachineInstall()).show();
+                                new MachineInstallDialogue(context,item.getCode(),item.getMachineInstall()).show();
                                 break;
                             case 1:
-                                new MachineAddDialogue(context,item,MachineAdapter.this).show();
+                                new MachineAddDialogue(context,item).show();
                                 break;
                         }
                     }

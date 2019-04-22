@@ -9,16 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select location" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
         <ProgressBar
+            android:id="@+id/spinnerLoading"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:id="@+id/spinnerLoading"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <Spinner
             android:id="@+id/machineTypeSpinner"
 
@@ -41,18 +44,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
         <Button
             android:id="@+id/cancelButton"
             style="@style/addItemDialogueButton"
             android:text="Cancel" />
+
         <Button
             android:id="@+id/installButton"
             style="@style/addItemDialogueButton"
             android:text="Install" />
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/installingProgressBar"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </LinearLayout>

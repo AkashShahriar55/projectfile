@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +37,7 @@ public class InventoryFragment extends Fragment {
     private RecyclerView inventoryItemRecyclerView;
     private List<InventoryItem> itemList = new ArrayList<>();
     private InventoryItemAdapter mAdapter;
+    private SwipeRefreshLayout refreshlayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,6 +70,15 @@ public class InventoryFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        refreshlayout=view.findViewById(R.id.refreshingLayout);
+        refreshlayout.setRefreshing(true);
+        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                readDataFromFirebase();
+            }
+        });
+
         initializeAddItemButton();
         initializeRecyclerView();
 
@@ -81,7 +92,7 @@ public class InventoryFragment extends Fragment {
         addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new InventoryItemAddDialogue(getContext(),mAdapter).show();
+                new InventoryItemAddDialogue(getContext()).show();
 
             }
         });
@@ -117,24 +128,22 @@ public class InventoryFragment extends Fragment {
     }
 
     public void readDataFromFirebase() {
-        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").orderByChild("productName").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").orderByChild("productName").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                itemList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-
-
-
                     itemList.add(dsp.getValue(InventoryItem.class)); //add result into array list
                 }
-
                 mAdapter.notifyDataSetChanged();
-
+                refreshlayout.setRefreshing(false);
+             //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                refreshlayout.setRefreshing(false);
             }
         });
     }

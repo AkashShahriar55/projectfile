@@ -85,7 +85,7 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
                                 new InventoryItemHistoryDialogue(context,item.getCode()).show();
                                 break;
                             case 1:
-                                new InventoryItemAddDialogue(context,item,InventoryItemAdapter.this).show();
+                                new InventoryItemAddDialogue(context,item).show();
 
                                 break;
                         }

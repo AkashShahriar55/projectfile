@@ -7,13 +7,29 @@ public class Machine {
     private String name;
     private String model;
     private String type;
-    private String location;
-    private Date installDate;
     private Date lastVisit;
     private int daysInService;
     private float totalCollected;
     private float vendsPerDay;
     private MachineInstall machineInstall;
+
+    public Machine(String code, String name, String model, String type) {
+        this.code = code;
+        this.name = name;
+        this.model = model;
+        this.type = type;
+        lastVisit=null;
+        machineInstall=new MachineInstall();
+    }
+
+    public Machine(){
+        code="not set";
+        name="not set";
+        model="not set";
+        type="not set";
+        lastVisit=new Date();
+        machineInstall=new MachineInstall();
+    }
 
     public String getCode() {
         return code;
@@ -47,13 +63,6 @@ public class Machine {
         this.type = type;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
 
     public Date getLastVisit() {
@@ -88,13 +97,7 @@ public class Machine {
         this.vendsPerDay = vendsPerDay;
     }
 
-    public Date getInstallDate() {
-        return installDate;
-    }
 
-    public void setInstallDate(Date installDate) {
-        this.installDate = installDate;
-    }
 
     public MachineInstall getMachineInstall() {
         return machineInstall;

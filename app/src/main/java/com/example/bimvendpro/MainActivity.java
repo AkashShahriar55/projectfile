@@ -81,12 +81,13 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Dashboard");
         } else if (id == R.id.nav_inventory) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InventoryFragment()).commit();
-            toolbar.setTitle("InventoryFragment");
+            toolbar.setTitle("Inventory");
 
         } else if (id == R.id.nav_machines) {
-
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MachineFragment()).commit();
+            toolbar.setTitle("Machine");
         } else if (id == R.id.nav_location) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Location()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new LocationFragment()).commit();
             toolbar.setTitle("Locations");
 
         } else if (id == R.id.nav_routes) {
