@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Locations");
 
         } else if (id == R.id.nav_routes) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Routes()).commit();
+            toolbar.setTitle("Routes");
 
         } else if (id == R.id.nav_driver) {
 

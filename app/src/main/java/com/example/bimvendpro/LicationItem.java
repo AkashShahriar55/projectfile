@@ -1,6 +1,8 @@
 package com.example.bimvendpro;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LicationItem implements Serializable {
 
@@ -13,6 +15,8 @@ public class LicationItem implements Serializable {
     private String zip;
     private String country;
     private String location;
+
+
 
 
 
@@ -40,6 +44,15 @@ public class LicationItem implements Serializable {
 
     //installed machine
     private int noOfMachines;
+    private List<String> machines = new ArrayList<>();
+
+    public List<String> getMachines() {
+        return machines;
+    }
+
+    public void setMachines(List<String> machines) {
+        this.machines = machines;
+    }
 
     //service pattern
     private int intervalDay;
@@ -115,6 +128,15 @@ public class LicationItem implements Serializable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.notes = notes;
+        machines.add("empty");
+    }
+
+    public LicationItem(String code, String address, String location, double longitude, double latitude) {
+        this.code = code;
+        Address = address;
+        this.location = location;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public String getNotes() {

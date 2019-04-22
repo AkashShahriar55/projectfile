@@ -44,5 +44,9 @@
         <item>Wednesday</item>
         <item>Thursday</item>
     </string-array>
+    <string-array name="locations">
+d
+    </string-array>
     <string name="title_activity_view_edit_location">Map</string>
+    <string name="title_activity_add_view_edit_routes">Map</string>
 </resources>

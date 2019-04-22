@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/colorLightCard">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Add Location"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:gravity="center"
+        android:background="@color/colorBar"
+        android:textColor="@color/colorWhite"/>
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:id="@+id/rut_progressbar_addlocation"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rut_addLocation_listview"
+        android:layout_margin="10dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="@color/colorPink"
+        />
+</LinearLayout>
