@@ -8,15 +8,11 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,7 +48,7 @@ import java.util.Locale;
 public class ViewEditLocation extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private LicationItem item;
+    private Location item;
 
     private EditText editTextStatus,editTextCode,editTextAddress,editTextCity,editTextState,editTextZip,editTextCountry,editTextName,editTextPhone,editTextEmail
             ,editTextNotes,editTextWorkingHour,editTextWeek,editTextCommissionPercent,editTextLocation,editTextTax;
@@ -75,7 +71,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_edit_location);
 
-        item = (LicationItem) getIntent().getExtras().getSerializable("itemData");
+        item = (Location) getIntent().getExtras().getSerializable("itemData");
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -181,7 +177,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
                     buttonEdit.setText("Done");
                     buttonDelete.setText("Cancel");
                     buttonUpdateLocation.setEnabled(true);
-                    buttonUpdateLocation.setText("Update Location");
+                    buttonUpdateLocation.setText("Update LocationFragment");
                     textViewMode.setText("Edit Mode");
 
                 }
@@ -227,7 +223,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
 
     private void delete() {
-        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
                 finish();
@@ -346,21 +342,21 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
 
         if(!error){
-            writeDataToFirebase(new LicationItem(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,latitude,notes),isCodeChanged);
+            writeDataToFirebase(new Location(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,latitude,notes),isCodeChanged);
         }
 
     }
 
-    public void writeDataToFirebase(final LicationItem item, final boolean isCodeChanged) {
+    public void writeDataToFirebase(final Location item, final boolean isCodeChanged) {
         final ProgressDialog dialog = ProgressDialog.show(ViewEditLocation.this, "",
                 "Loading. Please wait...", true);
-        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).addValueEventListener(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean error = false;
 
                 dialog.show();
-                FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
+                FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
                         dialog.dismiss();
@@ -466,7 +462,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
             @Override
             public void onFailure(@NonNull Exception e) {
                 if (e instanceof ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed
+                    // LocationFragment settings are not satisfied, but this can be fixed
                     // by showing the user a dialog.
                     try {
                         // Show the dialog by calling startResolutionForResult(),
@@ -490,7 +486,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         }else{
             fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<android.location.Location>() {
                 @Override
-                public void onSuccess(Location location) {
+                public void onSuccess(android.location.Location location) {
                     longitude = location.getLongitude();
                     latitude = location.getLatitude();
 

@@ -75,26 +75,29 @@
                     android:text="Delete"
                     android:visibility="gone" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <Button
                         android:id="@+id/addButton"
                         style="@style/addItemDialogueButton"
                         android:text="Add"
-                        android:paddingLeft="20dp"/>
+                        />
 
                     <ProgressBar
                         android:id="@+id/loadingProgressBar"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_centerVertical="true"
+                        android:visibility="gone"
                         android:layout_marginLeft="6dp"
                         android:translationZ="2dp"
-                        android:visibility="gone" />
+                />
 
-                </RelativeLayout>
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

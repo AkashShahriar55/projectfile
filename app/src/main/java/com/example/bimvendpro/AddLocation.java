@@ -9,13 +9,11 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +31,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -228,14 +225,14 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
 
         if(!error){
-            writeDataToFirebase(new LicationItem(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,lattitude,notes));
+            writeDataToFirebase(new Location(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,lattitude,notes));
         }
     }
 
-    public void writeDataToFirebase(final LicationItem item) {
+    public void writeDataToFirebase(final Location item) {
         final ProgressDialog dialog = ProgressDialog.show(AddLocation.this, "",
                 "Loading. Please wait...", true);
-        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).addValueEventListener(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -245,7 +242,7 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
                     dialog.dismiss();
                 } else {
                     dialog.show();
-                    FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
                             dialog.dismiss();
@@ -309,9 +306,9 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
             return;
         }else{
-            fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<android.location.Location>() {
                 @Override
-                public void onSuccess(Location location) {
+                public void onSuccess(android.location.Location location) {
                     longitude = location.getLongitude();
                     lattitude = location.getLatitude();
 
@@ -392,7 +389,7 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void onFailure(@NonNull Exception e) {
                 if (e instanceof ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed
+                    // LocationFragment settings are not satisfied, but this can be fixed
                     // by showing the user a dialog.
                     try {
                         // Show the dialog by calling startResolutionForResult(),

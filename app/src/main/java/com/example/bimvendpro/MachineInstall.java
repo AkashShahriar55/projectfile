@@ -4,7 +4,12 @@ import java.util.Date;
 
 public class MachineInstall {
     private String location;
-    private Date date;
+    private Date installationDate;
+
+    public MachineInstall(){
+        location="not set";
+        installationDate=null;
+    }
 
     public String getLocation() {
         return location;
@@ -14,11 +19,13 @@ public class MachineInstall {
         this.location = location;
     }
 
-    public Date getDate() {
-        return date;
+
+
+    public Date getInstallationDate() {
+        return installationDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setInstallationDate(Date installationDate) {
+        this.installationDate = installationDate;
     }
 }
