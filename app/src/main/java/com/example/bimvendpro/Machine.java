@@ -7,7 +7,7 @@ public class Machine {
     private String name;
     private String model;
     private String type;
-    private Date lastVisit;
+    private String lastVisit;
     private int daysInService;
     private float totalCollected;
     private float vendsPerDay;
@@ -27,7 +27,7 @@ public class Machine {
         name="not set";
         model="not set";
         type="not set";
-        lastVisit=new Date();
+        lastVisit=null;
         machineInstall=new MachineInstall();
     }
 
@@ -65,11 +65,11 @@ public class Machine {
 
 
 
-    public Date getLastVisit() {
+    public String getLastVisit() {
         return lastVisit;
     }
 
-    public void setLastVisit(Date lastVisit) {
+    public void setLastVisit(String lastVisit) {
         this.lastVisit = lastVisit;
     }
 

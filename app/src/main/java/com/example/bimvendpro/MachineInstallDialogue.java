@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -23,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -65,10 +68,22 @@ public class MachineInstallDialogue extends Dialog {
         init();
 
         if (item != null) {  //dlg type edit
-            if(item.getInstallationDate()==null){
-                installDateEditText.setText("not set");
-            }else {
+            if (item.getInstallationDate() == null) {
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+                String str = format.format(new Date());
+                installDateEditText.setText(str);
+            } else {
                 installDateEditText.setText(item.getInstallationDate().toString());
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+                    Date d = dateFormat.parse(installDateEditText.getText().toString());
+                    installDateCalenderView.setDate(d.getTime());
+                    installDateCalenderView.setVisibility(View.VISIBLE);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             //    machineType.setSelection(getIndexFromSpinner(productTypeSpinner, item.getProductType()));
             installButton.setText("Update");
@@ -92,26 +107,22 @@ public class MachineInstallDialogue extends Dialog {
         installButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: validate & update data to firebase
+                writeDataToFirebase(new MachineInstall(machineType.getSelectedItem().toString(),installDateEditText.getText().toString()));
             }
         });
 
         installDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 try {
-                    SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy");
-                    Date date = format.parse(installDateEditText.getText().toString());
-                    installDateCalenderView.setDate(date.getTime());
-
+                    Date d = dateFormat.parse(installDateEditText.getText().toString());
+                    installDateCalenderView.setDate(d.getTime());
+                    installDateCalenderView.setVisibility(View.VISIBLE);
                 } catch (ParseException e) {
-                    SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy", Locale.getDefault());
-
-                    String str = format.format(new Date());
-                    installDateEditText.setText(str);
-                    //installDateCalenderView.setDate(date.getTime());
+                    e.printStackTrace();
                 }
-                installDateCalenderView.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -120,9 +131,16 @@ public class MachineInstallDialogue extends Dialog {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 StringBuilder strBld = new StringBuilder();
-                strBld.append(dayOfMonth).append("-").append(month).append("-").append(year);
+                strBld.append(String.format("%02d",dayOfMonth)).append("-").append(String.format("%02d",month+1)).append("-").append(year);
                 installDateEditText.setText(strBld.toString());
-                installDateCalenderView.setVisibility(View.GONE);
+                //installDateCalenderView.setVisibility(View.GONE);
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
     }
@@ -155,10 +173,33 @@ public class MachineInstallDialogue extends Dialog {
     }
 
 
+    public void writeDataToFirebase(final MachineInstall item) {
+        installingOn();
+
+
+        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(code).child("machineInstall").setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
+                installingOff();
+                dismiss();
+
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                installingOff();
+            }
+        });
+
+    }
+
     private void loadLocationsToSpinner() {
         spinnerLoadingOn();
 
-        FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").orderByChild("code").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").orderByChild("code").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> loc = new ArrayList<>();

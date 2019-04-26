@@ -63,13 +63,17 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
 
 
     @Override
-    public void onBindViewHolder(MachineViewHolder holder, int position) {
+    public void onBindViewHolder(final MachineViewHolder holder, int position) {
         final Machine item = itemList.get(position);
         holder.codeTextView.setText(item.getCode());
         holder.locationTextView.setText(item.getMachineInstall().getLocation());
         holder.totalCollectedTextView.setText(String.valueOf(item.getTotalCollected()));
         holder.modelTextView.setText(item.getModel());
-        holder.lastVisitTextView.setText(String.valueOf(item.getLastVisit()));
+        if(item.getLastVisit()==null){
+            holder.lastVisitTextView.setText(String.valueOf("not set"));
+        }else {
+            holder.lastVisitTextView.setText(String.valueOf(item.getLastVisit()));
+        }
         holder.nameTextView.setText(item.getName());
         holder.typeTextView.setText(item.getType());
         holder.installedTextView.setText(String.valueOf(item.getMachineInstall().getInstallationDate()));
@@ -99,6 +103,17 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
                 builder.show();
 
                 return false;
+            }
+        });
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int vb= holder.expandedLayout.getVisibility();
+                if(vb==View.VISIBLE){
+                    holder.expandedLayout.setVisibility(View.GONE);
+                }else {
+                    holder.expandedLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
 

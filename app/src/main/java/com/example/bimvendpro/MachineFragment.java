@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ public class MachineFragment extends Fragment {
     private List<Machine> itemList = new ArrayList<>();
     private MachineAdapter mAdapter;
     private ImageView addImageView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,12 +42,19 @@ public class MachineFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        swipeRefreshLayout=view.findViewById(R.id.refreshingLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                readDataFromFirebase();
+            }
+        });
         initializeAddItemButton();
         initializeRecyclerView();
 
         readDataFromFirebase();
 
-
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     private void initializeRecyclerView() {
@@ -56,6 +65,7 @@ public class MachineFragment extends Fragment {
         machineRecyclerView.setLayoutManager(mLayoutManager);
         machineRecyclerView.setItemAnimator(new DefaultItemAnimator());
         machineRecyclerView.setAdapter(mAdapter);
+
     }
 
     private void initializeAddItemButton() {
@@ -84,12 +94,13 @@ public class MachineFragment extends Fragment {
                 }
 
                 mAdapter.notifyDataSetChanged();
-
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
