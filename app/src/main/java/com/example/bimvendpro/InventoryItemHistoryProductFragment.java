@@ -40,10 +40,10 @@ public class InventoryItemHistoryProductFragment extends Fragment {
     }
 
     private void readDataFromFirebase(){
-        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("History").child("Product").orderByChild("historyDate").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("History").child("Product").orderByChild("historyDate").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                itemList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
 
                     itemList.add(dsp.getValue(InventoryItemHistoryProduct.class)); //add result into array list

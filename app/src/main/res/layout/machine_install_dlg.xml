@@ -37,13 +37,15 @@
     <EditText
         android:id="@+id/installDateEditText"
         style="@style/addItemDialogueEditTextView"
-        android:inputType="none" />
+        android:focusable="false"
+        android:inputType="none"/>
 
     <CalendarView
         android:id="@+id/installDateCalender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
