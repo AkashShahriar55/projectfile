@@ -7,16 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineViewHolder> {
     private List<Machine> itemList;
     private Context context;
+    private MainActivity mainActivity;
+
 
     public class MachineViewHolder extends RecyclerView.ViewHolder {
         private TextView codeTextView, locationTextView, totalCollectedTextView, modelTextView, lastVisitTextView, nameTextView, typeTextView, installedTextView, inServiceTextView,
@@ -49,9 +49,11 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
         }
 
     }
-    public MachineAdapter(List<Machine> moviesList, Context context) {
+    public MachineAdapter(List<Machine> moviesList, Context context, MainActivity mainActivity) {
         this.itemList = moviesList;
         this.context=context;
+        this.mainActivity=mainActivity;
+
     }
     @Override
     public MachineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -83,7 +85,7 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
             @Override
             public boolean onLongClick(View v) {
 
-                String[] colors = {"Install machine", "Edit"};
+                String[] colors = {"Install machine", "Edit Machine","Ingredients"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(item.getName());
@@ -96,6 +98,9 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
                                 break;
                             case 1:
                                 new MachineAddDialogue(context,item).show();
+                                break;
+                            case 2:
+                                mainActivity.changeFragment(new MachineIngredientsFragment(),item.getName(),item.getCode(),MainActivity.INGREDIENTS);
                                 break;
                         }
                     }
@@ -125,4 +130,6 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
     public int getItemCount() {
         return itemList.size();
     }
+
+
 }

@@ -51,7 +51,7 @@ public class MachineInstallDialogue extends Dialog {
         this.item = item;
     }
 
-    //todo: partial complete
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +66,8 @@ public class MachineInstallDialogue extends Dialog {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         init();
+
+
 
         if (item != null) {  //dlg type edit
             if (item.getInstallationDate() == null) {

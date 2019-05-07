@@ -2,6 +2,7 @@ package com.example.bimvendpro;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,6 +14,8 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
+    public static final int DASHBOARD=1, MACHINE=2,LOCATIONS=3,INVENTORY=4,INGREDIENTS=5;
+    private String neededCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
+    private int currFrag=DASHBOARD;
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -63,7 +66,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id==R.id.action_add){
+            if(currFrag==DASHBOARD){
+
+            }else if(currFrag==INVENTORY){
+                new InventoryItemAddDialogue(this).show();
+            }else if(currFrag==MACHINE){
+                new MachineAddDialogue(this).show();
+            }else if(currFrag==INGREDIENTS) {
+                new MachineIngredientsAddDialogue(this,neededCode).show();
+                return true;
+            }
+        } else if(id==R.id.action_search){
             return true;
         }
 
@@ -78,18 +92,25 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_dashboard) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new Dashboard()).commit();
+            currFrag=DASHBOARD;
+
             toolbar.setTitle("Dashboard");
         } else if (id == R.id.nav_inventory) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new InventoryFragment()).commit();
+            currFrag=INVENTORY;
             toolbar.setTitle("Inventory");
 
         } else if (id == R.id.nav_machines) {
+            MachineFragment machineFragment=new MachineFragment();
+            Bundle args = new Bundle();
+
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new MachineFragment()).commit();
+            currFrag=MACHINE;
             toolbar.setTitle("Machine");
         } else if (id == R.id.nav_location) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new LocationFragment()).commit();
             toolbar.setTitle("Locations");
-
+            currFrag=LOCATIONS;
         } else if (id == R.id.nav_routes) {
 
         } else if (id == R.id.nav_driver) {
@@ -100,6 +121,15 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
 
+    }
+    public void changeFragment(Fragment newfragment, String title, String neededCode, int type){
+        Bundle bundle = new Bundle();
+        bundle.putString("code", neededCode);
+        newfragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,newfragment).commit();
+        toolbar.setTitle(title);
+        currFrag=type;
+        this.neededCode=neededCode;
     }
 
     @Override

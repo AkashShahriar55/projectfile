@@ -138,6 +138,7 @@ public class MachineAddDialogue extends Dialog {
         getWindow().setAttributes(params);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
+        hideKeyboard();
         init();
 
         if (item != null) {  //dlg type edit
