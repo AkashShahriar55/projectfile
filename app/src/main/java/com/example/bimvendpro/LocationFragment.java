@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,11 +53,11 @@ public class LocationFragment extends Fragment {
     private RecyclerView recyclerViewLocation;
     private List<Location> itemList = new ArrayList<>();
     private LocationItemAdapter mAdapter;
-    ProgressBar progressBarLocation;
 
 
     ImageView addButtonImage;
     SearchView searchViewLocation;
+    private SwipeRefreshLayout refreshlayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -113,7 +114,14 @@ public class LocationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d("lifecycle","onViewCreated");
 
-        progressBarLocation = view.findViewById(R.id.loc_progressbar);
+        refreshlayout=view.findViewById(R.id.refreshingLayout);
+        refreshlayout.setRefreshing(true);
+        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                readDataFromFirebase();
+            }
+        });
 
         addButtonImage = view.findViewById(R.id.locaddImageView);
         addButtonImage.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +158,9 @@ public class LocationFragment extends Fragment {
                 return false;
             }
         });
+
+        initializeRecyclerView();
+        readDataFromFirebase();
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -227,34 +238,29 @@ public class LocationFragment extends Fragment {
     }
 
     public void readDataFromFirebase() {
-        progressBarLocation.setVisibility(View.VISIBLE);
-        FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").orderByChild("location").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").orderByChild("location").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                progressBarLocation.setVisibility(View.INVISIBLE);
+                itemList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-
-
-
+                    Log.d("error","here is a error" + dsp.getValue(Location.class).getLocation());
                     itemList.add(dsp.getValue(Location.class)); //add result into array list
                 }
-
                 mAdapter.notifyDataSetChanged();
-
+                refreshlayout.setRefreshing(false);
+                //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(),databaseError.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                refreshlayout.setRefreshing(false);
             }
         });
     }
 
     @Override
     public void onResume() {
-        itemList = new ArrayList<>();
-        initializeRecyclerView();
-        readDataFromFirebase();
         super.onResume();
     }
 

@@ -38,10 +38,9 @@ public class RouteDialogFragment extends DialogFragment {
 
     private ListView listView;
     private NoticeDialogListener listener;
-    private ProgressBar progressBar;
 
     List<CharSequence> locationNames = new ArrayList<>();
-    List<LicationItem> locationItemList = new ArrayList<>();
+    List<Location> locationItemList = new ArrayList<>();
     ArrayAdapter<CharSequence> listAdapter;
     private int itemNo;
 
@@ -58,12 +57,7 @@ public class RouteDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        String code = locationItemList.get(itemNo).getCode();
-                        String name = locationItemList.get(itemNo).getLocation();
-                        double latitude = locationItemList.get(itemNo).getLatitude();
-                        double longitue = locationItemList.get(itemNo).getLongitude();
-                        Toast.makeText(getContext(),"" + code + name + String.valueOf(latitude) + String.valueOf(longitue),Toast.LENGTH_SHORT).show();
-                        listener.passData(code,name,latitude,longitue);
+                        listener.passData(locationItemList.get(itemNo));
 
                     }
                 })
@@ -73,11 +67,10 @@ public class RouteDialogFragment extends DialogFragment {
                     }
                 });
 
-        progressBar = view.findViewById(R.id.rut_progressbar_addlocation);
-
         listView = view.findViewById(R.id.rut_addLocation_listview);
         listAdapter = new ArrayAdapter<CharSequence>(getActivity(),android.R.layout.simple_list_item_1,locationNames);
         listView.setAdapter(listAdapter);
+        listView.setSelection(0);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -93,7 +86,7 @@ public class RouteDialogFragment extends DialogFragment {
 
 
     public interface NoticeDialogListener{
-        void passData(String code, String name,double latitude,double longitude);
+        void passData(Location location);
     }
 
     @Override
@@ -110,28 +103,28 @@ public class RouteDialogFragment extends DialogFragment {
 
         listener = (NoticeDialogListener) context;
 
+
+
         populateListFromDatabase();
     }
 
     private void populateListFromDatabase() {
-        progressBar.setVisibility(View.VISIBLE);
-        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").orderByChild("location").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").orderByChild("location").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    Log.d("error","here is a error" + dsp.getValue(Location.class).getLocation());
 
-                    locationItemList.add(dsp.getValue(LicationItem.class)); //add result into array list
-                    locationNames.add(dsp.getValue(LicationItem.class).getLocation());
-
+                    locationItemList.add(dsp.getValue(Location.class)); //add result into array list
+                    locationNames.add(dsp.getValue(Location.class).getLocation());
                 }
-
                 listAdapter.notifyDataSetChanged();
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(),databaseError.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

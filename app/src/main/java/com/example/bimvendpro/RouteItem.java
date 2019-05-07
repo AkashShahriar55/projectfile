@@ -2,25 +2,38 @@ package com.example.bimvendpro;
 
 import android.widget.ListView;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class RouteItem {
+public class RouteItem implements Serializable {
 
     private String name;
     private String description;
-    private List<LicationItem> locationsList;
+    private List<Location> locationsList;
+    private List<String> locationCode;
+
+    public List<String> getLocationCode() {
+        return locationCode;
+    }
+
+    public void setLocationCode(List<String> locationCode) {
+        this.locationCode = locationCode;
+    }
 
     private int noOfLocation;
     private int noOfMachines;
 
 
 
-    public RouteItem(String name, String description, List<LicationItem> locationsList) {
+    public RouteItem(String name, String description, List<String> locationCode,int noOfLocation,int noOfMachines) {
         this.name = name;
         this.description = description;
-        this.locationsList = locationsList;
-        this.noOfLocation = 0;
-        this.noOfMachines = 0;
+        this.locationCode = locationCode;
+        this.noOfLocation = noOfLocation;
+        this.noOfMachines = noOfMachines;
+    }
+
+    public RouteItem() {
     }
 
     public int getNoOfLocation() {
@@ -55,11 +68,11 @@ public class RouteItem {
         this.description = description;
     }
 
-    public List<LicationItem> getLocationsList() {
+    public List<Location> getLocationsList() {
         return locationsList;
     }
 
-    public void setLocationsList(List<LicationItem> locationsList) {
+    public void setLocationsList(List<Location> locationsList) {
         this.locationsList = locationsList;
     }
 }

@@ -13,27 +13,34 @@
         android:orientation="horizontal"
         android:padding="5dp"
         android:weightSum="4"
-        android:id="@+id/rout_container">
+        android:id="@+id/expense_container">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="3"
+            android:gravity="center"
             >
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text="catagory"
                 android:textSize="16sp"
                 android:gravity="start|center"
                 android:textColor="@color/colorBar"
-                android:id="@+id/rout_name"/>
+                android:id="@+id/expense_catagory"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="this is thsdfsdft to save .ll givesdfasdfas dfass fsdfsdfsdfsdfsdfsdfsddd ddd dfas dfas dfaf"
+                android:text="dd-mm-yy"
                 android:textSize="14sp"
-                android:id="@+id/rout_description" />
+                android:id="@+id/expense_date" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="payee"
+                android:textSize="14sp"
+                android:id="@+id/expense_payee" />
 
         </LinearLayout>
         <LinearLayout
@@ -50,39 +57,16 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_location"
+                    android:src="@drawable/ic_expense"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="000"
+                    android:text="00.00"
                     android:gravity="center|top"
-                    android:textColor="@color/colorPink"
-                    android:id="@+id/rout_nolocation"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:layout_weight="1">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_machines"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="000"
-                    android:gravity="center|top"
-                    android:textColor="@color/colorPink"
-                    android:id="@+id/rout_nomachine"/>
+                    android:textColor="@color/colorred"
+                    android:id="@+id/expense_amount"/>
 
 
             </LinearLayout>

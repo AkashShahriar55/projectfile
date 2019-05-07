@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="@drawable/gradient1">
 
     <TextView
@@ -17,13 +17,13 @@
         android:textSize="16sp"
         android:textColor="@color/colorWhite"
         android:background="@color/colortransparent"
-        android:id="@+id/loc_view_mode"
+        android:id="@+id/rut_view_mode"
         />
 
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:scrollbars="none"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp">
@@ -38,7 +38,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:id="@+id/rut_map_card">
 
                 <fragment
                     android:id="@+id/map"
@@ -181,17 +182,18 @@
                         android:text="Add YourLocation Here"
                         android:gravity="center"
                         android:id="@+id/routes_addLocationDummy"/>
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rut_recyclerview"
+                        android:background="@color/colorWhite">
+
+                    </android.support.v7.widget.RecyclerView>
 
                 </LinearLayout>
 
 
             </android.support.v7.widget.CardView>
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </android.support.v7.widget.RecyclerView>
-
 
 
             <LinearLayout
@@ -220,6 +222,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

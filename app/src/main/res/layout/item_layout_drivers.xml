@@ -13,12 +13,13 @@
         android:orientation="horizontal"
         android:padding="5dp"
         android:weightSum="4"
-        android:id="@+id/rout_container">
+        android:id="@+id/drivers_container">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_weight="3"
+            android:gravity="center"
             >
             <TextView
                 android:layout_width="match_parent"
@@ -27,13 +28,19 @@
                 android:textSize="16sp"
                 android:gravity="start|center"
                 android:textColor="@color/colorBar"
-                android:id="@+id/rout_name"/>
+                android:id="@+id/drivers_name"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="this is thsdfsdft to save .ll givesdfasdfas dfass fsdfsdfsdfsdfsdfsdfsddd ddd dfas dfas dfaf"
+                android:text="license"
                 android:textSize="14sp"
-                android:id="@+id/rout_description" />
+                android:id="@+id/drivers_license" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textSize="14sp"
+                android:id="@+id/drivers_address" />
 
         </LinearLayout>
         <LinearLayout
@@ -50,39 +57,16 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_location"
+                    android:src="@drawable/ic_working_hour"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="000"
+                    android:text="hh:mm"
                     android:gravity="center|top"
                     android:textColor="@color/colorPink"
-                    android:id="@+id/rout_nolocation"/>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:layout_weight="1">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_machines"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="000"
-                    android:gravity="center|top"
-                    android:textColor="@color/colorPink"
-                    android:id="@+id/rout_nomachine"/>
+                    android:id="@+id/drivers_working_hour"/>
 
 
             </LinearLayout>

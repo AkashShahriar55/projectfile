@@ -95,7 +95,12 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Routes");
 
         } else if (id == R.id.nav_driver) {
-
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DriversFragment()).commit();
+            toolbar.setTitle("Drivers");
+        }
+        else if (id == R.id.nav_expenses) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ExpenseFragment()).commit();
+            toolbar.setTitle("Expenses");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

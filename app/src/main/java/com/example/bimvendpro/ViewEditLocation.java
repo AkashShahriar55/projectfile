@@ -57,7 +57,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
     private Spinner commissionSpinner,daysSpinner;
 
-    private Button buttonEdit,buttonDelete,buttonUpdateLocation;
+    private Button buttonEdit,buttonDelete,buttonUpdateLocation,buttonInstallMachine;
     private Boolean editmode;
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -101,6 +101,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         buttonEdit = findViewById(R.id.loc_button_add);
         buttonDelete = findViewById(R.id.loc_button_cancel);
         buttonUpdateLocation =findViewById(R.id.loc_update_location);
+        buttonInstallMachine = findViewById(R.id.loc_install_machine);
 
         init();
 
@@ -217,13 +218,20 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
                 createLocationRequest();
             }
         });
+
+        buttonInstallMachine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new LocationInstallMachineDialog(ViewEditLocation.this,item.getCode()).show();
+            }
+        });
     }
 
 
 
 
     private void delete() {
-        FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
                 finish();
@@ -350,32 +358,19 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
     public void writeDataToFirebase(final Location item, final boolean isCodeChanged) {
         final ProgressDialog dialog = ProgressDialog.show(ViewEditLocation.this, "",
                 "Loading. Please wait...", true);
-        FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).addValueEventListener(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean error = false;
-
-                dialog.show();
-                FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                        dialog.dismiss();
-                        if (task.isSuccessful()) {
-                            Toast.makeText(ViewEditLocation.this, "Updated", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(ViewEditLocation.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@android.support.annotation.NonNull DatabaseError databaseError) {
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(ViewEditLocation.this, "Updated", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
 
             }
 
-
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ViewEditLocation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
 
@@ -430,6 +425,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.clear();
 
         // Add a marker in Sydney and move the camera
         LatLng location = new LatLng(latitude, longitude);

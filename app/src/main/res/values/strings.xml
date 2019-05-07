@@ -44,8 +44,34 @@
         <item>Wednesday</item>
         <item>Thursday</item>
     </string-array>
+
+    <string-array name="expense_category">
+        <item>Advertisement</item>
+        <item>Coins</item>
+        <item>Commissions</item>
+        <item>Cost Of Goods Sold</item>
+        <item>Financial Supplies</item>
+        <item>Fuel</item>
+        <item>Insurance</item>
+        <item>Inventory</item>
+        <item>Labor</item>
+        <item>Machine Transportation</item>
+        <item>Office</item>
+        <item>Other Expenses</item>
+        <item>Professional Location Service</item>
+        <item>Promotions</item>
+        <item>Purchased New Equipment</item>
+        <item>Refunds</item>
+        <item>Rent or Lease</item>
+        <item>Repair and Maintenance</item>
+        <item>Salaries</item>
+        <item>Supplies</item>
+        <item>Taxes</item>
+        <item>Travel</item>
+        <item>Vehicle</item>
+    </string-array>
     <string-array name="locations">
-d
+        d
     </string-array>
     <string name="title_activity_view_edit_location">Map</string>
     <string name="title_activity_add_view_edit_routes">Map</string>

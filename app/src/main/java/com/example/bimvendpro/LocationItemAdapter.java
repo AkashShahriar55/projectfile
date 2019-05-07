@@ -25,6 +25,7 @@ public class LocationItemAdapter extends RecyclerView.Adapter<LocationItemAdapte
 
 
 
+
     public class LocationViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewCode,textViewLocation,textViewAddress,textViewCity,textViewZip,textViewServicedays,textViewLastvisit,textViewNextvisit,textViewNoofmachine;
         private LinearLayout container;

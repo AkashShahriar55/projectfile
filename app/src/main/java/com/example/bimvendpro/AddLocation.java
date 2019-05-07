@@ -232,39 +232,19 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
     public void writeDataToFirebase(final Location item) {
         final ProgressDialog dialog = ProgressDialog.show(AddLocation.this, "",
                 "Loading. Please wait...", true);
-        FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).addValueEventListener(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.exists()) {
-                    editTextCode.setError("Code already exist. Try with new.");
-                    editTextCode.requestFocus();
-                    dialog.dismiss();
-                } else {
-                    dialog.show();
-                    FirebaseUtilClass.getDatabaseReference().child("LocationFragment").child("Locations").child(item.getCode()).setValue(item).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                            dialog.dismiss();
-                            if (task.isSuccessful()) {
-                                Toast.makeText(AddLocation.this, "Updated", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else {
-                                Toast.makeText(AddLocation.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@android.support.annotation.NonNull DatabaseError databaseError) {
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(AddLocation.this, "Updated", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
 
             }
 
-
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddLocation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
 
 

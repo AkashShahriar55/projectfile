@@ -1,6 +1,7 @@
 package com.example.bimvendpro;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Location implements Serializable {
 
@@ -26,6 +27,10 @@ public class Location implements Serializable {
     private float commission;
     private  float tax;
     private String notes;
+
+    //Machines and routes
+    private List<String> machineCodes;
+    private List<String> routes;
 
     //working hour
     private String workingHour;
@@ -119,6 +124,14 @@ public class Location implements Serializable {
 
     public String getNotes() {
         return notes;
+    }
+
+    public Location(String code, String location, int noOfMachines, double longitude, double latitude) {
+        this.code = code;
+        this.location = location;
+        this.noOfMachines = noOfMachines;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public void setNotes(String notes) {

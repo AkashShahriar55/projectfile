@@ -1,22 +1,16 @@
 package com.example.bimvendpro;
 
-import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,35 +29,33 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Routes.OnFragmentInteractionListener} interface
+ * {@link ExpenseFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Routes#newInstance} factory method to
+ * Use the {@link ExpenseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Routes extends Fragment {
+public class ExpenseFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    private RecyclerView recyclerViewRoutes;
-    private List<RouteItem> itemList = new ArrayList<>();
-    private RoutesItemAdapter mAdapter;
+    private RecyclerView recyclerViewExpenses;
+    private List<ExpenseItem> expenseItems = new ArrayList<>();
+    private ExpenseItemAdapter mAdapter;
 
 
     private ImageView addButtonImage;
-    private SearchView searchViewRoutes;
+    private SearchView searchViewExpense;
     private SwipeRefreshLayout refreshlayout;
-
 
     private OnFragmentInteractionListener mListener;
 
-    public Routes() {
+    public ExpenseFragment() {
         // Required empty public constructor
     }
 
@@ -73,11 +65,11 @@ public class Routes extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Routes.
+     * @return A new instance of fragment ExpenseFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Routes newInstance(String param1, String param2) {
-        Routes fragment = new Routes();
+    public static ExpenseFragment newInstance(String param1, String param2) {
+        ExpenseFragment fragment = new ExpenseFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -98,7 +90,7 @@ public class Routes extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_routes, container, false);
+        return inflater.inflate(R.layout.fragment_expense, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -108,98 +100,6 @@ public class Routes extends Fragment {
         }
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        refreshlayout=view.findViewById(R.id.refreshingLayout);
-        refreshlayout.setRefreshing(true);
-        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                readDataFromFirebase();
-            }
-        });
-
-        addButtonImage = view.findViewById(R.id.rutaddImageView);
-
-        addButtonImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestLocationPermissions();
-                    return;
-                } else {
-                    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                    Intent intent = new Intent(getContext(),AddViewEditRoutes.class);
-                    intent.putExtra("mode","add");
-                    startActivity(intent);
-                    Toast.makeText(getContext(), "You have already permission", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-
-        searchViewRoutes = view.findViewById(R.id.rut_search);
-        searchViewRoutes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-                mAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
-                mAdapter.getFilter().filter(query);
-                return false;
-            }
-        });
-
-        initializeRecyclerView();
-        readDataFromFirebase();
-
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-
-    private void initializeRecyclerView() {
-        recyclerViewRoutes = getView().findViewById(R.id.RoutesRecyclerView);
-
-        mAdapter = new RoutesItemAdapter(itemList,getContext());
-        RecyclerView.LayoutManager mLayoutmanager =new LinearLayoutManager(getContext());
-        recyclerViewRoutes.setLayoutManager(mLayoutmanager);
-        recyclerViewRoutes.setItemAnimator(new DefaultItemAnimator());
-        recyclerViewRoutes.setAdapter(mAdapter);
-    }
-
-
-
-    private void requestLocationPermissions() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Permission Needed")
-                    .setMessage("This permission is needed to locate the location")
-                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                        }
-                    })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create().show();
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-
-        }
-    }
 
     @Override
     public void onDetach() {
@@ -222,13 +122,70 @@ public class Routes extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void readDataFromFirebase() {
-        FirebaseUtilClass.getDatabaseReference().child("Route").child("Routes").orderByChild("name").addValueEventListener(new ValueEventListener() {
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        refreshlayout=view.findViewById(R.id.refreshingLayout);
+        refreshlayout.setRefreshing(true);
+        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                readDataFromFirebase();
+            }
+        });
+
+        addButtonImage = view.findViewById(R.id.expenseaddImageView);
+
+        addButtonImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),AddViewEditExpenses.class);
+                intent.putExtra("mode","add");
+                startActivity(intent);
+            }
+        });
+
+
+        searchViewExpense = view.findViewById(R.id.expense_search);
+        searchViewExpense.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
+
+        initializeRecyclerView();
+        readDataFromFirebase();
+
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void initializeRecyclerView() {
+        recyclerViewExpenses = getView().findViewById(R.id.expenseRecyclerView);
+
+        mAdapter = new ExpenseItemAdapter(expenseItems,getContext());
+        RecyclerView.LayoutManager mLayoutmanager =new LinearLayoutManager(getContext());
+        recyclerViewExpenses.setLayoutManager(mLayoutmanager);
+        recyclerViewExpenses.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewExpenses.setAdapter(mAdapter);
+    }
+
+    private void readDataFromFirebase() {
+        FirebaseUtilClass.getDatabaseReference().child("Expense").child("Expenses").orderByChild("Catagory").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                itemList.clear();
+                expenseItems.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    itemList.add(dsp.getValue(RouteItem.class)); //add result into array list
+                    expenseItems.add(dsp.getValue(ExpenseItem.class)); //add result into array list
                 }
                 mAdapter.notifyDataSetChanged();
                 refreshlayout.setRefreshing(false);
