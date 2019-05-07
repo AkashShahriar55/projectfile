@@ -20,4 +20,5 @@
     <color name="colortransparent">#80D81B60</color>
     <color name="green">#43A047</color>
     <color name="black1">#212121</color>
+    <color name="lightgray">#F5F5F5</color>
 </resources>
