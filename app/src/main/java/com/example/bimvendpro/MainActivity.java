@@ -1,8 +1,10 @@
 package com.example.bimvendpro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -72,7 +74,9 @@ public class MainActivity extends AppCompatActivity
             }else if(currFrag==INVENTORY){
                 new InventoryItemAddDialogue(this).show();
             }else if(currFrag==MACHINE){
-                new MachineAddDialogue(this).show();
+                Intent myIntent = new Intent(this, MachineAddDialogue.class);
+                 //Optional parameters
+                this.startActivity(myIntent);
             }else if(currFrag==INGREDIENTS) {
                 new MachineIngredientsAddDialogue(this,neededCode).show();
                 return true;

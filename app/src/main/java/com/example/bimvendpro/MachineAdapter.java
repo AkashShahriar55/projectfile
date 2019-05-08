@@ -3,6 +3,9 @@ package com.example.bimvendpro;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineViewHolder> {
@@ -85,7 +89,7 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
             @Override
             public boolean onLongClick(View v) {
 
-                String[] colors = {"Install machine", "Edit Machine","Ingredients"};
+                String[] colors = {"Install machine", "Edit Machine","Edit Ingredients","Notes"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(item.getName());
@@ -97,9 +101,15 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
                                 new MachineInstallDialogue(context,item.getCode(),item.getMachineInstall()).show();
                                 break;
                             case 1:
-                                new MachineAddDialogue(context,item).show();
+                                Intent intent = new Intent(context,MachineAddDialogue.class);
+                                intent.putExtra("item",item);
+                                context.startActivity(intent);
+
                                 break;
                             case 2:
+                                mainActivity.changeFragment(new MachineIngredientsFragment(),item.getName(),item.getCode(),MainActivity.INGREDIENTS);
+                                break;
+                            case 3:
                                 mainActivity.changeFragment(new MachineIngredientsFragment(),item.getName(),item.getCode(),MainActivity.INGREDIENTS);
                                 break;
                         }

@@ -67,6 +67,7 @@ public class AddViewEditExpenses extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*
         setContentView(R.layout.activity_add_view_edit_expenses);
 
         editTextDate = findViewById(R.id.expense_edttxt_date);
@@ -84,7 +85,7 @@ public class AddViewEditExpenses extends AppCompatActivity {
         imageViewReceipt = findViewById(R.id.expenses_image_receipt);
         linearLayoutAddImage = findViewById(R.id.expense_add_image_layout);
 
-
+*/
 
         buttonAddImage.setOnClickListener(new View.OnClickListener() {
             @Override

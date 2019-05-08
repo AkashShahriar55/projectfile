@@ -2,17 +2,26 @@ package com.example.bimvendpro;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,26 +30,35 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
-public class MachineAddDialogue extends Dialog {
+public class MachineAddDialogue extends AppCompatActivity {
     private Machine item;
     private EditText codeEditText, machineNameEditText, modelEditText;
     private Spinner machineTypeSpinner;
     private Button cancelButton, deleteButton, addButton;
     private ProgressBar progressBar;
     private Boolean editDlg;
+    private ImageView addImage;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri mImageUri;
+    private boolean hasImage = false;
+    private String imageUrlStr = "";
 
-
-    public MachineAddDialogue(Context context) {
-        super(context);
-
+    public MachineAddDialogue() {
+        // Empty constructor is required for DialogFragment
+        // Make sure not to add arguments to the constructor
+        // Use `newInstance` instead as shown below
     }
 
-    public MachineAddDialogue(Context context, Machine item) {
-        super(context);
-        this.item = item;
 
-    }
+
+
+
 
     private void hideKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -62,7 +80,7 @@ public class MachineAddDialogue extends Dialog {
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure to delete the item?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
@@ -77,6 +95,14 @@ public class MachineAddDialogue extends Dialog {
         deleteButton = findViewById(R.id.deleteButton);
         addButton = findViewById(R.id.addButton);
         progressBar = findViewById(R.id.loadingProgressBar);
+        addImage=findViewById(R.id.machineImageAdd);
+
+        addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+            }
+        });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +110,8 @@ public class MachineAddDialogue extends Dialog {
                 hideKeyboard();
 
 
-                dismiss();
+                finish();
+
 
             }
         });
@@ -104,7 +131,7 @@ public class MachineAddDialogue extends Dialog {
                 tryWriteData();
             }
         });
-        setCancelable(false);
+
     }
 
 
@@ -114,7 +141,7 @@ public class MachineAddDialogue extends Dialog {
             @Override
             public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
                 notLoading();
-                MachineAddDialogue.this.dismiss();
+                MachineAddDialogue.this.finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -124,6 +151,87 @@ public class MachineAddDialogue extends Dialog {
         });
     }
 
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+       startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+
+            hasImage = true;
+        //    buttonAddImage.setText("delete");
+         //   buttonAddImage.setTextColor(getResources().getColor(R.color.colorred));
+        }
+    }
+
+
+    private void uploadFile(Uri imgUri, String code) {
+        final ProgressDialog dialog = ProgressDialog.show(MachineAddDialogue.this, "",
+                "Loading. Please wait...", true);
+        dialog.show();
+        if (imgUri != null) {
+            final StorageReference fileReference = FirebaseStorage.getInstance().getReference("uploads").child("Machine").child(code);
+            UploadTask mUploadTask;
+            mUploadTask = (UploadTask) fileReference.putFile(imgUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                }
+                            }, 500);
+
+
+                            Toast.makeText(MachineAddDialogue.this, "Upload successful", Toast.LENGTH_LONG).show();
+                            finish();
+                            fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Uri downloadUrl = uri;
+                                    imageUrlStr = downloadUrl.toString();
+                                    Picasso.get().load(imageUrlStr).into(addImage);
+
+                                }
+                            });
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            dialog.setMessage("Uploading Image: " + progress + "%");
+                        }
+                    });
+
+        } else {
+            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,15 +239,17 @@ public class MachineAddDialogue extends Dialog {
         setContentView(R.layout.machine_add_dlg);
 
 
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.gravity = Gravity.CENTER;
-        getWindow().setAttributes(params);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
 
         hideKeyboard();
         init();
+
+
+        Intent intent = getIntent();
+        item =(Machine) intent.getExtras().getSerializable("item");
+
+
+
 
         if (item != null) {  //dlg type edit
             codeEditText.setText(item.getCode());
@@ -228,16 +338,20 @@ public class MachineAddDialogue extends Dialog {
         FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(item.getCode()).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MachineAddDialogue.this, "Updated", Toast.LENGTH_SHORT).show();
                 notLoading();
-                dismiss();
+                if(mImageUri!=null) {
+                    uploadFile(mImageUri, item.getCode());
+                } else {
+                    finish();
+                }
 
             }
 
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 notLoading();
             }
         });

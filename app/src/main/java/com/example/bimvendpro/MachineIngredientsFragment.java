@@ -42,6 +42,7 @@ public class MachineIngredientsFragment extends Fragment {
         if (bundle != null) {
             code = bundle.getString("code");
         }
+
     }
 
     @Override
@@ -59,6 +60,8 @@ public class MachineIngredientsFragment extends Fragment {
         readDataFromFirebase();
 
         swipeRefreshLayout.setRefreshing(true);
+
+
 
     }
 

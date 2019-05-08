@@ -1,8 +1,9 @@
 package com.example.bimvendpro;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Machine {
+public class Machine implements Serializable {
     private String code;
     private String name;
     private String model;
