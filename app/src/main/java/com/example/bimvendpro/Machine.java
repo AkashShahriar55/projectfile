@@ -9,6 +9,7 @@ public class Machine implements Serializable {
     private String model;
     private String type;
     private String lastVisit;
+    private String note;
     private int daysInService;
     private float totalCollected;
     private float vendsPerDay;
@@ -106,5 +107,13 @@ public class Machine implements Serializable {
 
     public void setMachineInstall(MachineInstall machineInstall) {
         this.machineInstall = machineInstall;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

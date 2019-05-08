@@ -4,16 +4,22 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.Serializable;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineViewHolder> {
@@ -27,6 +33,7 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
                 ventsPerDayTextView;
         private Machine item;
         private LinearLayout parent, expandedLayout;
+        private ImageView machineImage;
 
         public MachineViewHolder(View view) {
             super(view);
@@ -42,6 +49,7 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
             ventsPerDayTextView = view.findViewById(R.id.ventsPerDay);
             parent = view.findViewById(R.id.parent);
             expandedLayout = view.findViewById(R.id.expandedLayout);
+            machineImage=view.findViewById(R.id.machineimage);
         }
 
         public Machine getItem() {
@@ -85,6 +93,33 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
         holder.installedTextView.setText(String.valueOf(item.getMachineInstall().getInstallationDate()));
         holder.inServiceTextView.setText(String.valueOf(item.getDaysInService()));
         holder.ventsPerDayTextView.setText(String.valueOf(item.getVendsPerDay()));
+
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("uploads").child("Machine").child(item.getCode());
+
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                holder.machineImage.setVisibility(View.VISIBLE);
+                Uri downloadUrl = uri;
+
+                Picasso.get().load(downloadUrl.toString()).into(holder.machineImage);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                holder.machineImage.setVisibility(View.GONE);
+            }
+        });
+
+
+// ImageView in your Activity
+
+
+
+
         holder.parent.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -110,7 +145,7 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
                                 mainActivity.changeFragment(new MachineIngredientsFragment(),item.getName(),item.getCode(),MainActivity.INGREDIENTS);
                                 break;
                             case 3:
-                                mainActivity.changeFragment(new MachineIngredientsFragment(),item.getName(),item.getCode(),MainActivity.INGREDIENTS);
+                                new MachineNoteDialogue(context,item.getCode(),item.getNote()).show();
                                 break;
                         }
                     }

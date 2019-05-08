@@ -89,7 +89,7 @@ public class MachineInstallDialogue extends Dialog {
             }
             //    machineType.setSelection(getIndexFromSpinner(productTypeSpinner, item.getProductType()));
             installButton.setText("Update");
-
+            machineType.setEnabled(false);
             editDlg = true;
         }
 
@@ -154,7 +154,9 @@ public class MachineInstallDialogue extends Dialog {
     }
 
     private void spinnerLoadingOff() {
-        machineType.setEnabled(true);
+        if(!editDlg) {
+            machineType.setEnabled(true);
+        }
         installButton.setEnabled(true);
         spinnerLoading.setVisibility(View.GONE);
     }
@@ -168,7 +170,9 @@ public class MachineInstallDialogue extends Dialog {
     }
 
     private void installingOff() {
-        machineType.setEnabled(true);
+        if(!editDlg) {
+            machineType.setEnabled(true);
+        }
         installButton.setEnabled(true);
         cancelButton.setEnabled(true);
         machineInstallingProgressBar.setVisibility(View.GONE);
@@ -182,9 +186,24 @@ public class MachineInstallDialogue extends Dialog {
         FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(code).child("machineInstall").setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
-                installingOff();
-                dismiss();
+
+
+                FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getLocation()).child("machineInstall").child(code).setValue(item.getInstallationDate()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
+                        installingOff();
+                        dismiss();
+
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        installingOff();
+                    }
+                });
 
             }
 

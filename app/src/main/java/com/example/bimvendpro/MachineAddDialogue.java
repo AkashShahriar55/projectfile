@@ -26,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,10 +55,6 @@ public class MachineAddDialogue extends AppCompatActivity {
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
-
-
-
-
 
 
     private void hideKeyboard() {
@@ -95,7 +92,7 @@ public class MachineAddDialogue extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
         addButton = findViewById(R.id.addButton);
         progressBar = findViewById(R.id.loadingProgressBar);
-        addImage=findViewById(R.id.machineImageAdd);
+        addImage = findViewById(R.id.machineImageAdd);
 
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,16 +134,30 @@ public class MachineAddDialogue extends AppCompatActivity {
 
     private void deleteItem() {
         loading();
-        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                notLoading();
-                MachineAddDialogue.this.finish();
+
+
+                FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getMachineInstall().getLocation()).child("machineInstall").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                        notLoading();
+                        MachineAddDialogue.this.finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@android.support.annotation.NonNull Exception e) {
+                        notLoading();
+                        Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@android.support.annotation.NonNull Exception e) {
                 notLoading();
+                Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -155,7 +166,7 @@ public class MachineAddDialogue extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-       startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     @Override
@@ -167,8 +178,10 @@ public class MachineAddDialogue extends AppCompatActivity {
             mImageUri = data.getData();
 
             hasImage = true;
-        //    buttonAddImage.setText("delete");
-         //   buttonAddImage.setTextColor(getResources().getColor(R.color.colorred));
+            Picasso.get().load(imageUrlStr).into(addImage);
+            //addImage.setImageURI(mImageUri);
+            //    buttonAddImage.setText("delete");
+            //   buttonAddImage.setTextColor(getResources().getColor(R.color.colorred));
         }
     }
 
@@ -225,11 +238,6 @@ public class MachineAddDialogue extends AppCompatActivity {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
         }
     }
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
 
 
     @Override
@@ -239,17 +247,15 @@ public class MachineAddDialogue extends AppCompatActivity {
         setContentView(R.layout.machine_add_dlg);
 
 
-
-
         hideKeyboard();
         init();
 
 
         Intent intent = getIntent();
-        item =(Machine) intent.getExtras().getSerializable("item");
+        if (intent.getExtras() != null) {
+            item = (Machine) intent.getExtras().getSerializable("item");
 
-
-
+        }
 
         if (item != null) {  //dlg type edit
             codeEditText.setText(item.getCode());
@@ -263,7 +269,31 @@ public class MachineAddDialogue extends AppCompatActivity {
             codeEditText.setEnabled(false);
         }
 
+        if (item != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("uploads").child("Machine").child(item.getCode());
 
+
+
+
+
+            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+
+                    Uri downloadUrl = uri;
+
+                    Picasso.get().load(downloadUrl.toString()).into(addImage);
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+
+
+        }
     }
 
     private int getIndexFromSpinner(Spinner spinner, String myString) {
@@ -340,7 +370,7 @@ public class MachineAddDialogue extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 Toast.makeText(MachineAddDialogue.this, "Updated", Toast.LENGTH_SHORT).show();
                 notLoading();
-                if(mImageUri!=null) {
+                if (mImageUri != null) {
                     uploadFile(mImageUri, item.getCode());
                 } else {
                     finish();
