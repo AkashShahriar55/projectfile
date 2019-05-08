@@ -76,7 +76,7 @@ public class MachineInstallDialogue extends Dialog {
                 String str = format.format(new Date());
                 installDateEditText.setText(str);
             } else {
-                installDateEditText.setText(item.getInstallationDate().toString());
+                installDateEditText.setText(item.getInstallationDate());
                 try {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 

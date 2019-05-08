@@ -1,5 +1,6 @@
 package com.example.bimvendpro;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -53,6 +55,7 @@ public class MachineNoteDialogue extends Dialog {
         getWindow().setAttributes(params);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
+        hideKeyboard();
 
         setCancelable(false);
 
@@ -65,6 +68,7 @@ public class MachineNoteDialogue extends Dialog {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 writeDataToFirebase(note.getText().toString());
             }
         });
@@ -72,6 +76,7 @@ public class MachineNoteDialogue extends Dialog {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 dismiss();
             }
         });
@@ -112,4 +117,12 @@ public class MachineNoteDialogue extends Dialog {
         });
 
     }
+
+    private void hideKeyboard() {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+//Hide:
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
+
 }

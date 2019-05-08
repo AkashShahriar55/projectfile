@@ -1,102 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingTop="20dp"
-    >
+    android:layout_marginBottom="5dp"
+    android:elevation="5dp"
+    app:cardCornerRadius="9dp">
 
     <LinearLayout
+
+        android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="["
-            android:textColor="@color/green"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12-04-19"
-            android:id="@+id/purDate"
-            android:textColor="@color/green"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="]"
-            android:textSize="17sp"
-            android:textColor="@color/green"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:text="seller name"
-            android:textColor="@color/black1"
-            android:textSize="17sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:orientation="vertical"
+        android:paddingTop="20dp">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
-          >
-
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:src="@drawable/products" />
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/productNo"
-                android:text="12"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:paddingBottom="20dp">
+                android:text="["
+                android:textColor="@color/green"
 
-            <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:src="@drawable/ic_local_atm_black_24dp" />
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/purDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12-04-19"
+                android:textColor="@color/green"
+
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="12"
-                android:id="@+id/amount"
-                android:textSize="17sp"
+                android:text="]"
+
+                android:textColor="@color/green"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sellerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:text="seller name"
+                android:textColor="@color/black1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/products" />
+
+                <TextView
+                    android:id="@+id/productNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="12"
+
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:paddingBottom="20dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_local_atm_black_24dp" />
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="12"
+
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
         </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorGrayDark"></LinearLayout>
-</LinearLayout>
+</android.support.v7.widget.CardView>

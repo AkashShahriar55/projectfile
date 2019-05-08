@@ -18,27 +18,28 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-              >
+                android:orientation="vertical">
 
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Code" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/codeEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="CX5067" />
+                    <EditText
+                        android:id="@+id/codeEditText"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Code" />
+                </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Product Name" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/productNameEditTExt"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="Sneakers" />
+                    <EditText
+                        android:id="@+id/productNameEditTExt"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Product Name" />
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     style="@style/addItemDialogueTextView"
@@ -49,65 +50,93 @@
                     style="@style/addItemDialogueSpinner"
                     android:entries="@array/food_type" />
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="In stock" />
-
-                <EditText
-                    android:id="@+id/inStockEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="60" />
-
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="In Warehouse" />
-
-                <EditText
-                    android:id="@+id/inWarehouseEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="100" />
-
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="In Machine" />
-
-                <EditText
-                    android:id="@+id/inMachineEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="10" />
-
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Unit per case" />
-
-                <EditText
-                    android:id="@+id/unitPerCaseEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="24" />
-
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Last Cost" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_weight=".3"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/inStockEditText"
+                            style="@style/addItemDialogueEditTextView"
+                            android:hint="Stock" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+
+                        android:layout_weight=".3"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/inWarehouseEditText"
+                            style="@style/addItemDialogueEditTextView"
+                            android:hint="Warehouse" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_weight=".3"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/inMachineEditText"
+                            style="@style/addItemDialogueEditTextView"
+                            android:hint="\Machine" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_height="wrap_content">
+
                     <EditText
-                        android:id="@+id/lastCostEditText"
+                        android:id="@+id/unitPerCaseEditText"
                         style="@style/addItemDialogueEditTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_weight=".5"
-                        android:hint="5.25" />
+                        android:hint="Unit per case" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".5"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5">
+
+                        <EditText
+                            android:id="@+id/lastCostEditText"
+
+                            style="@style/addItemDialogueEditTextView"
+                            android:layout_width="match_parent"
+
+                            android:hint="Last Cost" />
+                    </android.support.design.widget.TextInputLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
                         android:text="$" />
                 </LinearLayout>
-
+</LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

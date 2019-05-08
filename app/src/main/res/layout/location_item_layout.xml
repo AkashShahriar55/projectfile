@@ -1,165 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView
-xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_margin="5dp"
-    android:foreground="?android:attr/selectableItemBackground"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/SelectableItemBackground"
-    android:clickable="true">
-<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/loc_container">
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:padding="5dp"
-        android:background="@color/colorBar">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="code"
-            android:layout_weight="1"
-            android:textColor="@color/colorWhite"
-            android:id="@+id/loc_code"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="location"
-            android:layout_weight="3"
-            android:textColor="@color/colorWhite"
-            android:id="@+id/loc_location"/>
-    </LinearLayout>
-    <LinearLayout
+        android:id="@+id/loc_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:orientation="vertical">
+
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/colorBar"
+            android:padding="5dp">
+
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/loc_code"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Address"
-                android:id="@+id/loc_address"
-                android:textColor="@color/colorListTitle"/>
+                android:layout_weight="1"
+                android:text="code"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/loc_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="location"
+                android:textColor="@color/colorWhite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/loc_address"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:text="Address"
+                    android:textColor="@color/colorListTitle" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="City:"
-                            android:layout_weight="1"
-                            android:textColor="@color/colorNormalText" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="cityname"
-                            android:id="@+id/loc_city"
-                            android:layout_weight="1"
-                            android:gravity="center"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="City:"
+                                android:textColor="@color/colorNormalText" />
+
+                            <TextView
+                                android:id="@+id/loc_city"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="cityname" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Zip:" />
+
+                            <TextView
+                                android:id="@+id/loc_zip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="zipcode" />
+                        </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Zip:"
-                            android:layout_weight="1"/>
+                            android:gravity="center"
+                            android:text="Service Days" />
+
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/loc_servicedays"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="zipcode"
-                            android:id="@+id/loc_zip"
-                            android:layout_weight="1"
-                            android:gravity="center"/>
+                            android:gravity="center"
+                            android:text="servicedays" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Service Days"
-                        android:gravity="center"/>
+                        android:layout_weight="1"
+                        android:text="Last visit:" />
+
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/loc_lastvisit"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="servicedays"
-                        android:gravity="center"
-                        android:id="@+id/loc_servicedays"/>
+                        android:layout_weight="1"
+                        android:text="00-00-00"
+                        android:textColor="@color/colorhighlight2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Next visit:" />
+
+                    <TextView
+                        android:id="@+id/loc_nextvisit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="00-00-00"
+                        android:textColor="@color/colorhighlight2" />
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Last visit:"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="00-00-00"
-                    android:textColor="@color/colorhighlight2"
-                    android:id="@+id/loc_lastvisit"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Next visit:"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="00-00-00"
-                    android:id="@+id/loc_nextvisit"
-                    android:textColor="@color/colorhighlight2"/>
+
             </LinearLayout>
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="center">
-            <ImageView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_machines"
-                android:layout_weight="1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="000"
-                android:textSize="20sp"
-                android:textColor="@color/colorMostImportant"
-                android:id="@+id/loc_noOfMachine"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_machines" />
+
+                <TextView
+                    android:id="@+id/loc_noOfMachine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="000"
+                    android:textColor="@color/colorMostImportant"
+                    android:textSize="20sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 </android.support.v7.widget.CardView>

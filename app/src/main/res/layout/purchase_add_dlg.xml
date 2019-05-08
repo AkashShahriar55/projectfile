@@ -1,59 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            style="@style/addItemDialogueEditTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Supplier" />
-    </android.support.design.widget.TextInputLayout>
-
-
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/installDateEditText"
-            style="@style/addItemDialogueEditTextView"
-            android:focusable="false"
-            android:inputType="none"
-            android:hint="Purchase Date"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <CalendarView
-        android:id="@+id/installDateCalender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <Button
-            android:id="@+id/cancelButton"
-            style="@style/addItemDialogueButton"
-            android:text="Cancel" />
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/installButton"
-            style="@style/addItemDialogueButton"
-            android:text="Save" />
-        <ProgressBar
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/installingProgressBar"
-            android:visibility="gone"/>
+            <EditText
+                android:id="@+id/supplieEditText"
+                style="@style/addItemDialogueEditTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Supplier" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/purchaseDateEditText"
+                style="@style/addItemDialogueEditTextView"
+                android:focusable="false"
+                android:hint="Purchase Date"
+                android:inputType="none" />
+        </android.support.design.widget.TextInputLayout>
+
+        <CalendarView
+            android:id="@+id/purchaseDateCalender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancelButton"
+                style="@style/addItemDialogueButton"
+                android:text="Cancel" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                style="@style/addItemDialogueButton"
+                android:text="Delete"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/saveButton"
+                style="@style/addItemDialogueButton"
+                android:text="Save" />
+
+            <ProgressBar
+                android:id="@+id/savingProgressBar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

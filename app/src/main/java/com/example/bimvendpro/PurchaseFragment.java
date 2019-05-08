@@ -1,6 +1,5 @@
 package com.example.bimvendpro;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,44 +20,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class InventoryFragment extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-    private String mParam1;
-    private String mParam2;
-
-
-
-    private RecyclerView inventoryItemRecyclerView;
-    private List<InventoryItem> itemList = new ArrayList<>();
-    private InventoryItemAdapter mAdapter;
+public class PurchaseFragment extends Fragment {
+    private RecyclerView purchaseRecyclerView;
+    private List<PurchaseClass> itemList = new ArrayList<>();
+    private PurchaseAdapter mAdapter;
     private SwipeRefreshLayout refreshlayout;
-
-    private OnFragmentInteractionListener mListener;
-
-    public InventoryFragment() {
-
-
-    }
-
-
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-
-    }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -72,7 +37,6 @@ public class InventoryFragment extends Fragment {
             }
         });
 
-
         initializeRecyclerView();
 
         readDataFromFirebase();
@@ -81,45 +45,33 @@ public class InventoryFragment extends Fragment {
 
 
     private void initializeRecyclerView() {
-        inventoryItemRecyclerView = getView().findViewById(R.id.inventory_item_container_recyclerview);
+        purchaseRecyclerView = getView().findViewById(R.id.purchases);
 
-        mAdapter = new InventoryItemAdapter(itemList, getContext());
+        mAdapter = new PurchaseAdapter(itemList, getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        inventoryItemRecyclerView.setLayoutManager(mLayoutManager);
-        inventoryItemRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        inventoryItemRecyclerView.setAdapter(mAdapter);
+        purchaseRecyclerView.setLayoutManager(mLayoutManager);
+        purchaseRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        purchaseRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_inventory, container, false);
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+        return inflater.inflate(R.layout.fragment_purchase, container, false);
     }
 
     public void readDataFromFirebase() {
-        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").orderByChild("productName").addValueEventListener(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Purchases").child("Items").orderByChild("purchaseDate").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 itemList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    itemList.add(dsp.getValue(InventoryItem.class)); //add result into array list
+                    itemList.add(dsp.getValue(PurchaseClass.class)); //add result into array list
                 }
                 mAdapter.notifyDataSetChanged();
                 refreshlayout.setRefreshing(false);
-             //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -129,6 +81,4 @@ public class InventoryFragment extends Fragment {
             }
         });
     }
-
-
 }
