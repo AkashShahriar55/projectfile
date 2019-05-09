@@ -186,7 +186,7 @@ public class MachineAddDialogue extends AppCompatActivity {
             mImageUri = data.getData();
 
             hasImage = true;
-            Picasso.get().load(imageUrlStr).into(addImage);
+            Picasso.get().load(mImageUri).into(addImage);
             //addImage.setImageURI(mImageUri);
             //    buttonAddImage.setText("delete");
             //   buttonAddImage.setTextColor(getResources().getColor(R.color.colorred));

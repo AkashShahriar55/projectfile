@@ -37,6 +37,7 @@
         <CalendarView
             android:id="@+id/purchaseDateCalender"
             android:layout_width="match_parent"
+            android:background="@color/colorLightCard"
             android:layout_height="wrap_content"
 
             />
@@ -51,6 +52,7 @@
             <Button
                 android:id="@+id/cancelButton"
                 style="@style/addItemDialogueButton"
+                android:theme="@style/MyButton"
                 android:text="Cancel" />
 
             <Button
@@ -61,6 +63,7 @@
 
             <Button
                 android:id="@+id/saveButton"
+                android:theme="@style/MyButton"
                 style="@style/addItemDialogueButton"
                 android:text="Save" />
 

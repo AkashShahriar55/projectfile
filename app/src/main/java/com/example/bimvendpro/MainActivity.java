@@ -1,6 +1,7 @@
 package com.example.bimvendpro;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,14 +11,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
-    public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6;
+    public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6,SHOW_NAVDRAWER=100,HIDE_NAVDRAWER=101;
     private String neededCode;
+    private DrawerLayout drawer;
+    private Drawable navIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +35,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -37,17 +44,26 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Dashboard()).commit();
         toolbar.setTitle("Dashboard");
+
+        navIcon = toolbar.getNavigationIcon();
+
+
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        if(currFrag==INGREDIENTS){
+            backToPrevFragment();
+        }else {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -80,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             } else if (currFrag == INGREDIENTS) {
                 new MachineIngredientsAddDialogue(this, neededCode).show();
                 return true;
-            }else if (currFrag == PURCHASES) {
+            } else if (currFrag == PURCHASES) {
                 new PurchaseAddDialogue(this).show();
                 return true;
             }
@@ -108,11 +124,11 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Inventory");
 
         } else if (id == R.id.nav_machines) {
-            MachineFragment machineFragment = new MachineFragment();
-            Bundle args = new Bundle();
+
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MachineFragment()).commit();
             currFrag = MACHINE;
+
             toolbar.setTitle("Machine");
         } else if (id == R.id.nav_location) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LocationFragment()).commit();
@@ -131,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_purchases) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PurchaseFragment()).commit();
             toolbar.setTitle("Purchases");
-            currFrag=PURCHASES;
+            currFrag = PURCHASES;
         }
 
 
@@ -149,6 +165,40 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitle(title);
         currFrag = type;
         this.neededCode = neededCode;
+
+    }
+
+    public void hideNavigationDrawer() {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setTag(HIDE_NAVDRAWER);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(toolbar.getTag().equals(SHOW_NAVDRAWER)){
+                    drawer.openDrawer(Gravity.START);
+                } else {
+                    backToPrevFragment();
+                }
+            }
+        });
+    }
+
+    public void backToPrevFragment(){
+        if(currFrag==INGREDIENTS) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MachineFragment()).commit();
+            currFrag = MACHINE;
+
+            toolbar.setTitle("Machine");
+            showNavigationDrawer();
+        }
+    }
+
+    public void showNavigationDrawer() {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        toolbar.setNavigationIcon(navIcon);
+        toolbar.setTag(SHOW_NAVDRAWER);
     }
 
     @Override

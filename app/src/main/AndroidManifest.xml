@@ -42,6 +42,7 @@
             android:label="@string/title_activity_add_location" />
         <activity
             android:name=".MachineAddDialogue"
+
             android:label="Add machine" />
         <activity
             android:name=".MainActivity"

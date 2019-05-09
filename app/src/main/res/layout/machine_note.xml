@@ -22,31 +22,31 @@
         android:maxLines="10"
         android:scrollbars="vertical"
 
-         />
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:text="Cancel" />
+            android:text="Cancel"
+            android:theme="@style/MyButton" />
 
         <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:text="Save" />
+            android:text="Save"
+            android:theme="@style/MyButton" />
 
         <ProgressBar
-            android:layout_width="30dp"
             android:id="@+id/loadingNote"
-            android:visibility="gone"
-            android:layout_height="wrap_content" />
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

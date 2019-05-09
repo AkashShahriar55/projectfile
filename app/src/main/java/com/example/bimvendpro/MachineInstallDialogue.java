@@ -16,8 +16,10 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -37,7 +39,7 @@ public class MachineInstallDialogue extends Dialog {
     private Spinner machineType;
     private EditText installDateEditText;
     private CalendarView installDateCalenderView;
-    private Button cancelButton, installButton;
+    private Button cancelButton, installButton, uninstallButton;
     private ProgressBar spinnerLoading, machineInstallingProgressBar;
     private boolean editDlg = false;
 
@@ -68,7 +70,6 @@ public class MachineInstallDialogue extends Dialog {
         init();
 
 
-
         if (item != null) {  //dlg type edit
             if (item.getInstallationDate() == null) {
                 SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -82,16 +83,18 @@ public class MachineInstallDialogue extends Dialog {
 
                     Date d = dateFormat.parse(installDateEditText.getText().toString());
                     installDateCalenderView.setDate(d.getTime());
-                    installDateCalenderView.setVisibility(View.VISIBLE);
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
             //    machineType.setSelection(getIndexFromSpinner(productTypeSpinner, item.getProductType()));
             installButton.setText("Update");
+            uninstallButton.setVisibility(View.VISIBLE);
             machineType.setEnabled(false);
             editDlg = true;
         }
+
 
         loadLocationsToSpinner();
 
@@ -105,22 +108,25 @@ public class MachineInstallDialogue extends Dialog {
         spinnerLoading = findViewById(R.id.spinnerLoading);
         machineInstallingProgressBar = findViewById(R.id.installingProgressBar);
         installDateCalenderView = findViewById(R.id.installDateCalender);
-
+        uninstallButton = findViewById(R.id.uninstallButton);
         installButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeDataToFirebase(new MachineInstall(machineType.getSelectedItem().toString(),installDateEditText.getText().toString()));
+
+                writeDataToFirebase(new MachineInstall(machineType.getSelectedItem().toString(), installDateEditText.getText().toString()));
             }
         });
 
         installDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                installDateCalenderView.setVisibility(View.VISIBLE);
+                installDateEditText.setVisibility(View.GONE);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 try {
                     Date d = dateFormat.parse(installDateEditText.getText().toString());
                     installDateCalenderView.setDate(d.getTime());
-                    installDateCalenderView.setVisibility(View.VISIBLE);
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -132,8 +138,10 @@ public class MachineInstallDialogue extends Dialog {
 
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                installDateCalenderView.setVisibility(View.GONE);
+                installDateEditText.setVisibility(View.VISIBLE);
                 StringBuilder strBld = new StringBuilder();
-                strBld.append(String.format("%02d",dayOfMonth)).append("-").append(String.format("%02d",month+1)).append("-").append(year);
+                strBld.append(String.format("%02d", dayOfMonth)).append("-").append(String.format("%02d", month + 1)).append("-").append(year);
                 installDateEditText.setText(strBld.toString());
                 //installDateCalenderView.setVisibility(View.GONE);
             }
@@ -145,6 +153,42 @@ public class MachineInstallDialogue extends Dialog {
                 dismiss();
             }
         });
+
+        installDateCalenderView.setVisibility(View.GONE);
+
+
+        uninstallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                installingOn();
+                FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(code).child("machineInstall").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+
+
+                        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getLocation()).child("machineInstall").child(code).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                                installingOff();
+                                dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@android.support.annotation.NonNull Exception e) {
+                                installingOff();
+                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@android.support.annotation.NonNull Exception e) {
+                        installingOff();
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     private void spinnerLoadingOn() {
@@ -154,7 +198,7 @@ public class MachineInstallDialogue extends Dialog {
     }
 
     private void spinnerLoadingOff() {
-        if(!editDlg) {
+        if (!editDlg) {
             machineType.setEnabled(true);
         }
         installButton.setEnabled(true);
@@ -170,7 +214,7 @@ public class MachineInstallDialogue extends Dialog {
     }
 
     private void installingOff() {
-        if(!editDlg) {
+        if (!editDlg) {
             machineType.setEnabled(true);
         }
         installButton.setEnabled(true);

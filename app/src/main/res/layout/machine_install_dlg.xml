@@ -44,6 +44,8 @@
     <CalendarView
         android:id="@+id/installDateCalender"
         android:layout_width="match_parent"
+        android:background="@color/colorLightCard"
+
         android:layout_height="wrap_content"
 
         />
@@ -56,11 +58,20 @@
 
         <Button
             android:id="@+id/cancelButton"
+            android:theme="@style/MyButton"
             style="@style/addItemDialogueButton"
             android:text="Cancel" />
 
         <Button
+            android:id="@+id/uninstallButton"
+            android:theme="@style/MyButton"
+            style="@style/addItemDialogueButton"
+            android:visibility="gone"
+            android:text="Uninstall" />
+
+        <Button
             android:id="@+id/installButton"
+            android:theme="@style/MyButton"
             style="@style/addItemDialogueButton"
             android:text="Install" />
         <ProgressBar

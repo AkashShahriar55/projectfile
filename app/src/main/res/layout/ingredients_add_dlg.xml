@@ -72,12 +72,14 @@
                 <Button
                     android:id="@+id/cancelButton"
                     style="@style/addItemDialogueButton"
+                    android:theme="@style/MyButton"
                     android:text="Cancel" />
 
                 <Button
                     android:id="@+id/deleteButton"
                     style="@style/addItemDialogueButton"
                     android:text="Delete"
+                    android:theme="@style/MyButton"
                     android:visibility="gone" />
 
                 <LinearLayout
@@ -90,6 +92,7 @@
                         android:id="@+id/addButton"
                         style="@style/addItemDialogueButton"
                         android:text="Add"
+                        android:theme="@style/MyButton"
                         />
 
                     <ProgressBar

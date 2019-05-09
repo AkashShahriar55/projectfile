@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addItemScrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="15dp">
+    android:layout_height="wrap_content">
 
-
-    <ScrollView
-        android:id="@+id/addItemScrollView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+        android:padding="15dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,24 +22,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Code" />
+                    <EditText
+                        android:id="@+id/codeEditText"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Code" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/codeEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="CX5067" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Machine Name" />
-
-                <EditText
-                    android:id="@+id/machineNameEditTExt"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="CokeMachine" />
+                    <EditText
+                        android:id="@+id/machineNameEditTExt"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Name" />
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     style="@style/addItemDialogueTextView"
@@ -48,14 +51,15 @@
                     style="@style/addItemDialogueSpinner"
                     android:entries="@array/machine_type" />
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Model" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/modelEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="Small" />
+                    <EditText
+                        android:id="@+id/modelEditText"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Model" />
+                </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -78,48 +82,53 @@
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="15dp"
-
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/cancelButton"
-            style="@style/addItemDialogueButton"
-            android:text="Cancel" />
-
-        <Button
-            android:id="@+id/deleteButton"
-            style="@style/addItemDialogueButton"
-            android:text="Delete"
-            android:visibility="gone" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="25dp"
+
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/addButton"
+                android:id="@+id/cancelButton"
                 style="@style/addItemDialogueButton"
-                android:text="Add" />
+                android:text="Cancel"
+                android:theme="@style/MyButton" />
 
-            <ProgressBar
-                android:id="@+id/loadingProgressBar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="6dp"
-                android:translationZ="2dp"
+            <Button
+                android:id="@+id/deleteButton"
+                style="@style/addItemDialogueButton"
+                android:text="Delete"
+                android:theme="@style/MyButton"
                 android:visibility="gone" />
 
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/addButton"
+                    style="@style/addItemDialogueButton"
+                    android:text="Add"
+                    android:theme="@style/MyButton" />
+
+                <ProgressBar
+                    android:id="@+id/loadingProgressBar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+
+                    android:layout_marginLeft="6dp"
+                    android:translationZ="2dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>

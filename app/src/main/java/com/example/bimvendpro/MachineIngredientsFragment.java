@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,7 @@ public class MachineIngredientsFragment extends Fragment {
     private String code;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView noIngredientsTextView;
 
 
     @Override
@@ -61,7 +63,10 @@ public class MachineIngredientsFragment extends Fragment {
 
         swipeRefreshLayout.setRefreshing(true);
 
+        noIngredientsTextView=view.findViewById(R.id.noIngredentsMsg);
 
+
+        ((MainActivity) getActivity()).hideNavigationDrawer();
 
     }
 
@@ -90,7 +95,11 @@ public class MachineIngredientsFragment extends Fragment {
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     itemList.add(dsp.getValue(MachineIngredients.class)); //add result into array list
                 }
-
+                if(itemList.size()==0){
+                    noIngredientsTextView.setVisibility(View.VISIBLE);
+                }else {
+                    noIngredientsTextView.setVisibility(View.GONE);
+                }
                 mAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }

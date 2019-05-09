@@ -108,6 +108,7 @@ public class PurchaseAddDialogue extends Dialog {
             public void onClick(View v) {
                 hideKeyboard();
                 purchaseDateCalenderView.setVisibility(View.VISIBLE);
+                purchaseDateEditText.setVisibility(View.GONE);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 try {
                     Date d = dateFormat.parse(purchaseDateEditText.getText().toString());
@@ -124,6 +125,7 @@ public class PurchaseAddDialogue extends Dialog {
 
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                purchaseDateEditText.setVisibility(View.VISIBLE);
                 hideKeyboard();
                 StringBuilder strBld = new StringBuilder();
                 strBld.append(String.format("%02d", dayOfMonth)).append("-").append(String.format("%02d", month + 1)).append("-").append(year);
