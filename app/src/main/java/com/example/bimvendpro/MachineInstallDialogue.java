@@ -278,7 +278,9 @@ public class MachineInstallDialogue extends Dialog {
                 ;
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 machineType.setAdapter(adapter);
-                machineType.setSelection(getIndexFromSpinner(machineType, item.getLocation()));
+                if(editDlg) {
+                    machineType.setSelection(getIndexFromSpinner(machineType, item.getLocation()));
+                }
                 spinnerLoadingOff();
                 // mAdapter.notifyDataSetChanged();
 

@@ -15,11 +15,12 @@ import java.util.List;
 public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngredientsAdapter.MachineIngredientsViewHolder> {
     private List<MachineIngredients> itemList;
     private Context context;
-
+    private String machineId;
     public class MachineIngredientsViewHolder extends RecyclerView.ViewHolder {
-        private TextView codeTextView, productNameTextView, canisterTextView, maxTextView;
+        private TextView codeTextView, productNameTextView, canisterTextView, maxTextView,lastTextView;
         private MachineIngredients item;
         private LinearLayout parent;
+
 
         public MachineIngredientsViewHolder(View view) {
             super(view);
@@ -28,6 +29,7 @@ public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngre
             canisterTextView = view.findViewById(R.id.canisterTextView);
             maxTextView = view.findViewById(R.id.maxTextView);
             parent=view.findViewById(R.id.parent);
+            lastTextView=view.findViewById(R.id.lastTextView);
         }
 
         public MachineIngredients getItem() {
@@ -39,9 +41,10 @@ public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngre
         }
     }
 
-    public MachineIngredientsAdapter(List<MachineIngredients> moviesList, Context context) {
+    public MachineIngredientsAdapter(List<MachineIngredients> moviesList, Context context, String machineId) {
         this.itemList = moviesList;
         this.context=context;
+        this.machineId=machineId;
     }
 
     @Override
@@ -56,8 +59,9 @@ public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngre
         final MachineIngredients item = itemList.get(position);
         holder.codeTextView.setText(item.getCode());
         holder.productNameTextView.setText(item.getName());
-        holder.canisterTextView.setText(String.valueOf(item.getCanister()));
+        holder.canisterTextView.setText(String.valueOf(item.getVendPrice()));
         holder.maxTextView.setText(String.valueOf(item.getMax()));
+        holder.lastTextView.setText(String.valueOf(item.getLastCount()));
 
         holder.parent.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -72,7 +76,7 @@ public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngre
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:
-                                new MachineIngredientsAddDialogue(context,item.getCode(),item).show();
+                                new MachineIngredientsAddDialogue(context,machineId,item).show();
                                 break;
 
                         }

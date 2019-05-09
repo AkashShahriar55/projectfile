@@ -47,7 +47,7 @@ public class PurchaseFragment extends Fragment {
     private void initializeRecyclerView() {
         purchaseRecyclerView = getView().findViewById(R.id.purchases);
 
-        mAdapter = new PurchaseAdapter(itemList, getContext());
+        mAdapter = new PurchaseAdapter(itemList, getContext(),(MainActivity) getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         purchaseRecyclerView.setLayoutManager(mLayoutManager);
         purchaseRecyclerView.setItemAnimator(new DefaultItemAnimator());

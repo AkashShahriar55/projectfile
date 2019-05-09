@@ -15,6 +15,7 @@ import java.util.List;
 public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.PurchaseViewHolder> {
     private List<PurchaseClass> itemList;
     private Context context;
+    private MainActivity mainActivity;
     public class PurchaseViewHolder extends RecyclerView.ViewHolder {
         private TextView purDateTextView, supplierTextView, productNoTextView, amountTextView;
         private PurchaseClass item;
@@ -38,9 +39,10 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
         }
     }
 
-    public PurchaseAdapter(List<PurchaseClass> moviesList, Context context) {
+    public PurchaseAdapter(List<PurchaseClass> moviesList, Context context, MainActivity mainActivity) {
         this.itemList = moviesList;
         this.context=context;
+        this.mainActivity=mainActivity;
     }
 
     @Override
@@ -74,10 +76,11 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:
-                              //  new InventoryItemHistoryDialogue(context,item.getCode()).show();
+                                new PurchaseAddDialogue(context,item).show();
                                 break;
                             case 1:
                                // new InventoryItemAddDialogue(context,item).show();
+                                mainActivity.changeFragment(new PurchaseProductFragment(),item.getSupplier(),item.getPushId(),MainActivity.PRODUCTS);
 
                                 break;
                         }
@@ -86,6 +89,14 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
                 builder.show();
 
                 return false;
+            }
+        });
+
+        holder.parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.changeFragment(new PurchaseProductFragment(),item.getSupplier(),item.getPushId(),MainActivity.PRODUCTS);
+
             }
         });
 

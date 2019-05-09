@@ -1,17 +1,21 @@
 package com.example.bimvendpro;
 
-public class MachineIngredients {
+import java.io.Serializable;
+
+public class MachineIngredients implements Serializable {
     private String code;
     private String name;
-    private Integer canister;
+    private Double vendPrice;
     private Integer max;
+    private Integer lastCount;
 
 
-    MachineIngredients(String code, String name, Integer canister, Integer max){
-        this.canister=canister;
+    MachineIngredients(String code, String name, Double vendPrice, Integer max, Integer lastCount){
+        this.vendPrice=vendPrice;
         this.code=code;
         this.name=name;
         this.max=max;
+        this.lastCount=lastCount;
     }
 
     MachineIngredients(){
@@ -34,13 +38,7 @@ public class MachineIngredients {
         this.name = name;
     }
 
-    public Integer getCanister() {
-        return canister;
-    }
 
-    public void setCanister(Integer canister) {
-        this.canister = canister;
-    }
 
     public Integer getMax() {
         return max;
@@ -48,5 +46,21 @@ public class MachineIngredients {
 
     public void setMax(Integer max) {
         this.max = max;
+    }
+
+    public Double getVendPrice() {
+        return vendPrice;
+    }
+
+    public void setVendPrice(Double vendPrice) {
+        this.vendPrice = vendPrice;
+    }
+
+    public Integer getLastCount() {
+        return lastCount;
+    }
+
+    public void setLastCount(Integer lastCount) {
+        this.lastCount = lastCount;
     }
 }

@@ -5,16 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,17 +21,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MachineIngredientsFragment extends Fragment {
-    private RecyclerView machineRecyclerView;
+public class PurchaseProductFragment extends Fragment {
+    private RecyclerView productRecyclerView;
 
-    private List<MachineIngredients> itemList = new ArrayList<>();
-    private MachineIngredientsAdapter mAdapter;
+    private List<PurchaseProductClass> itemList = new ArrayList<>();
+    private PurchaseProductAdapter mAdapter;
     private String code;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView noIngredientsTextView;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,32 +61,29 @@ public class MachineIngredientsFragment extends Fragment {
 
 
     }
-
-
     private void initializeRecyclerView() {
-        machineRecyclerView = getView().findViewById(R.id.ingredientsRecyclerView);
+        productRecyclerView = getView().findViewById(R.id.productsRecyclerView);
 
-        mAdapter = new MachineIngredientsAdapter(itemList, getContext(), code);
+        mAdapter = new PurchaseProductAdapter(itemList, getContext(),code);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        machineRecyclerView.setLayoutManager(mLayoutManager);
-        machineRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        machineRecyclerView.setAdapter(mAdapter);
+        productRecyclerView.setLayoutManager(mLayoutManager);
+        productRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        productRecyclerView.setAdapter(mAdapter);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_ingredients, container, false);
+        return inflater.inflate(R.layout.fragment_product, container, false);
     }
 
 
     public void readDataFromFirebase() {
-        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(code).child("machineIngredients").orderByChild("name").addValueEventListener(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Purchases").child("Items").child(code).child("purchaseProducts").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 itemList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    itemList.add(dsp.getValue(MachineIngredients.class)); //add result into array list
+                    itemList.add(dsp.getValue(PurchaseProductClass.class)); //add result into array list
                 }
                 if (itemList.size() == 0) {
                     noIngredientsTextView.setVisibility(View.VISIBLE);

@@ -18,13 +18,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
 
                 <TextView
                     style="@style/addItemDialogueTextView"
-                    android:text="Select ingredient" />
+                    android:text="Select Product" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -44,71 +44,83 @@
                 </LinearLayout>
 
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Canister" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/canisterEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="12" />
+                    <EditText
+                        android:id="@+id/canisterEditText"
+                        android:inputType="numberDecimal"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Vend Price" />
 
-                <TextView
-                    style="@style/addItemDialogueTextView"
-                    android:text="Max Capacity" />
+                </android.support.design.widget.TextInputLayout>
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/maxEditText"
-                    style="@style/addItemDialogueEditTextView"
-                    android:hint="200" />
+                    <EditText
+                        android:id="@+id/maxEditText"
+                        android:inputType="number"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Max Capacity" />
+                </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/cancelButton"
-                    style="@style/addItemDialogueButton"
-                    android:theme="@style/MyButton"
-                    android:text="Cancel" />
-
-                <Button
-                    android:id="@+id/deleteButton"
-                    style="@style/addItemDialogueButton"
-                    android:text="Delete"
-                    android:theme="@style/MyButton"
-                    android:visibility="gone" />
-
+                    <EditText
+                        android:id="@+id/lastEditText"
+                        android:inputType="number"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Last Count" />
+                </android.support.design.widget.TextInputLayout>
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+
+                    android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/addButton"
+                        android:id="@+id/cancelButton"
                         style="@style/addItemDialogueButton"
-                        android:text="Add"
-                        android:theme="@style/MyButton"
-                        />
+                        android:text="Cancel"
+                        android:theme="@style/MyButton" />
 
-                    <ProgressBar
-                        android:id="@+id/loadingProgressBar"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:visibility="gone"
-                        android:layout_marginLeft="6dp"
-                        android:translationZ="2dp"
-                />
+                    <Button
+                        android:id="@+id/deleteButton"
+                        style="@style/addItemDialogueButton"
+                        android:text="Delete"
+                        android:theme="@style/MyButton"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/addButton"
+                            style="@style/addItemDialogueButton"
+                            android:text="Add"
+                            android:theme="@style/MyButton" />
+
+                        <ProgressBar
+                            android:id="@+id/loadingProgressBar"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="6dp"
+                            android:translationZ="2dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
-
             </LinearLayout>
-        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

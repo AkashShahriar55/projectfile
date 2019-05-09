@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -29,7 +30,7 @@ public class PurchaseAddDialogue extends Dialog {
     private EditText supplierEditText, purchaseDateEditText;
     private CalendarView purchaseDateCalenderView;
     private Button cancelButton, saveButton, deleteButton;
-    private Boolean editDlg;
+    private Boolean editDlg = false;
     private ProgressBar progressBar;
 
     public PurchaseAddDialogue(Context context) {
@@ -59,6 +60,7 @@ public class PurchaseAddDialogue extends Dialog {
         hideKeyboard();
 
         if (item != null) {  //dlg type edit
+            supplierEditText.setText(item.getSupplier());
             deleteButton.setVisibility(View.VISIBLE);
             if (item.getPurchaseDate() == null) {
                 SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
@@ -72,7 +74,7 @@ public class PurchaseAddDialogue extends Dialog {
 
                     Date d = dateFormat.parse(purchaseDateEditText.getText().toString());
                     purchaseDateCalenderView.setDate(d.getTime());
-                    purchaseDateCalenderView.setVisibility(View.VISIBLE);
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -90,16 +92,41 @@ public class PurchaseAddDialogue extends Dialog {
         purchaseDateEditText = findViewById(R.id.purchaseDateEditText);
         cancelButton = findViewById(R.id.cancelButton);
         saveButton = findViewById(R.id.saveButton);
-        progressBar=findViewById(R.id.savingProgressBar);
-        deleteButton=findViewById(R.id.deleteButton);
+        progressBar = findViewById(R.id.savingProgressBar);
+        deleteButton = findViewById(R.id.deleteButton);
 
-        purchaseDateCalenderView.setVisibility(View.GONE);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideKeyboard();
-                writeDataToFirebase(new PurchaseClass(supplierEditText.getText().toString(), purchaseDateEditText.getText().toString()));
+                if (supplierEditText.getText() == null) {
+                    supplierEditText.setError("Mustn't be empty");
+                    return;
+                } else if (TextUtils.isEmpty(supplierEditText.getText().toString())) {
+                    supplierEditText.setError("Mustn't be empty");
+                    return;
+                }
+                if (purchaseDateEditText.getText() == null) {
+                    purchaseDateEditText.setError("Select a date");
+                    return;
+                } else if (TextUtils.isEmpty(purchaseDateEditText.getText().toString())) {
+                    purchaseDateEditText.setError("Select a date");
+                    return;
+                }
+                String pushId;
+                if (editDlg) {
+                    pushId = item.getPushId();
+                } else {
+                    pushId = FirebaseUtilClass.getDatabaseReference().child("Purchases").child("Items").push().getKey();
+                }
+                if (editDlg) {
+                    item.setSupplier(supplierEditText.getText().toString());
+                    item.setPurchaseDate(purchaseDateEditText.getText().toString());
+                    writeDataToFirebase(item);
+                } else {
+                    writeDataToFirebase(new PurchaseClass(pushId, supplierEditText.getText().toString(), purchaseDateEditText.getText().toString()));
+                }
             }
         });
 
@@ -142,6 +169,8 @@ public class PurchaseAddDialogue extends Dialog {
                 dismiss();
             }
         });
+
+        purchaseDateCalenderView.setVisibility(View.GONE);
     }
 
     private void installingOn() {
@@ -168,7 +197,7 @@ public class PurchaseAddDialogue extends Dialog {
         installingOn();
 
 
-        FirebaseUtilClass.getDatabaseReference().child("Purchases").child("Items").push().setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirebaseUtilClass.getDatabaseReference().child("Purchases").child("Items").child(item.getPushId()).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
 
@@ -189,15 +218,16 @@ public class PurchaseAddDialogue extends Dialog {
         });
 
     }
+
     private void hideKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if(getCurrentFocus()!=null) {
+        if (getCurrentFocus() != null) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
 
 //Show
-       // imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+        // imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
 }

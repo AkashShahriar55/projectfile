@@ -1,28 +1,33 @@
 package com.example.bimvendpro;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class PurchaseClass implements Serializable {
     private String supplier;
-
+    private String pushId;
     private String purchaseDate;
-    private Integer productNo=0;
-    private Double totalCost=0.0;
+    private Integer productNo = 0;
+    private Double totalCost = 0.0;
+    private Map<String, PurchaseProductClass> purchaseProducts;
 
-    PurchaseClass(){
+    PurchaseClass() {
 
     }
 
-    PurchaseClass(String supplier, String purchaseDate){
-        this.supplier=supplier;
-        this.purchaseDate=purchaseDate;
+    PurchaseClass(String pushId, String supplier, String purchaseDate) {
+        this.supplier = supplier;
+        this.pushId = pushId;
+        this.purchaseDate = purchaseDate;
     }
 
-    PurchaseClass(String supplier, String purchaseDate, Integer productNo, Double totalCost){
-        this.supplier=supplier;
-        this.purchaseDate=purchaseDate;
-        this.productNo=productNo;
-        this.totalCost=totalCost;
+    PurchaseClass(String pushId, String supplier, String purchaseDate, Integer productNo, Double totalCost, Map<String, PurchaseProductClass> purchaseProducts) {
+        this.supplier = supplier;
+        this.pushId = pushId;
+        this.purchaseDate = purchaseDate;
+        this.productNo = productNo;
+        this.totalCost = totalCost;
+        this.purchaseProducts = purchaseProducts;
     }
 
     public String getSupplier() {
@@ -55,5 +60,21 @@ public class PurchaseClass implements Serializable {
 
     public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public String getPushId() {
+        return pushId;
+    }
+
+    public void setPushId(String pushId) {
+        this.pushId = pushId;
+    }
+
+    public Map<String, PurchaseProductClass> getPurchaseProducts() {
+        return purchaseProducts;
+    }
+
+    public void setPurchaseProducts(Map<String, PurchaseProductClass> purchaseProducts) {
+        this.purchaseProducts = purchaseProducts;
     }
 }

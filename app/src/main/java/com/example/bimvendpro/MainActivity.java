@@ -21,7 +21,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
-    public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6,SHOW_NAVDRAWER=100,HIDE_NAVDRAWER=101;
+    public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6, PRODUCTS = 7, SHOW_NAVDRAWER = 100, HIDE_NAVDRAWER = 101;
     private String neededCode;
     private DrawerLayout drawer;
     private Drawable navIcon;
@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if(currFrag==INGREDIENTS){
+        if (currFrag == INGREDIENTS || currFrag==PRODUCTS) {
             backToPrevFragment();
-        }else {
+        } else {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
@@ -98,6 +98,9 @@ public class MainActivity extends AppCompatActivity
                 return true;
             } else if (currFrag == PURCHASES) {
                 new PurchaseAddDialogue(this).show();
+                return true;
+            }else if (currFrag == PRODUCTS) {
+                new PurchaseProductAddDialogue(this,neededCode).show();
                 return true;
             }
         } else if (id == R.id.action_search) {
@@ -165,7 +168,7 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitle(title);
         currFrag = type;
         this.neededCode = neededCode;
-
+        hideNavigationDrawer();
     }
 
     public void hideNavigationDrawer() {
@@ -176,7 +179,7 @@ public class MainActivity extends AppCompatActivity
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toolbar.getTag().equals(SHOW_NAVDRAWER)){
+                if (toolbar.getTag().equals(SHOW_NAVDRAWER)) {
                     drawer.openDrawer(Gravity.START);
                 } else {
                     backToPrevFragment();
@@ -185,12 +188,18 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void backToPrevFragment(){
-        if(currFrag==INGREDIENTS) {
+    public void backToPrevFragment() {
+        if (currFrag == INGREDIENTS) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MachineFragment()).commit();
             currFrag = MACHINE;
 
             toolbar.setTitle("Machine");
+            showNavigationDrawer();
+        } else if (currFrag == PRODUCTS) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PurchaseFragment()).commit();
+            currFrag = PURCHASES;
+
+            toolbar.setTitle("Purchases");
             showNavigationDrawer();
         }
     }

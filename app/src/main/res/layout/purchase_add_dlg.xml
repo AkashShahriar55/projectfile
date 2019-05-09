@@ -37,8 +37,8 @@
         <CalendarView
             android:id="@+id/purchaseDateCalender"
             android:layout_width="match_parent"
-            android:background="@color/colorLightCard"
             android:layout_height="wrap_content"
+            android:background="@color/colorLightCard"
 
             />
 
@@ -52,20 +52,21 @@
             <Button
                 android:id="@+id/cancelButton"
                 style="@style/addItemDialogueButton"
-                android:theme="@style/MyButton"
-                android:text="Cancel" />
+                android:text="Cancel"
+                android:theme="@style/MyButton" />
 
             <Button
                 android:id="@+id/deleteButton"
                 style="@style/addItemDialogueButton"
                 android:text="Delete"
+                android:theme="@style/MyButton"
                 android:visibility="gone" />
 
             <Button
                 android:id="@+id/saveButton"
-                android:theme="@style/MyButton"
                 style="@style/addItemDialogueButton"
-                android:text="Save" />
+                android:text="Save"
+                android:theme="@style/MyButton" />
 
             <ProgressBar
                 android:id="@+id/savingProgressBar"

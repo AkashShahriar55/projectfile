@@ -28,7 +28,8 @@
                     <EditText
                         android:id="@+id/codeEditText"
                         style="@style/addItemDialogueEditTextView"
-                        android:hint="Code" />
+                        android:hint="Code"
+                        android:inputType="textNoSuggestions" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -57,84 +58,70 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_weight=".3"
-                        android:layout_height="wrap_content">
 
-                        <EditText
-                            android:id="@+id/inStockEditText"
-                            style="@style/addItemDialogueEditTextView"
-                            android:hint="Stock" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="0dp"
-
-                        android:layout_weight=".3"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3">
 
                         <EditText
                             android:id="@+id/inWarehouseEditText"
                             style="@style/addItemDialogueEditTextView"
-                            android:hint="Warehouse" />
+                            android:hint="In Warehouse"
+                            android:inputType="number" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_weight=".3"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3">
+
+                        <EditText
+                            android:id="@+id/inStockEditText"
+                            style="@style/addItemDialogueEditTextView"
+                            android:hint="In Stock"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:visibility="gone"
+                            android:inputType="none" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3">
 
                         <EditText
                             android:id="@+id/inMachineEditText"
                             style="@style/addItemDialogueEditTextView"
-                            android:hint="\Machine" />
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:inputType="none"
+                            android:visibility="gone"
+                            android:hint="In Machine"
+                             />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:layout_height="wrap_content">
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_weight=".5"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/unitPerCaseEditText"
-                        style="@style/addItemDialogueEditTextView"
-                        android:hint="Unit per case" />
-                </android.support.design.widget.TextInputLayout>
-
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight=".5"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".5">
+                        >
 
                         <EditText
-                            android:id="@+id/lastCostEditText"
-
+                            android:id="@+id/unitPerCaseEditText"
                             style="@style/addItemDialogueEditTextView"
-                            android:layout_width="match_parent"
-
-                            android:hint="Last Cost" />
+                            android:hint="Unit per case"
+                            android:inputType="numberDecimal" />
                     </android.support.design.widget.TextInputLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:gravity="center"
-                        android:text="$" />
+
+
                 </LinearLayout>
-</LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -146,8 +133,8 @@
                 <Button
                     android:id="@+id/cancelButton"
                     style="@style/addItemDialogueButton"
-                    android:theme="@style/MyButton"
-                    android:text="Cancel" />
+                    android:text="Cancel"
+                    android:theme="@style/MyButton" />
 
                 <Button
                     android:id="@+id/deleteButton"
@@ -162,9 +149,9 @@
 
                     <Button
                         android:id="@+id/addButton"
-                        android:theme="@style/MyButton"
                         style="@style/addItemDialogueButton"
-                        android:text="Add" />
+                        android:text="Add"
+                        android:theme="@style/MyButton" />
 
                     <ProgressBar
                         android:id="@+id/loadingProgressBar"

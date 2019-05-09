@@ -2,6 +2,8 @@ package com.example.bimvendpro;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class Machine implements Serializable {
     private String code;
@@ -14,23 +16,32 @@ public class Machine implements Serializable {
     private float totalCollected;
     private float vendsPerDay;
     private MachineInstall machineInstall;
-
+    private Map<String ,MachineIngredients> machineIngredients;
     public Machine(String code, String name, String model, String type) {
         this.code = code;
         this.name = name;
         this.model = model;
         this.type = type;
         lastVisit=null;
-        machineInstall=new MachineInstall();
+
+    }
+
+    public Machine(String code, String name, String model, String type,String lastVisit,String note, int daysInService,float totalCollected,float vendsPerDay, MachineInstall machineInstall, Map<String,MachineIngredients> machineIngredients) {
+        this.code = code;
+        this.name = name;
+        this.model = model;
+        this.type = type;
+        this.machineInstall=machineInstall;
+        this.lastVisit=lastVisit;
+        this.note=note;
+        this.daysInService=daysInService;
+        this.totalCollected=totalCollected;
+        this.vendsPerDay=vendsPerDay;
+        this.machineIngredients=machineIngredients;
     }
 
     public Machine(){
-        code="not set";
-        name="not set";
-        model="not set";
-        type="not set";
-        lastVisit=null;
-        machineInstall=new MachineInstall();
+
     }
 
     public String getCode() {
@@ -115,5 +126,14 @@ public class Machine implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+
+    public Map<String, MachineIngredients> getMachineIngredients() {
+        return machineIngredients;
+    }
+
+    public void setMachineIngredients(Map<String, MachineIngredients> machineIngredients) {
+        this.machineIngredients = machineIngredients;
     }
 }

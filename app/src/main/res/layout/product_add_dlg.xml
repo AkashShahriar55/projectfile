@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select location" />
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/spinnerLoading"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/productNameSpinner"
+
+            style="@style/addItemDialogueSpinner" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5">
+
+            <EditText
+                style="@style/addItemDialogueEditTextView"
+                android:id="@+id/casesPur"
+                android:inputType="numberDecimal"
+                android:hint="Cases Purchased" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5">
+
+            <EditText
+                style="@style/addItemDialogueEditTextView"
+                android:inputType="numberDecimal"
+                android:id="@+id/unitPerCase"
+                android:hint="Unit/Case" />
+        </android.support.design.widget.TextInputLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5">
+
+            <EditText
+                style="@style/addItemDialogueEditTextView"
+                android:id="@+id/costPerCase"
+                android:inputType="numberDecimal"
+                android:hint="Cost/Case" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5">
+
+
+        </android.support.design.widget.TextInputLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".33">
+
+            <EditText
+                style="@style/addItemDialogueEditTextView"
+                android:clickable="false"
+                android:focusable="false"
+                android:inputType="none"
+                android:id="@+id/unitCost"
+                android:hint="Unit Cost" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".33">
+
+            <EditText
+                style="@style/addItemDialogueEditTextView"
+                android:clickable="false"
+                android:focusable="false"
+                android:inputType="none"
+                android:id="@+id/noOfUnit"
+                android:hint="# Units" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".33">
+
+            <EditText
+                style="@style/addItemDialogueEditTextView"
+                android:clickable="false"
+                android:focusable="false"
+                android:inputType="none"
+                android:id="@+id/totalCost"
+                android:hint="Total Cost" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelButton"
+            style="@style/addItemDialogueButton"
+            android:text="Cancel"
+            android:theme="@style/MyButton" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            style="@style/addItemDialogueButton"
+            android:text="Delete"
+            android:theme="@style/MyButton"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/saveButton"
+            style="@style/addItemDialogueButton"
+            android:text="Add"
+            android:theme="@style/MyButton" />
+
+        <ProgressBar
+            android:id="@+id/savingProgressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</LinearLayout>

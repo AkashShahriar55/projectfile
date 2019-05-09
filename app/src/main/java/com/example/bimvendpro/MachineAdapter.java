@@ -80,7 +80,15 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
     public void onBindViewHolder(final MachineViewHolder holder, int position) {
         final Machine item = itemList.get(position);
         holder.codeTextView.setText(item.getCode());
-        holder.locationTextView.setText(item.getMachineInstall().getLocation());
+        if(item.getMachineInstall()==null){
+            holder.locationTextView.setText("not installed");
+            holder.installedTextView.setText("not installed");
+        }
+            else{
+            holder.locationTextView.setText(item.getMachineInstall().getLocation());
+            holder.installedTextView.setText(String.valueOf(item.getMachineInstall().getInstallationDate()));
+        }
+
         holder.totalCollectedTextView.setText(String.valueOf(item.getTotalCollected()));
         holder.modelTextView.setText(item.getModel());
         if(item.getLastVisit()==null){
@@ -90,7 +98,7 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
         }
         holder.nameTextView.setText(item.getName());
         holder.typeTextView.setText(item.getType());
-        holder.installedTextView.setText(String.valueOf(item.getMachineInstall().getInstallationDate()));
+
         holder.inServiceTextView.setText(String.valueOf(item.getDaysInService()));
         holder.ventsPerDayTextView.setText(String.valueOf(item.getVendsPerDay()));
 

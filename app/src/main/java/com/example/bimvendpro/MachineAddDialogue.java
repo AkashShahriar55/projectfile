@@ -61,7 +61,7 @@ public class MachineAddDialogue extends AppCompatActivity {
 
     private void hideKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if(getCurrentFocus()!=null) {
+        if (getCurrentFocus() != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
@@ -281,9 +281,6 @@ public class MachineAddDialogue extends AppCompatActivity {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("uploads").child("Machine").child(item.getCode());
 
 
-
-
-
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
@@ -335,7 +332,7 @@ public class MachineAddDialogue extends AppCompatActivity {
 
     private void tryWriteData() {
 
-        boolean error = false;
+
         String codeStr = codeEditText.getText().toString();
         String machineNameStr = machineNameEditText.getText().toString();
         String machineModelStr = modelEditText.getText().toString();
@@ -345,27 +342,32 @@ public class MachineAddDialogue extends AppCompatActivity {
         if (TextUtils.isEmpty(codeStr.trim())) {
             codeEditText.setError("Field mustn't be empty");
             codeEditText.requestFocus();
-            error = true;
+
             return;
         }
 
         if (TextUtils.isEmpty(machineNameStr.trim())) {
             machineNameEditText.setError("Field mustn't be empty");
             machineNameEditText.requestFocus();
-            error = true;
+
             return;
         }
 
         if (TextUtils.isEmpty(machineModelStr.trim())) {
             modelEditText.setError("Field mustn't be empty");
             modelEditText.requestFocus();
-            error = true;
+
             return;
         }
-
-
-        if (!error)
+        if (editDlg) {
+            item.setName(machineNameStr);
+            item.setModel(machineModelStr);
+            item.setType(machineType);
+            writeDataToFirebase(item);
+        } else {
             writeDataToFirebase(new Machine(codeStr, machineNameStr, machineModelStr, machineType));
+        }
+
 
     }
 
