@@ -103,14 +103,14 @@ public class PurchaseAddDialogue extends Dialog {
                 if (supplierEditText.getText() == null) {
                     supplierEditText.setError("Mustn't be empty");
                     return;
-                } else if (TextUtils.isEmpty(supplierEditText.getText().toString())) {
+                } else if (TextUtils.isEmpty(supplierEditText.getText().toString().trim())) {
                     supplierEditText.setError("Mustn't be empty");
                     return;
                 }
                 if (purchaseDateEditText.getText() == null) {
                     purchaseDateEditText.setError("Select a date");
                     return;
-                } else if (TextUtils.isEmpty(purchaseDateEditText.getText().toString())) {
+                } else if (TextUtils.isEmpty(purchaseDateEditText.getText().toString().trim())) {
                     purchaseDateEditText.setError("Select a date");
                     return;
                 }

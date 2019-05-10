@@ -169,9 +169,54 @@ public class MachineIngredientsAddDialogue extends Dialog {
         FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(code).child("machineIngredients").child(item.getCode()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
-                installingOff();
-                dismiss();
+
+
+                FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getCode()).child("inMachine").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        final Integer onInternetInMachine = Integer.valueOf(dataSnapshot.getValue().toString());
+                        Integer oldInMachine=0;
+                        if(editDlg){
+                            oldInMachine=MachineIngredientsAddDialogue.this.item.getLastCount();
+                        }
+                        final Integer newInMachine=0; //as deleted
+                        final Integer changedInMachine=newInMachine-oldInMachine;
+
+                        dataSnapshot.getRef().setValue(onInternetInMachine+changedInMachine);
+
+
+                        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getCode()).child("inStock").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Integer inStock = Integer.valueOf(dataSnapshot.getValue().toString());
+
+
+                                dataSnapshot.getRef().setValue(inStock+changedInMachine);
+
+                                Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                installingOff();
+                                dismiss();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                installingOff();
+                            }
+                        });
+
+                        Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
+                        installingOff();
+                        dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        installingOff();
+                    }
+                });
+
 
             }
 
@@ -267,25 +312,24 @@ public class MachineIngredientsAddDialogue extends Dialog {
                 FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getCode()).child("inMachine").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Integer inMachine = Integer.valueOf(dataSnapshot.getValue().toString());
-                        if (editDlg) {
-                            inMachine += (MachineIngredientsAddDialogue.this.item.getLastCount() - item.getLastCount());
-                        } else {
-                            inMachine += (item.getLastCount());
+                        final Integer onInternetInMachine = Integer.valueOf(dataSnapshot.getValue().toString());
+                        Integer oldInMachine=0;
+                        if(editDlg){
+                            oldInMachine=MachineIngredientsAddDialogue.this.item.getLastCount();
                         }
-                        dataSnapshot.getRef().setValue(inMachine);
+                        final Integer newInMachine=item.getLastCount();
+                        final Integer changedInMachine=newInMachine-oldInMachine;
+
+                        dataSnapshot.getRef().setValue(onInternetInMachine+changedInMachine);
 
 
                         FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getCode()).child("inStock").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Integer inStock = Integer.valueOf(dataSnapshot.getValue().toString());
-                                if (editDlg) {
-                                    inStock += (MachineIngredientsAddDialogue.this.item.getLastCount() - item.getLastCount());
-                                } else {
-                                    inStock += (item.getLastCount());
-                                }
-                                dataSnapshot.getRef().setValue(inStock);
+
+
+                                dataSnapshot.getRef().setValue(inStock+changedInMachine);
 
                                 Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
                                 installingOff();

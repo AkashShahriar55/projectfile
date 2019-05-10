@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +32,7 @@ public class MachineFragment extends Fragment {
 
     private List<Machine> itemList = new ArrayList<>();
     private MachineAdapter mAdapter;
-
+    private TextView noIngredientsTextView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -42,18 +43,17 @@ public class MachineFragment extends Fragment {
     }
 
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        swipeRefreshLayout=view.findViewById(R.id.refreshingLayout);
+        swipeRefreshLayout = view.findViewById(R.id.refreshingLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 readDataFromFirebase();
             }
         });
-
+        noIngredientsTextView = view.findViewById(R.id.noIngredentsMsg);
         initializeRecyclerView();
 
         readDataFromFirebase();
@@ -65,14 +65,13 @@ public class MachineFragment extends Fragment {
     private void initializeRecyclerView() {
         machineRecyclerView = getView().findViewById(R.id.machine_container_recyclerview);
 
-        mAdapter = new MachineAdapter(itemList, getContext(),(MainActivity) getActivity());
+        mAdapter = new MachineAdapter(itemList, getContext(), (MainActivity) getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         machineRecyclerView.setLayoutManager(mLayoutManager);
         machineRecyclerView.setItemAnimator(new DefaultItemAnimator());
         machineRecyclerView.setAdapter(mAdapter);
 
     }
-
 
 
     @Override
@@ -87,10 +86,16 @@ public class MachineFragment extends Fragment {
                 itemList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     itemList.add(dsp.getValue(Machine.class)); //add result into array list
+
                 }
 
                 mAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
+                if (itemList.size() == 0) {
+                    noIngredientsTextView.setVisibility(View.VISIBLE);
+                } else {
+                    noIngredientsTextView.setVisibility(View.GONE);
+                }
             }
 
             @Override

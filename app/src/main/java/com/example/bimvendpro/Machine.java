@@ -16,17 +16,17 @@ public class Machine implements Serializable {
     private float totalCollected;
     private float vendsPerDay;
     private MachineInstall machineInstall;
-    private Map<String ,MachineIngredients> machineIngredients;
+    private List<MachineIngredients> machineIngredients;
     public Machine(String code, String name, String model, String type) {
         this.code = code;
         this.name = name;
         this.model = model;
         this.type = type;
-        lastVisit=null;
+
 
     }
 
-    public Machine(String code, String name, String model, String type,String lastVisit,String note, int daysInService,float totalCollected,float vendsPerDay, MachineInstall machineInstall, Map<String,MachineIngredients> machineIngredients) {
+    public Machine(String code, String name, String model, String type,String lastVisit,String note, int daysInService,float totalCollected,float vendsPerDay, MachineInstall machineInstall, List<MachineIngredients>  machineIngredients) {
         this.code = code;
         this.name = name;
         this.model = model;
@@ -129,11 +129,11 @@ public class Machine implements Serializable {
     }
 
 
-    public Map<String, MachineIngredients> getMachineIngredients() {
+    public List<MachineIngredients>  getMachineIngredients() {
         return machineIngredients;
     }
 
-    public void setMachineIngredients(Map<String, MachineIngredients> machineIngredients) {
+    public void setMachineIngredients(List<MachineIngredients>  machineIngredients) {
         this.machineIngredients = machineIngredients;
     }
 }

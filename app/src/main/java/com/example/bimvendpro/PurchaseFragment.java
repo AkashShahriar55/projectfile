@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,10 +26,12 @@ public class PurchaseFragment extends Fragment {
     private List<PurchaseClass> itemList = new ArrayList<>();
     private PurchaseAdapter mAdapter;
     private SwipeRefreshLayout refreshlayout;
+    private TextView noIngredientsTextView;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        refreshlayout=view.findViewById(R.id.refreshingLayout);
+        refreshlayout = view.findViewById(R.id.refreshingLayout);
         refreshlayout.setRefreshing(true);
         refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -36,7 +39,7 @@ public class PurchaseFragment extends Fragment {
                 readDataFromFirebase();
             }
         });
-
+        noIngredientsTextView = view.findViewById(R.id.noIngredentsMsg);
         initializeRecyclerView();
 
         readDataFromFirebase();
@@ -47,7 +50,7 @@ public class PurchaseFragment extends Fragment {
     private void initializeRecyclerView() {
         purchaseRecyclerView = getView().findViewById(R.id.purchases);
 
-        mAdapter = new PurchaseAdapter(itemList, getContext(),(MainActivity) getActivity());
+        mAdapter = new PurchaseAdapter(itemList, getContext(), (MainActivity) getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         purchaseRecyclerView.setLayoutManager(mLayoutManager);
         purchaseRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -71,6 +74,11 @@ public class PurchaseFragment extends Fragment {
                 }
                 mAdapter.notifyDataSetChanged();
                 refreshlayout.setRefreshing(false);
+                if (itemList.size() == 0) {
+                    noIngredientsTextView.setVisibility(View.VISIBLE);
+                } else {
+                    noIngredientsTextView.setVisibility(View.GONE);
+                }
                 //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
             }
 

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +32,7 @@ public class InventoryFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-
+    private TextView noIngredientsTextView;
 
 
     private RecyclerView inventoryItemRecyclerView;
@@ -73,6 +74,7 @@ public class InventoryFragment extends Fragment {
         });
 
 
+        noIngredientsTextView=view.findViewById(R.id.noIngredentsMsg);
         initializeRecyclerView();
 
         readDataFromFirebase();
@@ -119,6 +121,11 @@ public class InventoryFragment extends Fragment {
                 }
                 mAdapter.notifyDataSetChanged();
                 refreshlayout.setRefreshing(false);
+                if (itemList.size() == 0) {
+                    noIngredientsTextView.setVisibility(View.VISIBLE);
+                } else {
+                    noIngredientsTextView.setVisibility(View.GONE);
+                }
              //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
             }
 

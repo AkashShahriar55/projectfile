@@ -14,8 +14,10 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -45,12 +47,13 @@ public class MachineAddDialogue extends AppCompatActivity {
     private Spinner machineTypeSpinner;
     private Button cancelButton, deleteButton, addButton;
     private ProgressBar progressBar;
-    private Boolean editDlg;
+    private Boolean editDlg = false;
     private ImageView addImage;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri mImageUri;
     private boolean hasImage = false;
     private String imageUrlStr = "";
+    private Toolbar toolbar;
 
     public MachineAddDialogue() {
         // Empty constructor is required for DialogFragment
@@ -146,20 +149,22 @@ public class MachineAddDialogue extends AppCompatActivity {
             @Override
             public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
 
+                if (item.getMachineInstall() != null) {
 
-                FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getMachineInstall().getLocation()).child("machineInstall").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                        notLoading();
-                        MachineAddDialogue.this.finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@android.support.annotation.NonNull Exception e) {
-                        notLoading();
-                        Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getMachineInstall().getLocation()).child("machineInstall").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                            notLoading();
+                            MachineAddDialogue.this.finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@android.support.annotation.NonNull Exception e) {
+                            notLoading();
+                            Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -251,7 +256,7 @@ public class MachineAddDialogue extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.machine_add_dlg);
 
 
@@ -262,8 +267,12 @@ public class MachineAddDialogue extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             item = (Machine) intent.getExtras().getSerializable("item");
-
+            getSupportActionBar().setTitle(item.getName());
         }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         if (item != null) {  //dlg type edit
             codeEditText.setText(item.getCode());
@@ -396,5 +405,13 @@ public class MachineAddDialogue extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

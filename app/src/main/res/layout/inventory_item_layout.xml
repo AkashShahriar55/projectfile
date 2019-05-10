@@ -170,11 +170,11 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center"
+                        android:src="@drawable/ic_warehouse"
 
-                        android:src="@drawable/ic_stock"
                         android:tint="@color/colorBar" />
 
                     <TextView
@@ -185,7 +185,7 @@
                         android:gravity="center"
                         android:text="000"
                         android:textColor="#000000"
-                        android:textSize="19sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -198,11 +198,11 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center"
+                        android:src="@drawable/ic_stock"
 
-                        android:src="@drawable/ic_warehouse"
                         android:tint="@color/colorBar" />
 
                     <TextView
@@ -213,7 +213,7 @@
                         android:gravity="center"
                         android:text="000"
                         android:textColor="#000000"
-                        android:textSize="19sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -226,8 +226,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center"
 
                         android:src="@drawable/ic_machines"
@@ -241,7 +241,7 @@
                         android:gravity="center"
                         android:text="000"
                         android:textColor="#000000"
-                        android:textSize="19sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
             </LinearLayout>
