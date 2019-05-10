@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddViewEditExpenses"></activity>
+        <activity android:name=".TripAddtrips"></activity>
+        <activity android:name=".AddViewEditExpenses" />
         <activity
             android:name=".AddViewEditDrivers"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -42,7 +43,6 @@
             android:label="@string/title_activity_add_location" />
         <activity
             android:name=".MachineAddDialogue"
-
             android:label="Add machine" />
         <activity
             android:name=".MainActivity"
@@ -55,7 +55,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

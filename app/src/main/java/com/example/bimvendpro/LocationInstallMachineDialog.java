@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
@@ -33,20 +34,24 @@ import java.util.Locale;
 public class LocationInstallMachineDialog extends Dialog {
 
     private String code;
+    private int noOfMachine;
     private String date;
     private Spinner machineSpinner;
     private CalendarView installDateCalenderView;
     private Button cancelButton, installButton;
     private ProgressBar spinnerLoading, machineInstallingProgressBar;
     List<String> machinecode = new ArrayList<>();
+    private listener mListener ;
 
     public LocationInstallMachineDialog(Context context) {
         super(context);
     }
 
-    public LocationInstallMachineDialog(Context context, String code) {
+    public LocationInstallMachineDialog(Context context, String code,int noOfMachine) {
         super(context);
         this.code = code;
+        this.noOfMachine = noOfMachine;
+        this.mListener = (listener) context;
     }
 
     @Override
@@ -125,15 +130,17 @@ public class LocationInstallMachineDialog extends Dialog {
         spinnerLoading.setVisibility(View.GONE);
     }
 
-    public void writeDataToFirebase(final String machineCode,String date,final MachineInstall item) {
+    public void writeDataToFirebase(final String machineCode, final String date, final MachineInstall item) {
 
-        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(code).child("machineInstall").child(machineCode).setValue(date).addOnSuccessListener(new OnSuccessListener<Void>() {
+        final DatabaseReference databaseReference = FirebaseUtilClass.getDatabaseReference();
+
+        databaseReference.child("Location").child("Locations").child(code).child("machineInstall").child(machineCode).setValue(date).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(machineCode).child("machineInstall").setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
+                databaseReference.child("Machine").child("Items").child(machineCode).child("machineInstall").setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
+                        mListener.onMachineInstall();
                         dismiss();
 
                     }
@@ -166,11 +173,12 @@ public class LocationInstallMachineDialog extends Dialog {
                 boolean hasMachine = false;
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
                     Machine m = dsp.getValue(Machine.class); //add result into array list
-                    if(m.getMachineInstall().getLocation().equals("not set")){
+                    if(m.getMachineInstall() == null){
                         hasMachine = true;
                         machinecode.add(m.getCode());
                         machine.add(m.getCode() + " | " + m.getName());
                     }
+
                 }
 
                 if(!hasMachine){
@@ -198,5 +206,9 @@ public class LocationInstallMachineDialog extends Dialog {
         }
 
         return 0;
+    }
+
+    public interface listener{
+        public void onMachineInstall();
     }
 }

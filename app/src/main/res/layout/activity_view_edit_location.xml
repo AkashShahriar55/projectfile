@@ -557,18 +557,18 @@
                 android:background="@color/colorGrayDark"
                 android:layout_marginTop="10dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Installed Machines"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorWhite"/>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Installed Machines"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_weight="1"/>
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
@@ -577,9 +577,27 @@
                         android:backgroundTint="@color/colorLightCard"
                         android:layout_margin="5dp"
                         android:padding="5dp"
+                        android:layout_weight="1"
                         android:id="@+id/loc_install_machine"
                         android:textColor="@color/colorhighlight2"
                         />
+                </LinearLayout>
+
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/LocationMachineRecycler"
+                        android:layout_marginTop="10dp">
+
+
+                    </android.support.v7.widget.RecyclerView>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
 

@@ -12,7 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,10 +46,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class ViewEditLocation extends FragmentActivity implements OnMapReadyCallback {
+public class ViewEditLocation extends FragmentActivity implements OnMapReadyCallback,LocationInstallMachineDialog.listener,LocationMachineAdapter.notifydata {
 
     private GoogleMap mMap;
     private Location item;
@@ -66,12 +71,20 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
     protected static final int REQUEST_CHECK_SETTINGS = 0x3;
 
+    private List<MachineInstall> machineInstallList = new ArrayList<>();
+    private RecyclerView recyclerViewMachineInstall;
+    private LocationMachineAdapter mAdapter;
+
+    private int noOfMachine;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_edit_location);
 
         item = (Location) getIntent().getExtras().getSerializable("itemData");
+        noOfMachine = item.getNoOfMachines();
+
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -112,6 +125,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
 
 
+        initializeRecyclerView();
     }
 
 
@@ -152,6 +166,22 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         latitude = item.getLatitude();
 
         setEditTextEnabled(false);
+
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).child("machineInstall").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                machineInstallList.clear();
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    machineInstallList.add(new MachineInstall(dsp.getKey(),dsp.getValue().toString()));
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(ViewEditLocation.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,7 +252,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         buttonInstallMachine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new LocationInstallMachineDialog(ViewEditLocation.this,item.getCode()).show();
+                new LocationInstallMachineDialog(ViewEditLocation.this,item.getCode(),noOfMachine).show();
             }
         });
     }
@@ -348,6 +378,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
         String day = daysSpinner.getSelectedItem().toString();
 
+        item.setNoOfMachines(noOfMachine);
 
         if(!error){
             writeDataToFirebase(new Location(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,latitude,notes),isCodeChanged);
@@ -524,5 +555,44 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
             });
         }
 
+    }
+
+    @Override
+    public void onMachineInstall() {
+        noOfMachine = noOfMachine+1;
+        updateMachineNo();
+    }
+
+    private void initializeRecyclerView() {
+        recyclerViewMachineInstall = findViewById(R.id.LocationMachineRecycler);
+
+        mAdapter = new LocationMachineAdapter(machineInstallList,this,item.getCode(),noOfMachine);
+        RecyclerView.LayoutManager mLayoutmanager =new LinearLayoutManager(this);
+        recyclerViewMachineInstall.setLayoutManager(mLayoutmanager);
+        recyclerViewMachineInstall.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewMachineInstall.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onNoOfMachineDelete() {
+        noOfMachine = noOfMachine-1;
+        updateMachineNo();
+    }
+
+    private void updateMachineNo() {
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(item.getCode()).child("noOfMachines").setValue(noOfMachine).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                Toast.makeText(ViewEditLocation.this, "Machine no updated", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ViewEditLocation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

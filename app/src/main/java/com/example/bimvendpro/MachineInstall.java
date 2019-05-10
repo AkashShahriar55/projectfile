@@ -11,10 +11,13 @@ public class MachineInstall implements Serializable {
         location="not set";
         installationDate=null;
     }
+
     public MachineInstall(String location, String installationDate){
         this.location=location;
         this.installationDate=installationDate;
     }
+
+
 
     public String getLocation() {
         return location;

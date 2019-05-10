@@ -31,6 +31,7 @@ public class Location implements Serializable {
     //Machines and routes
     private List<String> machineCodes;
     private List<String> routes;
+    private List<Machine> machines;
 
     //working hour
     private String workingHour;
@@ -140,6 +141,30 @@ public class Location implements Serializable {
 
     public Location() {
 
+    }
+
+    public List<String> getMachineCodes() {
+        return machineCodes;
+    }
+
+    public void setMachineCodes(List<String> machineCodes) {
+        this.machineCodes = machineCodes;
+    }
+
+    public List<String> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(List<String> routes) {
+        this.routes = routes;
+    }
+
+    public List<Machine> getMachines() {
+        return machines;
+    }
+
+    public void setMachines(List<Machine> machines) {
+        this.machines = machines;
     }
 
     public String getStatus() {

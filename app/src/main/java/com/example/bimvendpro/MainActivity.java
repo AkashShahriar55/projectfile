@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Dashboard");
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity
 
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Dashboard()).commit();
-        toolbar.setTitle("Dashboard");
+
 
         navIcon = toolbar.getNavigationIcon();
 
@@ -151,6 +152,10 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PurchaseFragment()).commit();
             toolbar.setTitle("Purchases");
             currFrag = PURCHASES;
+        }
+        else if (id == R.id.nav_trips) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TripFragment()).commit();
+            toolbar.setTitle("Trips");
         }
 
 

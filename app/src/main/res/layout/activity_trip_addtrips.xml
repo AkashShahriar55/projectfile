@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:minHeight="740dp"
+    android:background="@drawable/gradient1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Mode"
+        android:translationZ="1dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colortransparent"
+        android:id="@+id/rut_view_mode"
+        />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Basic Info"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorWhite"/>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorWhite">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:orientation="vertical"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:gravity="center"
+                                android:text="Driver"
+                                android:textColor="@color/colorBar" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:gravity="center"
+                                android:text="Date:"
+                                android:layout_marginTop="5dp"
+                                android:textColor="@color/colorBar" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:gravity="center"
+                                android:text="Description:"
+                                android:textColor="@color/colorBar" />
+
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="5dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@drawable/round_shape"
+                                android:backgroundTint="@color/colorLightCard">
+                                <Spinner
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:textSize="16sp"
+                                    android:id="@+id/trip_driver_name"
+                                    android:hint="e.g. Name"
+                                    android:paddingLeft="5dp"
+                                    android:paddingRight="5dp"
+                                    android:textColor="@color/colorGrayDark"/>
+                            </LinearLayout>
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@drawable/round_shape"
+                                android:backgroundTint="@color/colorLightCard"
+                                android:textSize="16sp"
+                                android:id="@+id/trip_date"
+                                android:hint="dd-mm-yy"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:layout_marginTop="5dp"
+                                android:textColor="@color/colorGrayDark"/>
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/round_shape"
+                                android:backgroundTint="@color/colorLightCard"
+                                android:textSize="16sp"
+                                android:gravity="start"
+                                android:id="@+id/trip_description"
+                                android:hint="e.g. Machine is in front gate"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:paddingTop="5dp"
+                                android:textColor="@color/colorGrayDark"/>
+
+
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@color/colorGrayDark">
+                        <Button
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="Add location"
+                            android:layout_weight="1"
+                            android:layout_margin="5dp"
+                            android:backgroundTint="@color/colorWhite"
+                            android:textColor="@color/colorhighlight2"
+                            android:id="@+id/trip_addLocation"
+                            />
+
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:text="Add YourLocation Here"
+                        android:gravity="center"
+                        android:id="@+id/trip_addLocationDummy"/>
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rut_recyclerview"
+                        android:background="@color/colorWhite">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_shape"
+                    android:text="Update"
+                    android:textColor="@color/colorhighlight2"
+                    android:id="@+id/rut_button_add"
+                    android:layout_margin="10dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_shape"
+                    android:text="Delete"
+                    android:textColor="@color/colorred"
+                    android:id="@+id/rut_button_cancel"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
