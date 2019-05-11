@@ -12,9 +12,10 @@ public class TripMachines implements Serializable {
     private int bills;
     private String adjust;
     private String comment;
+    private String code;
     private List<TripMachineProduct> tripMachineProducts;
 
-    public TripMachines(String name, String location, String type, List<TripMachineProduct> tripMachineProducts) {
+    public TripMachines(String name, String location, String type, List<TripMachineProduct> tripMachineProducts,String code) {
         this.name = name;
         this.location = location;
         this.type = type;
@@ -23,12 +24,23 @@ public class TripMachines implements Serializable {
         this.tripMachineProducts = tripMachineProducts;
         this.coins = 0;
         this.bills = 0;
-        this.adjust = "0";
+        this.adjust = "+0.0";
+        this.code = code;
     }
 
 
 
+
+
     public TripMachines() {
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public int getCoins() {

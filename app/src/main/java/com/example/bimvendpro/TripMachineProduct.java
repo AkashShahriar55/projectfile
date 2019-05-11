@@ -9,14 +9,16 @@ public class TripMachineProduct implements Serializable {
     private int soldOrWin;
     private int filled;
     private int newCount;
+    private String code;
 
-    public TripMachineProduct(String productName, int lastCount) {
+    public TripMachineProduct(String productName, int lastCount,String code) {
         this.productName = productName;
         this.lastCount = lastCount;
         this.presentCount = 0;
         this.soldOrWin = 0;
         this.filled = 0;
         this.newCount = 0;
+        this.code = code;
     }
 
     public TripMachineProduct() {

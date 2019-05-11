@@ -1,5 +1,6 @@
 package com.example.bimvendpro;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,10 +19,12 @@ import java.util.List;
 public class TripMachineAdapter extends RecyclerView.Adapter<TripMachineAdapter.TripMachineViewHolder>{
     private List<TripMachines> itemList;
     private Context context;
+    private String tripNumber;
 
-    public TripMachineAdapter(List<TripMachines> itemList, Context context) {
+    public TripMachineAdapter(List<TripMachines> itemList, Context context,String tripNumber) {
         this.itemList = itemList;
         this.context = context;
+        this.tripNumber = tripNumber;
     }
 
     @NonNull
@@ -34,7 +37,7 @@ public class TripMachineAdapter extends RecyclerView.Adapter<TripMachineAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TripMachineAdapter.TripMachineViewHolder tripMachineViewHolder, int i) {
+    public void onBindViewHolder(@NonNull TripMachineAdapter.TripMachineViewHolder tripMachineViewHolder, final int i) {
         final TripMachines item = itemList.get(i);
 
         tripMachineViewHolder.textViewName.setText(String.valueOf(item.getName()));
@@ -44,9 +47,11 @@ public class TripMachineAdapter extends RecyclerView.Adapter<TripMachineAdapter.
         tripMachineViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(context,TripEdit.class);
-//                intent.putExtra("item",item);
-//                context.startActivity(intent);
+                Intent intent = new Intent(context,TripMachineEnterResult.class);
+                intent.putExtra("item",item);
+                intent.putExtra("tripNumber",tripNumber);
+                intent.putExtra("machineNumber",i);
+                ((Activity)context).startActivityForResult(intent,1);
             }
         });
 
