@@ -85,7 +85,7 @@ public class MachineFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 itemList.clear();
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    String val=dsp.toString();
+//                    String val=dsp.toString();
                     itemList.add(dsp.getValue(Machine.class)); //add result into array list
 
                 }

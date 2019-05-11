@@ -1,6 +1,7 @@
 package com.example.bimvendpro;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class Machine implements Serializable {
     private List<MachineIngredients> machineIngredients;
 
     public Machine(String code, String name, String model, String type) {
-        this.code = code;
+        this.code = "M-" + code;
         this.name = name;
         this.model = model;
         this.type = type;
@@ -28,7 +29,7 @@ public class Machine implements Serializable {
     }
 
     public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall) {
-        this.code = code;
+        this.code = "M-" + code;
         this.name = name;
         this.model = model;
         this.type = type;
@@ -41,8 +42,8 @@ public class Machine implements Serializable {
 
     }
 
-    public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall, List<MachineIngredients> machineIngredients) {
-        this.code = code;
+    public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall,  List<MachineIngredients> machineIngredients) {
+        this.code = "M-" + code;
         this.name = name;
         this.model = model;
         this.type = type;
@@ -149,4 +150,6 @@ public class Machine implements Serializable {
     public void setMachineIngredients(List<MachineIngredients> machineIngredients) {
         this.machineIngredients = machineIngredients;
     }
+
+
 }

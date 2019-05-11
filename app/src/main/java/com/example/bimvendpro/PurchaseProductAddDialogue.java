@@ -197,16 +197,17 @@ public class PurchaseProductAddDialogue extends Dialog {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Double casesPur, unitPerCase, costPerCase;
+                Integer casesPur, unitPerCase;
+                Double costPerCase;
                 try {
-                    casesPur = Double.parseDouble(casesPurchasedEditText.getText().toString());
+                    casesPur = Integer.parseInt(casesPurchasedEditText.getText().toString());
                 } catch (Exception e) {
 
                     return;
                 }
 
                 try {
-                    unitPerCase = Double.parseDouble(unitPerCaseEditText.getText().toString());
+                    unitPerCase = Integer.parseInt(unitPerCaseEditText.getText().toString());
                 } catch (Exception e) {
 
                     return;
@@ -431,7 +432,7 @@ public class PurchaseProductAddDialogue extends Dialog {
                                         if (editDlg) {
                                             oldInWarehouse = PurchaseProductAddDialogue.this.item.getUnitPurchased();
                                         }
-                                        final Integer newInWarehouse = item.getCasesPurchased();
+                                        final Integer newInWarehouse = item.getUnitPurchased();
                                         final Integer changedInWarehouse = newInWarehouse - oldInWarehouse;
 
                                         dataSnapshot.getRef().setValue(onInternetInWarehouse + changedInWarehouse);
