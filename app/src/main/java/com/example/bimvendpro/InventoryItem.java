@@ -13,7 +13,7 @@ public class InventoryItem {
 
 
     public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, Integer unitPerCase) {
-        this.code = code;
+        this.code = "P-"+code;
         this.productName = productName;
         this.productType = productType;
         this.inStock = inStock;
@@ -28,7 +28,7 @@ public class InventoryItem {
     }
 
     public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, Integer unitPerCase, float lastCost) {
-        this.code = code;
+        this.code = "P-"+code;
         this.productName = productName;
         this.productType = productType;
         this.inStock = inStock;

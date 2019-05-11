@@ -145,7 +145,7 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
                 String type = machineList.get(i).getType();
                 Log.d("data", "machine count: " + i);
                 if(machineList.get(i).getMachineIngredients()!=null){
-                    machineIngredients = machineList.get(i).getMachineIngredients();
+                    machineIngredients = machineList.get(i).getMachineIngredientsToList();
                     for(int j =1;j<machineIngredients.size();j++){
                         Log.d("data", "product count: " + machineIngredients.size() + " " + j);
                         String productName = machineIngredients.get(j).getName();

@@ -3,6 +3,7 @@ package com.example.bimvendpro;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class Machine implements Serializable {
     private float totalCollected;
     private float vendsPerDay;
     private MachineInstall machineInstall;
-    private List<MachineIngredients> machineIngredients;
+    private HashMap<String, MachineIngredients> machineIngredients;
 
     public Machine(String code, String name, String model, String type) {
         this.code = "M-" + code;
@@ -42,7 +43,7 @@ public class Machine implements Serializable {
 
     }
 
-    public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall,  List<MachineIngredients> machineIngredients) {
+    public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall, HashMap<String, MachineIngredients> machineIngredients) {
         this.code = "M-" + code;
         this.name = name;
         this.model = model;
@@ -143,13 +144,22 @@ public class Machine implements Serializable {
     }
 
 
-    public List<MachineIngredients> getMachineIngredients() {
+    public HashMap<String, MachineIngredients> getMachineIngredients() {
         return machineIngredients;
     }
 
-    public void setMachineIngredients(List<MachineIngredients> machineIngredients) {
-        this.machineIngredients = machineIngredients;
+    public List<MachineIngredients> getMachineIngredientsToList() {
+        if (machineIngredients != null) {
+            List<MachineIngredients> list = new ArrayList<>(machineIngredients.values());
+            return list;
+        } else {
+            return null;
+        }
+
+
     }
 
-
+    public void setMachineIngredients(HashMap<String, MachineIngredients> machineIngredients) {
+        this.machineIngredients = machineIngredients;
+    }
 }
