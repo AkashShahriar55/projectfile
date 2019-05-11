@@ -42,7 +42,7 @@
             <EditText
                 style="@style/addItemDialogueEditTextView"
                 android:id="@+id/casesPur"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:hint="Cases Purchased" />
         </android.support.design.widget.TextInputLayout>
 
@@ -53,7 +53,7 @@
 
             <EditText
                 style="@style/addItemDialogueEditTextView"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:id="@+id/unitPerCase"
                 android:hint="Unit/Case" />
         </android.support.design.widget.TextInputLayout>

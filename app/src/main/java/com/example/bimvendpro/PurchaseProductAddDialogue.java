@@ -39,7 +39,7 @@ public class PurchaseProductAddDialogue extends Dialog {
     private EditText casesPurchasedEditText, unitPerCaseEditText, costPerCaseEditText, noOfUnitEditText, unitCostEditText, totalCostEditText;
     private Button saveButton, cancelButton, deleteButton;
     private Boolean editDlg = false;
-    private List<Double> defaultUnitPerCase = new ArrayList<>();
+    private List<Integer> defaultUnitPerCase = new ArrayList<>();
 
     public PurchaseProductAddDialogue(Context context, String sentPushId) {
         super(context);
@@ -111,16 +111,17 @@ public class PurchaseProductAddDialogue extends Dialog {
             public void onClick(View v) {
 
                 hideKeyboard();
-                Double casesPur, unitPerCase, costPerCase;
+                Integer casesPur, unitPerCase;
+                Double costPerCase;
                 try {
-                    casesPur = Double.parseDouble(casesPurchasedEditText.getText().toString());
+                    casesPur = Integer.parseInt(casesPurchasedEditText.getText().toString());
                 } catch (Exception e) {
                     casesPurchasedEditText.setError("Invalid input");
                     return;
                 }
 
                 try {
-                    unitPerCase = Double.parseDouble(unitPerCaseEditText.getText().toString());
+                    unitPerCase = Integer.parseInt(unitPerCaseEditText.getText().toString());
                 } catch (Exception e) {
                     unitPerCaseEditText.setError("Invalid input");
                     return;
@@ -140,7 +141,7 @@ public class PurchaseProductAddDialogue extends Dialog {
                 int index = compositeStr.lastIndexOf(" ");
                 String proname = compositeStr.substring(0, index);
 
-                Double unitPurchased = Double.parseDouble(noOfUnitEditText.getText().toString());
+                Integer unitPurchased = Integer.parseInt(noOfUnitEditText.getText().toString());
                 Double unitCost = Double.parseDouble(unitCostEditText.getText().toString());
                 Double totlCost = Double.parseDouble(totalCostEditText.getText().toString());
                 String pushId;
@@ -218,7 +219,7 @@ public class PurchaseProductAddDialogue extends Dialog {
                     return;
                 }
                 unitCostEditText.setText(String.format("%.2f", costPerCase / unitPerCase));
-                noOfUnitEditText.setText(String.format("%.2f", casesPur * unitPerCase));
+                noOfUnitEditText.setText(String.valueOf(casesPur * unitPerCase));
                 totalCostEditText.setText(String.format("%.2f", casesPur * unitPerCase * costPerCase / unitPerCase));
             }
 
@@ -413,7 +414,6 @@ public class PurchaseProductAddDialogue extends Dialog {
                                 dataSnapshot.getRef().setValue(totCost);
 
 
-
                                 FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getProductCode()).child("lastCost").setValue(item.getUnitCost()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -421,7 +421,51 @@ public class PurchaseProductAddDialogue extends Dialog {
                                         savingOff();
                                         dismiss();
                                     }
-                                } );
+                                });
+
+                                FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getProductCode()).child("inWarehouse").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        final Integer onInternetInWarehouse = Integer.valueOf(dataSnapshot.getValue().toString());
+                                        Integer oldInWarehouse = 0;
+                                        if (editDlg) {
+                                            oldInWarehouse = PurchaseProductAddDialogue.this.item.getUnitPurchased();
+                                        }
+                                        final Integer newInWarehouse = item.getCasesPurchased();
+                                        final Integer changedInWarehouse = newInWarehouse - oldInWarehouse;
+
+                                        dataSnapshot.getRef().setValue(onInternetInWarehouse + changedInWarehouse);
+
+
+                                        FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(item.getProductCode()).child("inStock").addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                Integer inStock = Integer.valueOf(dataSnapshot.getValue().toString());
+
+
+                                                dataSnapshot.getRef().setValue(inStock + changedInWarehouse);
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                                //   installingOff();
+                                            }
+                                        });
+
+                                        //  Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
+                                        //  installingOff();
+                                        //  dismiss();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                        //installingOff();
+                                    }
+                                });
+
                             }
 
                             @Override
@@ -438,7 +482,6 @@ public class PurchaseProductAddDialogue extends Dialog {
                         savingOff();
                     }
                 });
-
 
 
             }

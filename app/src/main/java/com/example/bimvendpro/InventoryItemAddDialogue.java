@@ -264,7 +264,7 @@ public class InventoryItemAddDialogue extends Dialog {
         int inStockInt = 0;
         int inWareHouseInt = 0;
         float lastCostFloat = 0;
-        Double unitPerCaseInt = 0.0;
+        Integer unitPerCaseInt = 0;
 
 
         if (TextUtils.isEmpty(codeStr.trim())) {
@@ -306,7 +306,7 @@ public class InventoryItemAddDialogue extends Dialog {
         }
 
         try {
-            unitPerCaseInt = Double.parseDouble(unitPerCaseEditText.getText().toString());
+            unitPerCaseInt = Integer.parseInt(unitPerCaseEditText.getText().toString());
         } catch (NumberFormatException e) {
             unitPerCaseEditText.setError("input a valid input");
             unitPerCaseEditText.requestFocus();

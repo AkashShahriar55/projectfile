@@ -7,12 +7,12 @@ public class InventoryItem {
     private int inStock;
     private int inWarehouse;
     private int inMachine;
-    private Double unitPerCase;
+    private Integer unitPerCase;
     private float lastCost;
     //private InventoryItemHistoryProduct inventoryItemHistory;
 
 
-    public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, Double unitPerCase) {
+    public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, Integer unitPerCase) {
         this.code = code;
         this.productName = productName;
         this.productType = productType;
@@ -27,7 +27,7 @@ public class InventoryItem {
 
     }
 
-    public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, Double unitPerCase, float lastCost) {
+    public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, Integer unitPerCase, float lastCost) {
         this.code = code;
         this.productName = productName;
         this.productType = productType;
@@ -86,13 +86,7 @@ public class InventoryItem {
         this.inMachine = inMachine;
     }
 
-    public Double getUnitPerCase() {
-        return unitPerCase;
-    }
 
-    public void setUnitPerCase(Double unitPerCase) {
-        this.unitPerCase = unitPerCase;
-    }
 
     public float getLastCost() {
         return lastCost;
@@ -100,6 +94,14 @@ public class InventoryItem {
 
     public void setLastCost(float lastCost) {
         this.lastCost = lastCost;
+    }
+
+    public Integer getUnitPerCase() {
+        return unitPerCase;
+    }
+
+    public void setUnitPerCase(Integer unitPerCase) {
+        this.unitPerCase = unitPerCase;
     }
 
 /*

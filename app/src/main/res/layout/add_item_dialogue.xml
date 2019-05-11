@@ -116,7 +116,7 @@
                             android:id="@+id/unitPerCaseEditText"
                             style="@style/addItemDialogueEditTextView"
                             android:hint="Unit per case"
-                            android:inputType="numberDecimal" />
+                            android:inputType="number" />
                     </android.support.design.widget.TextInputLayout>
 
 

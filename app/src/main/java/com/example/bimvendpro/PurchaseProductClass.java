@@ -6,10 +6,10 @@ public class PurchaseProductClass implements Serializable {
     private String productName;
     private String pushId;
     private String productCode;
-    private Double casesPurchased;
-    private Double unitPerCase;
+    private Integer casesPurchased;
+    private Integer unitPerCase;
     private Double costPerCase;
-    private Double unitPurchased;
+    private Integer unitPurchased;
     private Double unitCost;
     private Double totalCost;
 
@@ -19,7 +19,7 @@ public class PurchaseProductClass implements Serializable {
 
 
 
-    PurchaseProductClass(String pushId, String productCode, String productName, Double casesPurchased, Double unitPerCase, Double costPerCase, Double unitPurchased, Double unitCost, Double totalCost) {
+    PurchaseProductClass(String pushId, String productCode, String productName, Integer casesPurchased, Integer unitPerCase, Double costPerCase, Integer unitPurchased, Double unitCost, Double totalCost) {
         this.productCode = productCode;
         this.productName = productName;
         this.pushId = pushId;
@@ -47,21 +47,8 @@ public class PurchaseProductClass implements Serializable {
         this.productCode = productCode;
     }
 
-    public Double getCasesPurchased() {
-        return casesPurchased;
-    }
 
-    public void setCasesPurchased(Double casesPurchased) {
-        this.casesPurchased = casesPurchased;
-    }
 
-    public Double getUnitPerCase() {
-        return unitPerCase;
-    }
-
-    public void setUnitPerCase(Double unitPerCase) {
-        this.unitPerCase = unitPerCase;
-    }
 
     public Double getCostPerCase() {
         return costPerCase;
@@ -71,13 +58,7 @@ public class PurchaseProductClass implements Serializable {
         this.costPerCase = costPerCase;
     }
 
-    public Double getUnitPurchased() {
-        return unitPurchased;
-    }
 
-    public void setUnitPurchased(Double unitPurchased) {
-        this.unitPurchased = unitPurchased;
-    }
 
     public Double getUnitCost() {
         return unitCost;
@@ -102,5 +83,29 @@ public class PurchaseProductClass implements Serializable {
 
     public void setPushId(String pushId) {
         this.pushId = pushId;
+    }
+
+    public Integer getCasesPurchased() {
+        return casesPurchased;
+    }
+
+    public void setCasesPurchased(Integer casesPurchased) {
+        this.casesPurchased = casesPurchased;
+    }
+
+    public Integer getUnitPerCase() {
+        return unitPerCase;
+    }
+
+    public void setUnitPerCase(Integer unitPerCase) {
+        this.unitPerCase = unitPerCase;
+    }
+
+    public Integer getUnitPurchased() {
+        return unitPurchased;
+    }
+
+    public void setUnitPurchased(Integer unitPurchased) {
+        this.unitPurchased = unitPurchased;
     }
 }

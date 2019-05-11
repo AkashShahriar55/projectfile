@@ -17,6 +17,7 @@ public class Machine implements Serializable {
     private float vendsPerDay;
     private MachineInstall machineInstall;
     private List<MachineIngredients> machineIngredients;
+
     public Machine(String code, String name, String model, String type) {
         this.code = code;
         this.name = name;
@@ -26,21 +27,35 @@ public class Machine implements Serializable {
 
     }
 
-    public Machine(String code, String name, String model, String type,String lastVisit,String note, int daysInService,float totalCollected,float vendsPerDay, MachineInstall machineInstall, List<MachineIngredients>  machineIngredients) {
+    public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall) {
         this.code = code;
         this.name = name;
         this.model = model;
         this.type = type;
-        this.machineInstall=machineInstall;
-        this.lastVisit=lastVisit;
-        this.note=note;
-        this.daysInService=daysInService;
-        this.totalCollected=totalCollected;
-        this.vendsPerDay=vendsPerDay;
-        this.machineIngredients=machineIngredients;
+        this.machineInstall = machineInstall;
+        this.lastVisit = lastVisit;
+        this.note = note;
+        this.daysInService = daysInService;
+        this.totalCollected = totalCollected;
+        this.vendsPerDay = vendsPerDay;
+
     }
 
-    public Machine(){
+    public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall, List<MachineIngredients> machineIngredients) {
+        this.code = code;
+        this.name = name;
+        this.model = model;
+        this.type = type;
+        this.machineInstall = machineInstall;
+        this.lastVisit = lastVisit;
+        this.note = note;
+        this.daysInService = daysInService;
+        this.totalCollected = totalCollected;
+        this.vendsPerDay = vendsPerDay;
+        this.machineIngredients = machineIngredients;
+    }
+
+    public Machine() {
 
     }
 
@@ -77,7 +92,6 @@ public class Machine implements Serializable {
     }
 
 
-
     public String getLastVisit() {
         return lastVisit;
     }
@@ -111,7 +125,6 @@ public class Machine implements Serializable {
     }
 
 
-
     public MachineInstall getMachineInstall() {
         return machineInstall;
     }
@@ -129,11 +142,11 @@ public class Machine implements Serializable {
     }
 
 
-    public List<MachineIngredients>  getMachineIngredients() {
+    public List<MachineIngredients> getMachineIngredients() {
         return machineIngredients;
     }
 
-    public void setMachineIngredients(List<MachineIngredients>  machineIngredients) {
+    public void setMachineIngredients(List<MachineIngredients> machineIngredients) {
         this.machineIngredients = machineIngredients;
     }
 }
