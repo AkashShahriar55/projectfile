@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,13 +47,13 @@ public class TripFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private RecyclerView recyclerViewRoutes;
-    private List<RouteItem> itemList = new ArrayList<>();
-    private RoutesItemAdapter mAdapter;
+    private RecyclerView recyclerViewTrips;
+    private List<TripsItem> itemList = new ArrayList<>();
+    private TripItemAdapter mAdapter;
 
 
     private ImageView addButtonImage;
-    private SearchView searchViewRoutes;
+    private SearchView searchViewTrips;
     private SwipeRefreshLayout refreshlayout;
 
 
@@ -143,8 +149,8 @@ public class TripFragment extends Fragment {
         });
 
 
-        searchViewRoutes = view.findViewById(R.id.trip_search);
-        searchViewRoutes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchViewTrips = view.findViewById(R.id.trip_search);
+        searchViewTrips.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // filter recycler view when query submitted
@@ -166,10 +172,33 @@ public class TripFragment extends Fragment {
     }
 
     private void initializeRecyclerView() {
+        recyclerViewTrips = getView().findViewById(R.id.TripsRecyclerView);
 
+        mAdapter = new TripItemAdapter(itemList,getContext());
+        RecyclerView.LayoutManager mLayoutmanager =new LinearLayoutManager(getContext());
+        recyclerViewTrips.setLayoutManager(mLayoutmanager);
+        recyclerViewTrips.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewTrips.setAdapter(mAdapter);
     }
 
     private void readDataFromFirebase() {
+        FirebaseUtilClass.getDatabaseReference().child("Trip").child("Trips").orderByChild("status").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                itemList.clear();
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    itemList.add(dsp.getValue(TripsItem.class)); //add result into array list
+                }
+                mAdapter.notifyDataSetChanged();
+                refreshlayout.setRefreshing(false);
+                //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                refreshlayout.setRefreshing(false);
+            }
+        });
     }
 }

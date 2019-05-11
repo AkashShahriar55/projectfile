@@ -59,43 +59,8 @@ public class TripAddLocationDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(locationItemList.get(itemNo).getCode()).child("machineInstall").addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                                    //Log.d("machine code", "onDataChange machine code: "+dsp.getKey());
-                                    FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(dsp.getKey()).addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            //Log.d("machine code", "machine code onDataChange: "+ dataSnapshot.getValue(Machine.class).getCode());
-                                            if(dataSnapshot != null){
-                                                machineList.add(dataSnapshot.getValue(Machine.class));
-                                                locationItemList.get(itemNo).setMachines(machineList);
-                                                listener.passData(locationItemList.get(itemNo));
-                                                Log.d("machinelist", "machine size onClick: "+ machineList.size());
-                                                Log.d("machine code", "machine code onDataChange: "+ dataSnapshot.getValue(Machine.class).getCode());
-                                            }
-                                        }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    });
-
-
-
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
+                        Log.d("machine info", "machine size on add: "+ machineList.size());
                         listener.passData(locationItemList.get(itemNo));
 
                     }
@@ -119,6 +84,38 @@ public class TripAddLocationDialog extends DialogFragment {
                 textViewAddress.setText(locationItemList.get(position).getAddress());
                 textViewNoOfMachine.setText(String.valueOf(locationItemList.get(position).getNoOfMachines()));
                 itemNo = position;
+                machineList = new ArrayList<>();
+                FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(locationItemList.get(itemNo).getCode()).child("machineInstall").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                            //Log.d("machine code", "onDataChange machine code: "+dsp.getKey());
+                            FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(dsp.getKey()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    //Log.d("machine code", "machine code onDataChange: "+ dataSnapshot.getValue(Machine.class).getCode());
+                                    if(dataSnapshot != null){
+                                        machineList.add(dataSnapshot.getValue(Machine.class));
+                                        locationItemList.get(itemNo).setMachines(machineList);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+
+                            });
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override

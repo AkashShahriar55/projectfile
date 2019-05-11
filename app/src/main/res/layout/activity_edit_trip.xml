@@ -163,28 +163,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@color/colorGrayDark">
-                        <Button
+                        <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:text="Add location"
+                            android:text="Enter Your Trip Result"
                             android:layout_weight="1"
-                            android:layout_margin="5dp"
-                            android:backgroundTint="@color/colorWhite"
-                            android:textColor="@color/colorhighlight2"
+                            android:gravity="center"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorWhite"
                             android:id="@+id/trip_addLocation"
                             />
 
                     </LinearLayout>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:text="Add YourLocation Here"
-                        android:gravity="center"
-                        android:id="@+id/trip_addLocationDummy"/>
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rut_recyclerview"
+                        android:id="@+id/trip_machine_recyclerview"
                         android:background="@color/colorWhite">
 
                     </android.support.v7.widget.RecyclerView>
@@ -204,20 +198,29 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/round_shape"
-                    android:text="Add"
+                    android:text="update"
                     android:textColor="@color/colorhighlight2"
-                    android:id="@+id/trip_button_add"
-                    android:layout_margin="10dp"/>
+                    android:id="@+id/trip_button_update"
+                    android:layout_margin="5dp"/>
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/round_shape"
-                    android:text="Cancel"
+                    android:text="delete"
                     android:textColor="@color/colorred"
-                    android:id="@+id/trip_button_cancel"
-                    android:layout_margin="10dp"/>
+                    android:id="@+id/trip_button_delete"
+                    android:layout_margin="5dp"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_shape"
+                    android:text="post"
+                    android:textColor="@color/colorCardBack"
+                    android:id="@+id/trip_button_post"
+                    android:layout_margin="5dp"/>
             </LinearLayout>
 
         </LinearLayout>

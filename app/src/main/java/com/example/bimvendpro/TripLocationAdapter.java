@@ -25,7 +25,6 @@ public class TripLocationAdapter extends RecyclerView.Adapter<TripLocationAdapte
     private Context context;
     private TripLocationAdapter.onDeleteClick callBack;
     private TripLocationMachineAdapter mAdapter;
-    private List<Machine>  machineList = new ArrayList<>();
 
     @NonNull
     @Override
@@ -39,7 +38,7 @@ public class TripLocationAdapter extends RecyclerView.Adapter<TripLocationAdapte
     @Override
     public void onBindViewHolder(@NonNull TripLocationAdapter.LocationViewHolder locationViewHolder, int i) {
         final Location item = itemList.get(i);
-        machineList = itemList.get(i).getMachines();
+
         locationViewHolder.textViewLocation.setText(String.valueOf(item.getLocation()));
         locationViewHolder.textViewAddress.setText(String.valueOf(item.getAddress()));
         locationViewHolder.imageButton.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +50,7 @@ public class TripLocationAdapter extends RecyclerView.Adapter<TripLocationAdapte
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 callBack.deleteClicked(item);
+                                notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -64,6 +64,14 @@ public class TripLocationAdapter extends RecyclerView.Adapter<TripLocationAdapte
         });
 
         if(itemList.get(i).getMachines() != null) {
+            List<Machine> machineList = itemList.get(i).getMachines();
+            mAdapter = new TripLocationMachineAdapter(machineList, context);
+            RecyclerView.LayoutManager mLayoutmanager = new LinearLayoutManager(context);
+            locationViewHolder.recyclerViewMachine.setLayoutManager(mLayoutmanager);
+            locationViewHolder.recyclerViewMachine.setItemAnimator(new DefaultItemAnimator());
+            locationViewHolder.recyclerViewMachine.setAdapter(mAdapter);
+        }else {
+            List<Machine> machineList = new ArrayList<>();
             mAdapter = new TripLocationMachineAdapter(machineList, context);
             RecyclerView.LayoutManager mLayoutmanager = new LinearLayoutManager(context);
             locationViewHolder.recyclerViewMachine.setLayoutManager(mLayoutmanager);

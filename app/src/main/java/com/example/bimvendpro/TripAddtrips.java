@@ -2,12 +2,14 @@
 package com.example.bimvendpro;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,8 +20,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -27,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 public class TripAddtrips extends AppCompatActivity implements TripAddLocationDialog.NoticeDialogListener,TripLocationAdapter.onDeleteClick {
 
@@ -35,9 +41,19 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
     private TripLocationAdapter mAdapter;
     private Spinner spinnerDriver;
     private EditText editTextDate,editTextDescription;
-    private Button buttonAddLocation;
+    private Button buttonAddLocation,buttonAdd,buttonCancel;
     private TextView textViewDummy;
     private List<Location> locationList = new ArrayList<>();
+    private List<Machine> machineList = new ArrayList<>();
+    private List<TripMachineProduct> tripMachineProducts = new ArrayList<>();
+    private List<TripMachines> tripMachines = new ArrayList<>();
+    private List<MachineIngredients> machineIngredients = new ArrayList<>();
+
+    private static final String ALLOWED_CHARACTERS ="0123456789abcde";
+
+    private int noOfLocation = 0;
+    private int noOfMachine = 0;
+
     final Calendar myCalendar = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +98,105 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
 
         textViewDummy = findViewById(R.id.trip_addLocationDummy);
 
+        buttonAdd = findViewById(R.id.trip_button_add);
+        buttonCancel = findViewById(R.id.trip_button_cancel);
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tryWriteData();
+            }
+        });
+
         initializeRecyclerView();
 
+    }
+
+    private static String getTripNumber(){
+        final Random random=new Random();
+        final StringBuilder sb=new StringBuilder(8);
+
+        for(int i=0;i<8;++i){
+            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+
+        }
+
+        return sb.toString();
+    }
+
+    private void tryWriteData() {
+        tripMachines = new ArrayList<>();
+        tripMachineProducts = new ArrayList<>();
+        machineIngredients = new ArrayList<>();
+        boolean error = false;
+        if(!machineList.isEmpty()){
+
+            for(int i =0 ; i< machineList.size();i++){
+                machineIngredients = new ArrayList<>();
+                String name = machineList.get(i).getName();
+                String location = machineList.get(i).getMachineInstall().getLocation();
+                String type = machineList.get(i).getType();
+                Log.d("data", "machine count: " + i);
+                if(machineList.get(i).getMachineIngredients()!=null){
+                    machineIngredients = machineList.get(i).getMachineIngredients();
+                    for(int j =1;j<machineIngredients.size();j++){
+                        Log.d("data", "product count: " + machineIngredients.size() + " " + j);
+                        String productName = machineIngredients.get(j).getName();
+                        int lastCount = machineIngredients.get(j).getLastCount();
+                        tripMachineProducts.add(new TripMachineProduct(productName,lastCount));
+                    }
+                }
+
+                tripMachines.add(new TripMachines(name,location,type,tripMachineProducts));
+            }
+        }
+
+        String driverName = spinnerDriver.getSelectedItem().toString();
+
+        String tripDate = editTextDate.getText().toString();
+        if(TextUtils.isEmpty(tripDate.trim())) {
+            editTextDate.setError("Field mustn't be empty");
+            editTextDate.requestFocus();
+            error = true;
+            return;
+        }
+
+        String tripDescription = editTextDescription.getText().toString();
+
+        String tripNumber = getTripNumber();
+
+
+
+        if(!error){
+            writeDataToFirebase(new TripsItem(driverName,tripDate,tripDescription,noOfLocation,noOfMachine,tripNumber,tripMachines));
+        }
+    }
+
+    private void writeDataToFirebase(TripsItem item) {
+        final ProgressDialog dialog = ProgressDialog.show(TripAddtrips.this, "",
+                "Loading. Please wait...", true);
+        FirebaseUtilClass.getDatabaseReference().child("Trip").child("Trips").child(item.getTripNumber()).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(TripAddtrips.this, "Updated", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                finish();
+
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(TripAddtrips.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void openDialog() {
@@ -146,10 +259,20 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
         }
 
         if(!hasAlready){
+            noOfLocation += 1;
             locationList.add(location);
+            if(location.getMachines() != null){
+                noOfMachine += location.getNoOfMachines();
+                machineList.addAll(location.getMachines());
+
+            }
+            Log.d("no of machine", "deleteClicked: " + machineList.size());
             textViewDummy.setVisibility(View.GONE);
         }
 
+        if(location.getMachines() != null){
+            Log.d("machine info", "machine size on passData: "+location.getMachines().size());
+        }
 
 
         mAdapter.notifyDataSetChanged();
@@ -167,6 +290,12 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
 
     @Override
     public void deleteClicked(Location itemPass) {
+        locationList.remove(itemPass);
+        if(itemPass.getMachines() != null){
+            machineList.removeAll(itemPass.getMachines());
+            Log.d("no of machine", "deleteClicked: " + machineList.size());
+        }
 
+        mAdapter.notifyDataSetChanged();
     }
 }

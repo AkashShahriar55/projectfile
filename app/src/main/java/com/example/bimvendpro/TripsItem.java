@@ -11,10 +11,10 @@ public class TripsItem implements Serializable {
     private int noOfLocation;
     private int noOfMachines;
     private String status;
-    private int tripNumber;
+    private String tripNumber;
     private List<TripMachines> tripMachines;
 
-    public TripsItem(String driverName, String tripDate, String tripDescription, String cashCollected, int noOfLocation, int noOfMachines, String status, int tripNumber, List<TripMachines> tripMachines) {
+    public TripsItem(String driverName, String tripDate, String tripDescription, int noOfLocation, int noOfMachines, String tripNumber, List<TripMachines> tripMachines) {
         this.driverName = driverName;
         this.tripDate = tripDate;
         this.tripDescription = tripDescription;
@@ -85,11 +85,11 @@ public class TripsItem implements Serializable {
         this.status = status;
     }
 
-    public int getTripNumber() {
+    public String getTripNumber() {
         return tripNumber;
     }
 
-    public void setTripNumber(int tripNumber) {
+    public void setTripNumber(String tripNumber) {
         this.tripNumber = tripNumber;
     }
 
