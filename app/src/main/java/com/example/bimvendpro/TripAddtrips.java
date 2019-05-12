@@ -143,6 +143,7 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
                 String name = machineList.get(i).getName();
                 String location = machineList.get(i).getMachineInstall().getLocation();
                 String type = machineList.get(i).getType();
+                String machineCode = machineList.get(i).getCode();
                 Log.d("data", "machine count: " + i);
                 if(machineList.get(i).getMachineIngredients()!=null){
                     machineIngredients = machineList.get(i).getMachineIngredientsToList();
@@ -150,11 +151,12 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
                         Log.d("data", "product count: " + machineIngredients.size() + " " + j);
                         String productName = machineIngredients.get(j).getName();
                         int lastCount = machineIngredients.get(j).getLastCount();
-                        tripMachineProducts.add(new TripMachineProduct(productName,lastCount));
+                        String productCode = machineIngredients.get(j).getCode();
+                        tripMachineProducts.add(new TripMachineProduct(productName,lastCount,productCode));
                     }
                 }
 
-                tripMachines.add(new TripMachines(name,location,type,tripMachineProducts));
+                tripMachines.add(new TripMachines(name,location,type,tripMachineProducts,machineCode));
             }
         }
 
@@ -233,7 +235,7 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
                 }
 
                 if(!hasDriver){
-                    drivers.add("No Location");
+                    drivers.add("No Driver");
                 }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(TripAddtrips.this, android.R.layout.simple_spinner_item, drivers);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

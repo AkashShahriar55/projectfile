@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TripEdit"></activity>
+        <activity android:name=".TripMachineEnterResult"></activity>
+        <activity android:name=".TripEdit" />
         <activity android:name=".TripAddtrips" />
         <activity android:name=".AddViewEditExpenses" />
         <activity
