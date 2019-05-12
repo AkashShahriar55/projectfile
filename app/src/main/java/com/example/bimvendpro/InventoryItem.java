@@ -13,7 +13,11 @@ public class InventoryItem {
 
 
     public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, Integer unitPerCase) {
-        this.code = "P-"+code;
+        if(code.charAt(0)=='P'){
+            this.code=code;
+        }else {
+            this.code = "P-"+code;
+        }
         this.productName = productName;
         this.productType = productType;
         this.inStock = inStock;
@@ -28,7 +32,11 @@ public class InventoryItem {
     }
 
     public InventoryItem(String code, String productName, String productType, int inStock, int inWarehouse, int inMachine, Integer unitPerCase, float lastCost) {
-        this.code = "P-"+code;
+        if(code.charAt(0)=='P'){
+            this.code=code;
+        }else {
+            this.code = "P-"+code;
+        }
         this.productName = productName;
         this.productType = productType;
         this.inStock = inStock;
@@ -43,7 +51,12 @@ public class InventoryItem {
     }
 
     public void setCode(String code) {
-        this.code = code;
+        if(code.charAt(0)=='P'){
+            this.code=code;
+        }else {
+            this.code = "P-"+code;
+        }
+
     }
 
     public String getProductName() {

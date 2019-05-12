@@ -21,7 +21,11 @@ public class Machine implements Serializable {
     private HashMap<String, MachineIngredients> machineIngredients;
 
     public Machine(String code, String name, String model, String type) {
-        this.code = "M-" + code;
+        if(code.charAt(0)=='M'){
+            this.code=code;
+        }else {
+            this.code = "M-"+code;
+        }
         this.name = name;
         this.model = model;
         this.type = type;
@@ -30,7 +34,11 @@ public class Machine implements Serializable {
     }
 
     public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall) {
-        this.code = "M-" + code;
+        if(code.charAt(0)=='M'){
+            this.code=code;
+        }else {
+            this.code = "M-"+code;
+        }
         this.name = name;
         this.model = model;
         this.type = type;
@@ -44,7 +52,11 @@ public class Machine implements Serializable {
     }
 
     public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall, HashMap<String, MachineIngredients> machineIngredients) {
-        this.code = "M-" + code;
+        if(code.charAt(0)=='M'){
+            this.code=code;
+        }else {
+            this.code = "M-"+code;
+        }
         this.name = name;
         this.model = model;
         this.type = type;
@@ -66,7 +78,11 @@ public class Machine implements Serializable {
     }
 
     public void setCode(String code) {
-        this.code = code;
+        if(code.charAt(0)=='M'){
+            this.code=code;
+        }else {
+            this.code = "M-"+code;
+        }
     }
 
     public String getName() {
