@@ -20,11 +20,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,12 +43,16 @@ public class TripEdit extends AppCompatActivity{
     private RecyclerView recyclerViewMachines;
     private TripMachineAdapter mAdapter;
 
+    private List<TripMachineProduct> tempProducts = new ArrayList<>();
+
     private Spinner spinnerDriver;
     private EditText editTextDate,editTextDescription;
 
     private Button buttonUpdate,buttonDelete,buttonPost;
 
     final Calendar myCalendar = Calendar.getInstance();
+
+    boolean flag = true;
 
 
     @Override
@@ -104,6 +112,120 @@ public class TripEdit extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 tryWriteData();
+            }
+        });
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete();
+            }
+        });
+
+        buttonPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postResults();
+            }
+        });
+    }
+
+    private void postResults() {
+        tempProducts = new ArrayList<>();
+        tryWriteData();
+        if(tripMachinesList != null){
+            for(int i = 0 ; i<tripMachinesList.size();i++){
+                flag = false;
+                String mcode = tripMachinesList.get(i).getCode();
+                final double cashCollectd = tripMachinesList.get(i).getCashCollected();
+
+                FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(mcode).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                        double totalCollected = Double.parseDouble(dataSnapshot.child("totalCollected").getValue().toString());
+                        totalCollected += cashCollectd;
+                        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(dataSnapshot.getKey()).child("totalCollected").setValue(totalCollected);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(TripEdit.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+                for(int j = 0; j<tripMachinesList.get(i).getTripMachineProducts().size();j++){
+                    flag = false;
+                    TripMachineProduct machineProduct = tripMachinesList.get(i).getTripMachineProducts().get(j);
+                    final String pcode = machineProduct.getCode();
+                    final int pnewCount = machineProduct.getNewCount();
+
+                    FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(mcode).child("machineIngredients").child(pcode).child("lastCount").setValue(pnewCount);
+
+                    boolean flag = false;
+                    for(int k =0 ; k<tempProducts.size();k++){
+                        if(machineProduct.getCode().equals(tempProducts.get(k).getCode())){
+                            flag = true;
+                            int sold = tempProducts.get(k).getSoldOrWin();
+                            int filled = tempProducts.get(k).getFilled();
+
+                            tempProducts.get(k).setFilled(filled + machineProduct.getFilled());
+                            tempProducts.get(k).setSoldOrWin(sold+machineProduct.getSoldOrWin());
+
+                        }
+                    }
+
+                    if(!flag){
+                        tempProducts.add(machineProduct);
+                    }
+
+
+
+                }
+            }
+        }
+
+        for(int i = 0; i<tempProducts.size();i++){
+            final String pcode = tempProducts.get(i).getCode();
+            final int psold = tempProducts.get(i).getSoldOrWin();
+            final int pfilled = tempProducts.get(i).getFilled();
+
+            FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(pcode).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    InventoryItem inventoryItem= dataSnapshot.getValue(InventoryItem.class);
+                    int inwarehouse = inventoryItem.getInWarehouse();
+                    int instock = inventoryItem.getInStock();
+                    int inmachine = inventoryItem.getInMachine();
+                    FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(pcode).child("inMachine").setValue(inmachine - psold + pfilled);
+                    FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(pcode).child("inWarehouse").setValue(inwarehouse - pfilled);
+                    FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Items").child(pcode).child("inStock").setValue(instock - psold);
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(TripEdit.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+    }
+
+    private void delete() {
+        FirebaseUtilClass.getDatabaseReference().child("Trip").child("Trips").child(tripsItem.getTripNumber()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+
+                finish();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@android.support.annotation.NonNull Exception e) {
             }
         });
     }
@@ -220,6 +342,7 @@ public class TripEdit extends AppCompatActivity{
                 TripMachines tripMachines = (TripMachines) data.getExtras().getSerializable("machine");
                 int machineNo = data.getExtras().getInt("machineNo");
                 tripMachinesList.set(machineNo,tripMachines);
+                mAdapter.notifyDataSetChanged();
                 tripsItem.setTripMachines(tripMachinesList);
             }
         }

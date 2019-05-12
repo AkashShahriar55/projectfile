@@ -19,12 +19,13 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TripMachineEnterResult extends AppCompatActivity implements TripMachineProductInputAdapter.passData {
 
     private TripMachines tripMachines;
-    private List<TripMachineProduct> tripMachineProduct;
+    private List<TripMachineProduct> tripMachineProduct = new ArrayList<>();
     private EditText editTextName,editTextType,editTextLocation,editTextCash,editTextComment,editTextCashInput,editTextCoinsInput,editTextBillsInput,editTextAdjustInput;
     private RecyclerView recyclerViewProducts;
     private TripMachineProductInputAdapter mAdapter;
@@ -182,6 +183,7 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
 
     private void initializeRecyclerView() {
         recyclerViewProducts = findViewById(R.id.trip_machine_product_input_recyclerView);
+        Log.d("list size", "initializeRecyclerView: list size " + tripMachineProduct.size());
 
         mAdapter = new TripMachineProductInputAdapter(tripMachineProduct,this,this);
         RecyclerView.LayoutManager mLayoutmanager =new LinearLayoutManager(this);

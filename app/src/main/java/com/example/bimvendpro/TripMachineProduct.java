@@ -24,6 +24,14 @@ public class TripMachineProduct implements Serializable {
     public TripMachineProduct() {
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getProductName() {
         return productName;
     }
