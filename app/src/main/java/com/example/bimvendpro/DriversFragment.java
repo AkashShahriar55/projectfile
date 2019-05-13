@@ -138,17 +138,6 @@ public class DriversFragment extends Fragment {
             }
         });
 
-        addButtonImage = view.findViewById(R.id.rutaddImageView);
-
-        addButtonImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),AddViewEditDrivers.class);
-                intent.putExtra("mode","add");
-                startActivity(intent);
-            }
-        });
-
 
         searchViewRoutes = view.findViewById(R.id.driver_search);
         searchViewRoutes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

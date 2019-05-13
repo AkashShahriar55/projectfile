@@ -1,9 +1,15 @@
 package com.example.bimvendpro;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -21,7 +27,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
-    public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6, PRODUCTS = 7, SHOW_NAVDRAWER = 100, HIDE_NAVDRAWER = 101;
+    public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6, PRODUCTS = 7,ROUTES = 8,TRIPS = 9,DRIVERS = 10,EXPENSES = 11, SHOW_NAVDRAWER = 100, HIDE_NAVDRAWER = 101;
     private String neededCode;
     private DrawerLayout drawer;
     private Drawable navIcon;
@@ -103,12 +109,79 @@ public class MainActivity extends AppCompatActivity
             }else if (currFrag == PRODUCTS) {
                 new PurchaseProductAddDialogue(this,neededCode).show();
                 return true;
+            }else if(currFrag == LOCATIONS){
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestLocationPermissions();
+                } else {
+                    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                    Intent intent = new Intent(this,AddLocation.class);
+                    startActivity(intent);
+                    Toast.makeText(this, "You have already permission", Toast.LENGTH_LONG).show();
+                }
+            }
+            else if(currFrag == ROUTES){
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestLocationPermissions();
+                } else {
+                    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                    Intent intent = new Intent(this,AddViewEditRoutes.class);
+                    intent.putExtra("mode","add");
+                    startActivity(intent);
+                    Toast.makeText(this, "You have already permission", Toast.LENGTH_LONG).show();
+                }
+            }else if(currFrag == DRIVERS){
+                Intent intent = new Intent(this,AddViewEditDrivers.class);
+                intent.putExtra("mode","add");
+                startActivity(intent);
+            }else if(currFrag == EXPENSES){
+                Intent intent = new Intent(this,AddViewEditExpenses.class);
+                intent.putExtra("mode","add");
+                startActivity(intent);
             }
         } else if (id == R.id.action_search) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this,AddLocation.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void requestLocationPermissions() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission Needed")
+                    .setMessage("This permission is needed to locate the location")
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                        }
+                    })
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -141,13 +214,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_routes) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Routes()).commit();
             toolbar.setTitle("Routes");
-
+            currFrag = ROUTES;
         } else if (id == R.id.nav_driver) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DriversFragment()).commit();
             toolbar.setTitle("Drivers");
+            currFrag = DRIVERS;
         } else if (id == R.id.nav_expenses) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ExpenseFragment()).commit();
             toolbar.setTitle("Expenses");
+            currFrag = EXPENSES;
         } else if (id == R.id.nav_purchases) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PurchaseFragment()).commit();
             toolbar.setTitle("Purchases");

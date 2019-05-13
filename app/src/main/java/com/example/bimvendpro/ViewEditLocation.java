@@ -3,9 +3,11 @@ package com.example.bimvendpro;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.annotation.NonNull;
@@ -18,6 +20,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -84,6 +88,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
         item = (Location) getIntent().getExtras().getSerializable("itemData");
         noOfMachine = item.getNoOfMachines();
+        hideKeyboard();
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -126,6 +131,16 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
 
         initializeRecyclerView();
+    }
+
+    private void hideKeyboard() {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
+
     }
 
 
@@ -208,7 +223,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
                     buttonEdit.setText("Done");
                     buttonDelete.setText("Cancel");
                     buttonUpdateLocation.setEnabled(true);
-                    buttonUpdateLocation.setText("Update LocationFragment");
+                    buttonUpdateLocation.setText("Update Location Info");
                     textViewMode.setText("Edit Mode");
 
                 }
@@ -223,20 +238,34 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
                     init();
                 }
                 else {
-                    AlertDialog dialog = new AlertDialog.Builder(ViewEditLocation.this)
-                            .setMessage("Are you sure? Your Data will be Change")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    delete();
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
 
-                                }
-                            }).show();
+                    if(noOfMachine > 0){
+                        AlertDialog dialog = new AlertDialog.Builder(ViewEditLocation.this)
+                                .setMessage("Please Uninstall Machine")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                }).show();
+
+                    }else {
+                        AlertDialog dialog1 = new AlertDialog.Builder(ViewEditLocation.this)
+                                .setMessage("Are you sure? Your Data will be Change")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        delete();
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                }).show();
+                    }
+
+
 
                 }
             }
@@ -253,6 +282,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
                 new LocationInstallMachineDialog(ViewEditLocation.this,item.getCode(),noOfMachine).show();
+
             }
         });
     }
@@ -394,6 +424,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
             public void onSuccess(Void aVoid) {
                 Toast.makeText(ViewEditLocation.this, "Updated", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
+                finish();
 
             }
 
@@ -563,6 +594,13 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         updateMachineNo();
     }
 
+    @Override
+    public void isInstalling() {
+        buttonInstallMachine.setEnabled(false);
+        buttonInstallMachine.setText("wait");
+        buttonInstallMachine.setTextColor(Color.GRAY);
+    }
+
     private void initializeRecyclerView() {
         recyclerViewMachineInstall = findViewById(R.id.LocationMachineRecycler);
 
@@ -584,7 +622,9 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
             @Override
             public void onSuccess(Void aVoid) {
 
-                Toast.makeText(ViewEditLocation.this, "Machine no updated", Toast.LENGTH_SHORT).show();
+                buttonInstallMachine.setEnabled(true);
+                buttonInstallMachine.setText("Install");
+                buttonInstallMachine.setTextColor(getResources().getColor(R.color.colorhighlight2));
 
             }
 

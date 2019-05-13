@@ -36,13 +36,13 @@
         <item>% of Gross Profit</item>
     </string-array>
     <string-array name="days">
-        <item>Friday</item>
-        <item>Saturday</item>
         <item>Sunday</item>
         <item>Monday</item>
         <item>Tuesday</item>
         <item>Wednesday</item>
         <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
     </string-array>
 
     <string-array name="expense_category">

@@ -42,6 +42,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -224,8 +227,22 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         String day = daysSpinner.getSelectedItem().toString();
 
 
+        int dow = daysSpinner.getSelectedItemPosition()+1;
+        Calendar date = Calendar.getInstance();
+        int diff = dow - date.get(Calendar.DAY_OF_WEEK);
+        if (diff <= 0) {
+            diff += 7;
+        }
+        date.add(Calendar.DAY_OF_MONTH, diff);
+        DateFormat df = new SimpleDateFormat("dd-MM-yy");
+        String nextVisit = df.format(date.getTime());
+
+        Location item = new Location(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,lattitude,notes);
+
+        item.setNextVisit(nextVisit);
+
         if(!error){
-            writeDataToFirebase(new Location(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,lattitude,notes));
+            writeDataToFirebase(item);
         }
     }
 
@@ -237,6 +254,7 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
             public void onSuccess(Void aVoid) {
                 Toast.makeText(AddLocation.this, "Updated", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
+                finish();
 
             }
 
@@ -324,13 +342,13 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
 
         try {
-            addresses = geocoder.getFromLocation(lattitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            editTextAddress.setText(addresses.get(0).getAddressLine(0));// If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            editTextCity.setText(addresses.get(0).getLocality());
-            editTextState.setText(addresses.get(0).getAdminArea());
-            editTextCountry.setText(addresses.get(0).getCountryName());
-            editTextZip.setText(addresses.get(0).getPostalCode());
-            editTextLocation.setText(addresses.get(0).getFeatureName());
+            addresses = geocoder.getFromLocation(lattitude, longitude, 2); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            editTextAddress.setText(addresses.get(1).getAddressLine(0));// If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            editTextCity.setText(addresses.get(1).getLocality());
+            editTextState.setText(addresses.get(1).getAdminArea());
+            editTextCountry.setText(addresses.get(1).getCountryName());
+            editTextZip.setText(addresses.get(1).getPostalCode());
+            editTextLocation.setText(addresses.get(1).getFeatureName());
         } catch (IOException e) {
             e.printStackTrace();
 

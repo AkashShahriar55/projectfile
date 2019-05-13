@@ -437,7 +437,7 @@
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:id="@+id/loc_editxt_commissionpercent"
                             android:background="@drawable/round_shape"
                             android:backgroundTint="@color/colorLightCard"
@@ -475,6 +475,7 @@
                         android:backgroundTint="@color/colorLightCard"
                         android:hint="e.g. 2.85%"
                         android:paddingLeft="5dp"
+                        android:inputType="numberDecimal"
                         android:paddingRight="5dp"
                         android:layout_margin="5dp"
                         android:textColor="@color/colorGrayDark">
@@ -559,19 +560,20 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="start|center"
                         android:text="Installed Machines"
+                        android:layout_marginLeft="10dp"
                         android:textSize="16sp"
                         android:textColor="@color/colorWhite"
-                        android:layout_weight="1"/>
+                        android:layout_weight="3"/>
                     <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:text="Install Machine"
                         android:background="@drawable/round_shape"
                         android:backgroundTint="@color/colorLightCard"
@@ -593,8 +595,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/LocationMachineRecycler"
-                        android:layout_marginTop="10dp">
+                        android:id="@+id/LocationMachineRecycler">
 
 
                     </android.support.v7.widget.RecyclerView>
@@ -640,7 +641,7 @@
                                 android:layout_weight="1"
                                 android:padding="5dp"
                                 android:textSize="16sp"
-                                android:inputType="numberDecimal"
+                                android:inputType="number"
                                 android:id="@+id/loc_editxt_week"
                                 android:background="@drawable/round_shape"
                                 android:backgroundTint="@color/colorLightCard"

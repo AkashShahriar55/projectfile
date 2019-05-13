@@ -26,10 +26,11 @@
         <activity android:name=".TripMachineEnterResult" />
         <activity android:name=".TripEdit" />
         <activity android:name=".TripAddtrips" />
-        <activity android:name=".AddViewEditExpenses" />
+        <activity android:name=".AddViewEditExpenses"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".AddViewEditDrivers"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

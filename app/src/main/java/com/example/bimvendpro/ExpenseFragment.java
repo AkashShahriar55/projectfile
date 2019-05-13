@@ -134,16 +134,6 @@ public class ExpenseFragment extends Fragment {
             }
         });
 
-        addButtonImage = view.findViewById(R.id.expenseaddImageView);
-
-        addButtonImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),AddViewEditExpenses.class);
-                intent.putExtra("mode","add");
-                startActivity(intent);
-            }
-        });
 
 
         searchViewExpense = view.findViewById(R.id.expense_search);

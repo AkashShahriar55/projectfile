@@ -120,23 +120,6 @@ public class Routes extends Fragment {
             }
         });
 
-        addButtonImage = view.findViewById(R.id.rutaddImageView);
-
-        addButtonImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestLocationPermissions();
-                    return;
-                } else {
-                    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                    Intent intent = new Intent(getContext(),AddViewEditRoutes.class);
-                    intent.putExtra("mode","add");
-                    startActivity(intent);
-                    Toast.makeText(getContext(), "You have already permission", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
 
 
         searchViewRoutes = view.findViewById(R.id.rut_search);
@@ -175,31 +158,7 @@ public class Routes extends Fragment {
 
 
 
-    private void requestLocationPermissions() {
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Permission Needed")
-                    .setMessage("This permission is needed to locate the location")
-                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                        }
-                    })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create().show();
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-
-        }
-    }
 
     @Override
     public void onDetach() {

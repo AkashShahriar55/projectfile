@@ -83,6 +83,7 @@ public class LocationInstallMachineDialog extends Dialog {
             public void onClick(View v) {
                 String selectedMachine = (String) machineSpinner.getSelectedItem();
                 if(!selectedMachine.equals("No machine")){
+                    mListener.isInstalling();
                     String mCode = machinecode.get(getIndexFromSpinner(machineSpinner,selectedMachine));
                     writeDataToFirebase(mCode,date,new MachineInstall(code,date));
                 }else{
@@ -210,5 +211,6 @@ public class LocationInstallMachineDialog extends Dialog {
 
     public interface listener{
         public void onMachineInstall();
+        public void isInstalling();
     }
 }

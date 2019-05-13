@@ -28,7 +28,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -123,23 +128,6 @@ public class LocationFragment extends Fragment {
             }
         });
 
-        addButtonImage = view.findViewById(R.id.locaddImageView);
-        addButtonImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestLocationPermissions();
-                    return;
-                } else {
-                    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                    Intent intent = new Intent(getContext(),AddLocation.class);
-                    startActivity(intent);
-                    Toast.makeText(getContext(), "You have already permission", Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
-
 
 
         searchViewLocation = view.findViewById(R.id.loc_search);
@@ -162,7 +150,37 @@ public class LocationFragment extends Fragment {
         initializeRecyclerView();
         readDataFromFirebase();
 
+
+
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void updateNextVisit() {
+
+        for(int i =0; i<itemList.size();i++){
+            Log.d("date", "updateNextVisit: " + itemList.get(i).getNextVisit());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
+            Date Date = null;
+            Calendar nextDate = Calendar.getInstance();
+            try {
+                Date = sdf.parse(itemList.get(i).getNextVisit());
+                nextDate.setTime(Date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Calendar presentDate = Calendar.getInstance();
+            Log.d("date", "updateNextVisit: " + nextDate);
+            if (presentDate.after(nextDate)) {
+                int interVal = itemList.get(i).getIntervalDay();
+                nextDate.add(Calendar.DAY_OF_MONTH, interVal);
+                DateFormat df = new SimpleDateFormat("dd-MM-yy");
+                String nextVisit = df.format(nextDate.getTime());
+                Log.d("date", "updateNextVisit: " + nextVisit);
+                FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(itemList.get(i).getCode()).child("nextVisit").setValue(nextVisit);
+            }
+        }
+
     }
 
     private void initializeRecyclerView() {
@@ -175,44 +193,9 @@ public class LocationFragment extends Fragment {
         recyclerViewLocation.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(),AddLocation.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void requestLocationPermissions() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Permission Needed")
-                    .setMessage("This permission is needed to locate the location")
-                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                        }
-                    })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .create().show();
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
 
-        }
-    }
+
 
 
     @Override
@@ -248,6 +231,7 @@ public class LocationFragment extends Fragment {
                 }
                 mAdapter.notifyDataSetChanged();
                 refreshlayout.setRefreshing(false);
+                updateNextVisit();
                 //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
             }
 

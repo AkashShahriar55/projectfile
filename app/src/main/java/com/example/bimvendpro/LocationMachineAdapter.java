@@ -1,6 +1,8 @@
 package com.example.bimvendpro;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -60,28 +62,42 @@ public class LocationMachineAdapter extends RecyclerView.Adapter<LocationMachine
         locationMachineViewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final DatabaseReference databaseReference = FirebaseUtilClass.getDatabaseReference();
-                databaseReference.child("Machine").child("Items").child(item.getLocation()).child("machineInstall").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                        databaseReference.child("Location").child("Locations").child(lcode).child("machineInstall").child(item.getLocation()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setMessage("Are you sure? Your Data will be Change")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
-                                itemList.remove(item);
-                                notifyDataSetChanged();
-                                notifydata.onNoOfMachineDelete();
+                            public void onClick(DialogInterface dialog, int which) {
+                                final DatabaseReference databaseReference = FirebaseUtilClass.getDatabaseReference();
+                                databaseReference.child("Machine").child("Items").child(item.getLocation()).child("machineInstall").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                                        databaseReference.child("Location").child("Locations").child(lcode).child("machineInstall").child(item.getLocation()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
+                                                itemList.remove(item);
+                                                notifyDataSetChanged();
+                                                notifydata.onNoOfMachineDelete();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@android.support.annotation.NonNull Exception e) {
+                                            }
+                                        });
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@android.support.annotation.NonNull Exception e) {
+                                    }
+                                });
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onFailure(@android.support.annotation.NonNull Exception e) {
+                            public void onClick(DialogInterface dialog, int which) {
+
                             }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@android.support.annotation.NonNull Exception e) {
-                    }
-                });
+                        }).show();
+
             }
         });
         locationMachineViewHolder.setItem(item);
