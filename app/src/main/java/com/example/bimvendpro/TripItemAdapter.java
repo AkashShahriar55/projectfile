@@ -32,7 +32,7 @@ public class TripItemAdapter extends RecyclerView.Adapter<TripItemAdapter.TripVi
     @Override
     public TripItemAdapter.TripViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.trip_item_layout,viewGroup,false);
+                .inflate(R.layout.trip_item_layout, viewGroup, false);
 
         return new TripItemAdapter.TripViewHolder(itemView);
     }
@@ -44,9 +44,9 @@ public class TripItemAdapter extends RecyclerView.Adapter<TripItemAdapter.TripVi
         tripViewHolder.textViewName.setText(String.valueOf(item.getTripNumber()));
         tripViewHolder.textViewDate.setText(String.valueOf(item.getTripDate()));
         tripViewHolder.textViewStatus.setText(String.valueOf(item.getStatus()));
-        if(item.getStatus().equals("created")){
+        if (item.getStatus().equals("created")) {
             tripViewHolder.textViewStatus.setTextColor(Color.RED);
-        }else{
+        } else {
             tripViewHolder.textViewStatus.setTextColor(Color.GREEN);
         }
         tripViewHolder.textViewNoOfLocation.setText(String.valueOf(item.getNoOfLocation()));
@@ -55,8 +55,8 @@ public class TripItemAdapter extends RecyclerView.Adapter<TripItemAdapter.TripVi
         tripViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,TripEdit.class);
-                intent.putExtra("item",item);
+                Intent intent = new Intent(context, TripEdit.class);
+                intent.putExtra("item", item);
                 context.startActivity(intent);
             }
         });
@@ -117,6 +117,7 @@ public class TripItemAdapter extends RecyclerView.Adapter<TripItemAdapter.TripVi
         private TextView textViewCollection;
         private LinearLayout container;
         private TripsItem item;
+
         public TripViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.trip_number);

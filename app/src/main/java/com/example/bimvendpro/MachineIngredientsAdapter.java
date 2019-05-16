@@ -7,14 +7,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngredientsAdapter.MachineIngredientsViewHolder> {
+public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngredientsAdapter.MachineIngredientsViewHolder> implements Filterable {
     private List<MachineIngredients> itemList;
     private Context context;
+    private List<MachineIngredients> itemListFiltered;
     private String machineId;
     public class MachineIngredientsViewHolder extends RecyclerView.ViewHolder {
         private TextView codeTextView, productNameTextView, canisterTextView, maxTextView,lastTextView;
@@ -45,7 +49,52 @@ public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngre
         this.itemList = moviesList;
         this.context=context;
         this.machineId=machineId;
+        this.itemListFiltered = itemList;
     }
+
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                String charString = constraint.toString();
+                if (charString.isEmpty()) {
+                    itemListFiltered = itemList;
+                } else {
+                    List<MachineIngredients> filteredList = new ArrayList<>();
+
+                    for (MachineIngredients row : itemList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getCode().toLowerCase().contains(charString.toLowerCase())
+                                || row.getName().toLowerCase().contains(charString.toLowerCase())
+                                || String.valueOf(row.getLastCount()).toLowerCase().contains(charString.toLowerCase())
+                                || String.valueOf(row.getVendPrice()).toLowerCase().contains(charString.toLowerCase())
+                                || String.valueOf(row.getMax()).toLowerCase().contains(charString.toLowerCase())
+                        ) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    itemListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = itemListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                itemListFiltered = (ArrayList<MachineIngredients>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
 
     @Override
     public MachineIngredientsAdapter.MachineIngredientsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,7 +105,7 @@ public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngre
     }
     @Override
     public void onBindViewHolder(MachineIngredientsViewHolder holder, int position) {
-        final MachineIngredients item = itemList.get(position);
+        final MachineIngredients item = itemListFiltered.get(position);
         holder.codeTextView.setText(item.getCode());
         holder.productNameTextView.setText(item.getName());
         holder.canisterTextView.setText(String.valueOf(item.getVendPrice()));
@@ -92,6 +141,6 @@ public class MachineIngredientsAdapter extends RecyclerView.Adapter<MachineIngre
     }
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemListFiltered.size();
     }
 }

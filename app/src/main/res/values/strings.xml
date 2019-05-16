@@ -11,23 +11,33 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="food_type">
-        <item>Beverage</item>
-        <item>Food</item>
-        <item>Hot Drink</item>
-        <item>Ingredient</item>
+        <item>Plush Toys</item>
+        <item>Seals</item>
+        <item>Containers</item>
+        <item>Stickers</item>
+        <item>25 cent capsules</item>
+        <item>50 cent capsules</item>
+        <item>Candy</item>
+        <item>Bulk m&amp;m</item>
+        <item>Coke</item>
+        <item>Sprite</item>
+        <item>Chips</item>
+        <item>Sickers</item>
+        <item>Kitkat</item>
+
     </string-array>
     <string-array name="machine_type">
-        <item>Bulk</item>
-        <item>Cash Up Font</item>
-        <item>Cigarette</item>
-        <item>Coffee</item>
-        <item>Honor Box</item>
-        <item>Juice</item>
+        <item>Crane</item>
+        <item>Sports Arena</item>
+        <item>Coin Pusher </item>
+        <item>Kiddi Ride</item>
+        <item>Bulk Vend</item>
+        <item>Sticker</item>
         <item>Snack</item>
-        <item>Snack/Coffee</item>
+        <item>Gumball</item>
         <item>Soda</item>
-        <item>Soda/Snack</item>
-        <item>Toy Capsule</item>
+        <item>Video Game</item>
+
     </string-array>
     <string name="title_activity_add_location">Add Location</string>
     <string-array name="commission">

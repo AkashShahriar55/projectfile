@@ -79,9 +79,7 @@ public class Dashboard extends Fragment {
         MenuItem item=menu.findItem(R.id.action_add);
 
             item.setVisible(false);
-        MenuItem item2=menu.findItem(R.id.action_search);
 
-        item2.setVisible(false);
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -7,15 +7,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdapter.InventoryViewHolder> {
+public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdapter.InventoryViewHolder>   implements Filterable {
     private List<InventoryItem> itemList;
     private Context context;
+    private List<InventoryItem> itemListFiltered;
 
     public class InventoryViewHolder extends RecyclerView.ViewHolder {
         private TextView codeTextView, inMachineTextView, inStock, inWareHouseTextView, lastCostTextView, productNameTextView, productTypeTextView, unitPerCaseTextView;
@@ -47,6 +52,7 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
 
     public InventoryItemAdapter(List<InventoryItem> moviesList, Context context) {
         this.itemList = moviesList;
+        this.itemListFiltered = itemList;
         this.context=context;
     }
 
@@ -59,8 +65,48 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
     }
 
     @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                String charString = constraint.toString();
+                if (charString.isEmpty()) {
+                    itemListFiltered = itemList;
+                } else {
+                    List<InventoryItem> filteredList = new ArrayList<>();
+
+                    for (InventoryItem row : itemList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getProductType().toLowerCase().contains(charString.toLowerCase())
+                                || row.getProductName().toLowerCase().contains(charString.toLowerCase())
+                                || row.getCode().toLowerCase().contains(charString.toLowerCase())
+                                ) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    itemListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = itemListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                itemListFiltered = (ArrayList<InventoryItem>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    @Override
     public void onBindViewHolder(InventoryViewHolder holder, int position) {
-        final InventoryItem item = itemList.get(position);
+        final InventoryItem item = itemListFiltered.get(position);
         holder.codeTextView.setText(item.getCode());
         holder.inMachineTextView.setText(String.valueOf(item.getInMachine()));
         holder.inStock.setText(String.valueOf(item.getInStock()));
@@ -73,7 +119,7 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
             @Override
             public boolean onLongClick(View v) {
 
-                String[] colors = {"View History", "Edit"};
+                String[] colors = {"Edit"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(item.getProductName());
@@ -81,10 +127,8 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
+
                             case 0:
-                                new InventoryItemHistoryDialogue(context,item.getCode()).show();
-                                break;
-                            case 1:
                                 new InventoryItemAddDialogue(context,item).show();
 
                                 break;
@@ -103,6 +147,6 @@ public class InventoryItemAdapter extends RecyclerView.Adapter<InventoryItemAdap
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemListFiltered.size();
     }
 }

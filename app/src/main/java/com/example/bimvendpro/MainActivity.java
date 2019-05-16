@@ -138,8 +138,6 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("mode","add");
                 startActivity(intent);
             }
-        } else if (id == R.id.action_search) {
-            return true;
         }
 
         return super.onOptionsItemSelected(item);

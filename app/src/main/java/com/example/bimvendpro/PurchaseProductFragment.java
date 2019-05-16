@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import java.util.List;
 public class PurchaseProductFragment extends Fragment {
     private RecyclerView productRecyclerView;
 
+    private SearchView searchViewExpense;
     private List<PurchaseProductClass> itemList = new ArrayList<>();
     private PurchaseProductAdapter mAdapter;
     private String code;
@@ -51,6 +53,24 @@ public class PurchaseProductFragment extends Fragment {
             }
         });
 
+
+        searchViewExpense = view.findViewById(R.id.search);
+        searchViewExpense.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
         initializeRecyclerView();
 
         readDataFromFirebase();
@@ -59,6 +79,7 @@ public class PurchaseProductFragment extends Fragment {
 
         noIngredientsTextView = view.findViewById(R.id.noIngredentsMsg);
 
+        super.onViewCreated(view, savedInstanceState);
 
     }
     private void initializeRecyclerView() {

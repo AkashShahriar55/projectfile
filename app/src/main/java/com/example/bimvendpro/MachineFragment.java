@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ public class MachineFragment extends Fragment {
 
 
     private RecyclerView machineRecyclerView;
-
+    private SearchView searchViewExpense;
     private List<Machine> itemList = new ArrayList<>();
     private MachineAdapter mAdapter;
     private TextView noIngredientsTextView;
@@ -54,11 +55,33 @@ public class MachineFragment extends Fragment {
             }
         });
         noIngredientsTextView = view.findViewById(R.id.noIngredentsMsg);
+
+        searchViewExpense = view.findViewById(R.id.search);
+        searchViewExpense.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
+
+
+
         initializeRecyclerView();
 
         readDataFromFirebase();
 
         swipeRefreshLayout.setRefreshing(true);
+        super.onViewCreated(view, savedInstanceState);
     }
 
 

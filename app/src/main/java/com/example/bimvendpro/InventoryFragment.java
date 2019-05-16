@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class InventoryFragment extends Fragment {
     private String mParam2;
     private TextView noIngredientsTextView;
 
-
+    private SearchView searchViewExpense;
     private RecyclerView inventoryItemRecyclerView;
     private List<InventoryItem> itemList = new ArrayList<>();
     private InventoryItemAdapter mAdapter;
@@ -46,8 +47,6 @@ public class InventoryFragment extends Fragment {
 
 
     }
-
-
 
 
     @Override
@@ -64,7 +63,7 @@ public class InventoryFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        refreshlayout=view.findViewById(R.id.refreshingLayout);
+        refreshlayout = view.findViewById(R.id.refreshingLayout);
         refreshlayout.setRefreshing(true);
         refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -74,11 +73,32 @@ public class InventoryFragment extends Fragment {
         });
 
 
-        noIngredientsTextView=view.findViewById(R.id.noIngredentsMsg);
+        noIngredientsTextView = view.findViewById(R.id.noIngredentsMsg);
+
+
+        searchViewExpense = view.findViewById(R.id.ingredient_search);
+        searchViewExpense.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
+
+
         initializeRecyclerView();
 
         readDataFromFirebase();
-
+        super.onViewCreated(view, savedInstanceState);
     }
 
 
@@ -126,7 +146,7 @@ public class InventoryFragment extends Fragment {
                 } else {
                     noIngredientsTextView.setVisibility(View.GONE);
                 }
-             //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(getContext(), "Changed something", Toast.LENGTH_SHORT).show();
             }
 
             @Override
