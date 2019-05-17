@@ -48,16 +48,16 @@ public class AddSpinnerTypeActivity extends AppCompatActivity {
 
         type = getIntent().getIntExtra("type", PRODUCT);
 
-        if(type==PRODUCT){
+        if (type == PRODUCT) {
             getSupportActionBar().setTitle("Edit product types");
-        }else if(type==MACHINE){
+        } else if (type == MACHINE) {
             getSupportActionBar().setTitle("Edit machine types");
         }
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!TextUtils.isEmpty(itemNameEditText.getText().toString().trim())){
+                if (!TextUtils.isEmpty(itemNameEditText.getText().toString().trim())) {
                     writeToFireBase(itemNameEditText.getText().toString());
                 }
 
@@ -84,6 +84,7 @@ public class AddSpinnerTypeActivity extends AppCompatActivity {
 
         readDataFromFirebase();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -114,6 +115,7 @@ public class AddSpinnerTypeActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    itemNameEditText.setError(e.getMessage());
                     addItemButton.setEnabled(true);
                 }
             });
@@ -127,6 +129,7 @@ public class AddSpinnerTypeActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    itemNameEditText.setError(e.getMessage());
                     addItemButton.setEnabled(true);
                 }
             });
