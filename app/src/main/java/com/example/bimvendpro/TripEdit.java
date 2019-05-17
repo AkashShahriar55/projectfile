@@ -1,7 +1,10 @@
 package com.example.bimvendpro;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,12 +16,20 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,9 +57,11 @@ public class TripEdit extends AppCompatActivity{
     private List<TripMachineProduct> tempProducts = new ArrayList<>();
 
     private Spinner spinnerDriver;
-    private EditText editTextDate,editTextDescription;
+    private EditText editTextDate,editTextDescription,editTextName;
+    private ImageButton imageButton;
 
     private Button buttonUpdate,buttonDelete,buttonPost;
+    private PopupWindow popupWindow;
 
     final Calendar myCalendar = Calendar.getInstance();
 
@@ -66,10 +79,25 @@ public class TripEdit extends AppCompatActivity{
             initializeRecyclerView();
         }
 
+        hideKeyboard();
+
+        TripEdit.this.setTitle("Trip Number - "+ tripsItem.getTripNumber());
+
         spinnerDriver = findViewById(R.id.trip_driver_name);
         loadMachinesToSpinner();
 
+        editTextName = findViewById(R.id.trip_name);
+        imageButton = findViewById(R.id.trip_get_location);
+
         editTextDate = findViewById(R.id.trip_date);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupWindow popUp = popupWindowsort();
+                popUp.showAsDropDown(view, -10, 0); // show popup like dropdown list
+            }
+        });
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -86,6 +114,7 @@ public class TripEdit extends AppCompatActivity{
         editTextDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 new DatePickerDialog(TripEdit.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -103,40 +132,172 @@ public class TripEdit extends AppCompatActivity{
 
     }
 
+    private PopupWindow popupWindowsort() {
+
+        // initialize a pop up window type
+        popupWindow = new PopupWindow(this);
+
+        final ArrayList<String> sortList = new ArrayList<String>();
+
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").orderByChild("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    Location m = dsp.getValue(Location.class); //add result into array list
+                    sortList.add(m.getLocation());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(TripEdit.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line,
+                sortList){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                // Get the current item from ListView
+                View view = super.getView(position,convertView,parent);
+
+                // Get the Layout Parameters for ListView Current Item View
+                ViewGroup.LayoutParams params = view.getLayoutParams();
+
+                // Set the height of the Item View
+                params.height = 100;
+                view.setLayoutParams(params);
+
+                return view;
+            }
+        };
+        // the drop down list is a list view
+        final ListView listViewSort = new ListView(this);
+
+        // set our adapter and pass our pop up window contents
+        listViewSort.setAdapter(adapter);
+
+        // set on item selected
+        listViewSort.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                editTextName.setText(adapterView.getItemAtPosition(i).toString());
+                popupWindow.dismiss();
+            }
+        });
+
+        // some other visual settings for popup window
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(500);
+        // popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+
+        // set the listview as popup content
+        popupWindow.setContentView(listViewSort);
+
+        return popupWindow;
+    }
+
+    private void hideKeyboard() {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
+
+    }
+
     private void init() {
+
+        if(tripsItem.getStatus().equals("posted")){
+            editTextDescription.setEnabled(false);
+            editTextDate.setEnabled(false);
+            spinnerDriver.setEnabled(false);
+            buttonPost.setVisibility(View.GONE);
+            buttonUpdate.setVisibility(View.GONE);
+        }
+
         editTextDate.setText(tripsItem.getTripDate());
         editTextDescription.setText(tripsItem.getTripDescription());
-        spinnerDriver.setSelection(getIndexFromSpinner(spinnerDriver,tripsItem.getDriverName()));
+        editTextName.setText(tripsItem.getTripName());
+
 
         buttonUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tryWriteData();
+                AlertDialog dialog = new AlertDialog.Builder(TripEdit.this)
+                        .setMessage("Are you sure? Data will be change.")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                tryWriteData();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
+
             }
         });
 
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delete();
+                AlertDialog dialog = new AlertDialog.Builder(TripEdit.this)
+                        .setMessage("Are you sure? Data will be lost.")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                delete();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
+
             }
         });
 
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postResults();
+                AlertDialog dialog = new AlertDialog.Builder(TripEdit.this)
+                        .setMessage("Are you sure? It's can not be undone.")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                postResults();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
+
             }
         });
     }
 
     private void postResults() {
+
         tempProducts = new ArrayList<>();
         tryWriteData();
         if(tripMachinesList != null){
             for(int i = 0 ; i<tripMachinesList.size();i++){
                 flag = false;
                 String mcode = tripMachinesList.get(i).getCode();
+                String lcode = tripMachinesList.get(i).getLocation();
                 final double cashCollectd = tripMachinesList.get(i).getCashCollected();
 
                 FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(mcode).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -154,6 +315,8 @@ public class TripEdit extends AppCompatActivity{
                         Toast.makeText(TripEdit.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
+                FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(lcode).child("lastVisit").setValue(tripsItem.getTripDate());
 
 
 
@@ -186,6 +349,8 @@ public class TripEdit extends AppCompatActivity{
 
                 }
             }
+
+            FirebaseUtilClass.getDatabaseReference().child("Trip").child("Trips").child(tripsItem.getTripNumber()).child("status").setValue("posted");
         }
 
         for(int i = 0; i<tempProducts.size();i++){
@@ -252,6 +417,12 @@ public class TripEdit extends AppCompatActivity{
             tripsItem.setCashCollected(cashCollected);
         }
 
+        String tripName = editTextName.getText().toString();
+
+        tripsItem.setDriverName(driverName);
+        tripsItem.setTripDescription(tripDescription);
+        tripsItem.setTripName(tripName);
+
         writeDataToFirebase(tripsItem);
     }
 
@@ -289,6 +460,7 @@ public class TripEdit extends AppCompatActivity{
                         hasDriver = true;
                         drivers.add(m.getName());
                         spinnerDriver.setEnabled(true);
+
                     }
                 }
 
@@ -298,6 +470,11 @@ public class TripEdit extends AppCompatActivity{
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(TripEdit.this, android.R.layout.simple_spinner_item, drivers);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerDriver.setAdapter(adapter);
+                spinnerDriver.setSelection(getIndexFromSpinner(spinnerDriver,tripsItem.getDriverName()));
+
+                if(tripsItem.getStatus().equals("posted")){
+                    spinnerDriver.setEnabled(false);
+                }
 
                 // mAdapter.notifyDataSetChanged();
             }
@@ -318,7 +495,7 @@ public class TripEdit extends AppCompatActivity{
 
     private void initializeRecyclerView() {
         recyclerViewMachines = findViewById(R.id.trip_machine_recyclerview);
-        mAdapter = new TripMachineAdapter(tripMachinesList,this,tripsItem.getTripNumber());
+        mAdapter = new TripMachineAdapter(tripMachinesList,this,tripsItem.getTripNumber(),tripsItem.getStatus());
         RecyclerView.LayoutManager mLayoutmanager =new LinearLayoutManager(this);
         recyclerViewMachines.setLayoutManager(mLayoutmanager);
         recyclerViewMachines.setItemAnimator(new DefaultItemAnimator());

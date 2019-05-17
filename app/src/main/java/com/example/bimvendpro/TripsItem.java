@@ -5,6 +5,7 @@ import java.util.List;
 
 public class TripsItem implements Serializable {
     private String driverName;
+    private String tripName;
     private String tripDate;
     private String tripDescription;
     private double cashCollected;
@@ -13,8 +14,10 @@ public class TripsItem implements Serializable {
     private String status;
     private String tripNumber;
     private List<TripMachines> tripMachines;
+    private String Locations;
+    private String Machines;
 
-    public TripsItem(String driverName, String tripDate, String tripDescription, int noOfLocation, int noOfMachines, String tripNumber, List<TripMachines> tripMachines) {
+    public TripsItem(String driverName, String tripDate, String tripDescription, int noOfLocation, int noOfMachines, String tripNumber, List<TripMachines> tripMachines,String locations,String machines,String tripName) {
         this.driverName = driverName;
         this.tripDate = tripDate;
         this.tripDescription = tripDescription;
@@ -24,9 +27,36 @@ public class TripsItem implements Serializable {
         this.status = "created";
         this.tripNumber = tripNumber;
         this.tripMachines = tripMachines;
+        this.Locations = locations;
+        this.Machines = machines;
+        this.tripName = tripName;
     }
 
     public TripsItem() {
+    }
+
+    public String getTripName() {
+        return tripName;
+    }
+
+    public void setTripName(String tripName) {
+        this.tripName = tripName;
+    }
+
+    public String getLocations() {
+        return Locations;
+    }
+
+    public void setLocations(String locations) {
+        Locations = locations;
+    }
+
+    public String getMachines() {
+        return Machines;
+    }
+
+    public void setMachines(String machinnes) {
+        Machines = machinnes;
     }
 
     public String getDriverName() {

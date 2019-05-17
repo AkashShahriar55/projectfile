@@ -41,7 +41,8 @@ public class TripItemAdapter extends RecyclerView.Adapter<TripItemAdapter.TripVi
     public void onBindViewHolder(@NonNull TripItemAdapter.TripViewHolder tripViewHolder, int i) {
         final TripsItem item = itemListFiltered.get(i);
 
-        tripViewHolder.textViewName.setText(String.valueOf(item.getTripNumber()));
+        tripViewHolder.textViewName.setText(String.valueOf(item.getTripName()));
+        tripViewHolder.textViewNumber.setText(String.valueOf(item.getTripNumber()));
         tripViewHolder.textViewDate.setText(String.valueOf(item.getTripDate()));
         tripViewHolder.textViewStatus.setText(String.valueOf(item.getStatus()));
         if (item.getStatus().equals("created")) {
@@ -52,6 +53,8 @@ public class TripItemAdapter extends RecyclerView.Adapter<TripItemAdapter.TripVi
         tripViewHolder.textViewNoOfLocation.setText(String.valueOf(item.getNoOfLocation()));
         tripViewHolder.textViewNoOfMachine.setText(String.valueOf(item.getNoOfMachines()));
         tripViewHolder.textViewCollection.setText(String.valueOf(item.getCashCollected()));
+        tripViewHolder.textViewLocations.setText(String.valueOf(item.getLocations()));
+        tripViewHolder.textViewMachines.setText(String.valueOf(item.getMachines()));
         tripViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,9 +89,13 @@ public class TripItemAdapter extends RecyclerView.Adapter<TripItemAdapter.TripVi
                         // here we are looking for name or phone number match
                         if (row.getTripNumber().toLowerCase().contains(charString.toLowerCase())
                                 || row.getTripDate().toLowerCase().contains(charString.toLowerCase())
+                                || row.getTripName().toLowerCase().contains(charString.toLowerCase())
+                                || row.getLocations().toLowerCase().contains(charString.toLowerCase())
+                                || row.getMachines().toLowerCase().contains(charString.toLowerCase())
                                 || row.getStatus().contains(charString.toLowerCase())
                                 || String.valueOf(row.getCashCollected()).contains(charString.toLowerCase())) {
                             filteredList.add(row);
+
                         }
                     }
 
@@ -109,24 +116,30 @@ public class TripItemAdapter extends RecyclerView.Adapter<TripItemAdapter.TripVi
     }
 
     public class TripViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewName;
+        private TextView textViewNumber;
         private TextView textViewDate;
         private TextView textViewStatus;
         private TextView textViewNoOfLocation;
         private TextView textViewNoOfMachine;
         private TextView textViewCollection;
+        private TextView textViewLocations;
+        private TextView textViewMachines;
+        private TextView textViewName;
         private LinearLayout container;
         private TripsItem item;
 
         public TripViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewName = itemView.findViewById(R.id.trip_number);
+            textViewName = itemView.findViewById(R.id.trip_name);
+            textViewNumber = itemView.findViewById(R.id.trip_number);
             textViewDate = itemView.findViewById(R.id.trip_date);
             textViewStatus = itemView.findViewById(R.id.trip_status);
             textViewNoOfLocation = itemView.findViewById(R.id.trip_location_no);
             textViewNoOfMachine = itemView.findViewById(R.id.trip_machine_no);
             textViewCollection = itemView.findViewById(R.id.trip_collected_money);
             container = itemView.findViewById(R.id.trip_container);
+            textViewLocations = itemView.findViewById(R.id.trip_location);
+            textViewMachines = itemView.findViewById(R.id.trip_machines);
         }
 
         public TripsItem getItem() {

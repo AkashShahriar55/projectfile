@@ -138,16 +138,6 @@ public class TripFragment extends Fragment {
             }
         });
 
-        addButtonImage = view.findViewById(R.id.trip_add_item_button);
-
-        addButtonImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),TripAddtrips.class);
-                startActivity(intent);
-            }
-        });
-
 
         searchViewTrips = view.findViewById(R.id.trip_search);
         searchViewTrips.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

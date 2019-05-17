@@ -15,6 +15,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -44,6 +46,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -67,7 +70,7 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
     private EditText editTextStatus,editTextCode,editTextAddress,editTextCity,editTextState,editTextZip,editTextCountry,editTextName,editTextPhone,editTextEmail
             ,editTextNotes,editTextWorkingHour,editTextWeek,editTextCommissionPercent,editTextLocation,editTextTax;
 
-    private Spinner commissionSpinner,daysSpinner;
+    private Spinner commissionSpinner,daysSpinner,dwmSpinner;
 
     private Button buttonAdd,buttonCancel;
 
@@ -98,9 +101,11 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
         commissionSpinner = findViewById(R.id.loc_spinner_commission);
         daysSpinner = findViewById(R.id.loc_spinner_days);
+        dwmSpinner = findViewById(R.id.loc_spinner_DWM);
 
         buttonAdd = findViewById(R.id.loc_button_add);
         buttonCancel = findViewById(R.id.loc_button_cancel);
+
 
         init();
 
@@ -125,6 +130,28 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
         });
 
         editTextStatus.setText("Active");
+
+        dwmSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 0){
+                    daysSpinner.setVisibility(View.GONE);
+                }
+                else if(i == 2){
+                    daysSpinner.setVisibility(View.GONE);
+                }
+                else{
+                    daysSpinner.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
 
     }
 
@@ -215,7 +242,19 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
 
         int intervalday;
         try {
-            intervalday = Integer.parseInt(editTextWeek.getText().toString()) * 7;
+            if(dwmSpinner.getSelectedItem().equals("Days")){
+                intervalday = Integer.parseInt(editTextWeek.getText().toString());
+            }
+            else if(dwmSpinner.getSelectedItem().equals("Week")){
+                intervalday = Integer.parseInt(editTextWeek.getText().toString()) * 7;
+            }
+            else if(dwmSpinner.getSelectedItem().equals("Month")){
+                intervalday = Integer.parseInt(editTextWeek.getText().toString()) * 30;
+            }
+            else{
+                intervalday = Integer.parseInt(editTextWeek.getText().toString());
+            }
+
         }
         catch (NumberFormatException e){
             editTextWeek.setError("Give a service interval");
@@ -224,18 +263,39 @@ public class AddLocation extends FragmentActivity implements OnMapReadyCallback 
             return;
         }
 
-        String day = daysSpinner.getSelectedItem().toString();
+        String nextVisit;
+        String day;
 
-
-        int dow = daysSpinner.getSelectedItemPosition()+1;
-        Calendar date = Calendar.getInstance();
-        int diff = dow - date.get(Calendar.DAY_OF_WEEK);
-        if (diff <= 0) {
-            diff += 7;
+        if(dwmSpinner.getSelectedItem().equals("Days")){
+            day = "day";
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.DAY_OF_MONTH, intervalday);
+            DateFormat df = new SimpleDateFormat("dd-MM-yy");
+            nextVisit = df.format(date.getTime());
         }
-        date.add(Calendar.DAY_OF_MONTH, diff);
-        DateFormat df = new SimpleDateFormat("dd-MM-yy");
-        String nextVisit = df.format(date.getTime());
+        else if(dwmSpinner.getSelectedItem().equals("Week")){
+            day = daysSpinner.getSelectedItem().toString();
+
+
+            int dow = daysSpinner.getSelectedItemPosition()+1;
+            Calendar date = Calendar.getInstance();
+            int diff = dow - date.get(Calendar.DAY_OF_WEEK);
+            if (diff <= 0) {
+                diff += intervalday;
+            }
+            date.add(Calendar.DAY_OF_MONTH, diff);
+            DateFormat df = new SimpleDateFormat("dd-MM-yy");
+            nextVisit = df.format(date.getTime());
+        }
+        else{
+            day = "month";
+
+
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.DAY_OF_MONTH, intervalday);
+            DateFormat df = new SimpleDateFormat("dd-MM-yy");
+            nextVisit = df.format(date.getTime());
+        }
 
         Location item = new Location(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,lattitude,notes);
 

@@ -12,11 +12,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +30,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
-    public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6, PRODUCTS = 7, ROUTES = 8, TRIPS = 9, DRIVERS = 10, EXPENSES = 11, SHOW_NAVDRAWER = 100, HIDE_NAVDRAWER = 101;
+    public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6, PRODUCTS = 7,ROUTES = 8,TRIPS = 9,DRIVERS = 10,EXPENSES = 11, SHOW_NAVDRAWER = 100, HIDE_NAVDRAWER = 101;
     private String neededCode;
     private DrawerLayout drawer;
     private Drawable navIcon;
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (currFrag == INGREDIENTS || currFrag == PRODUCTS) {
+        if (currFrag == INGREDIENTS || currFrag==PRODUCTS) {
             backToPrevFragment();
         } else {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -107,35 +109,42 @@ public class MainActivity extends AppCompatActivity
             } else if (currFrag == PURCHASES) {
                 new PurchaseAddDialogue(this).show();
                 return true;
-            } else if (currFrag == PRODUCTS) {
-                new PurchaseProductAddDialogue(this, neededCode).show();
+            }else if (currFrag == PRODUCTS) {
+                new PurchaseProductAddDialogue(this,neededCode).show();
                 return true;
-            } else if (currFrag == LOCATIONS) {
+            }else if(currFrag == LOCATIONS){
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     requestLocationPermissions();
                 } else {
                     // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                    Intent intent = new Intent(this, AddLocation.class);
+                    Intent intent = new Intent(this,AddLocation.class);
                     startActivity(intent);
                     Toast.makeText(this, "You have already permission", Toast.LENGTH_LONG).show();
                 }
-            } else if (currFrag == ROUTES) {
+            }
+            else if(currFrag == ROUTES){
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     requestLocationPermissions();
                 } else {
                     // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                    Intent intent = new Intent(this, AddViewEditRoutes.class);
-                    intent.putExtra("mode", "add");
+                    Intent intent = new Intent(this,AddViewEditRoutes.class);
+                    intent.putExtra("mode","add");
                     startActivity(intent);
                     Toast.makeText(this, "You have already permission", Toast.LENGTH_LONG).show();
                 }
-            } else if (currFrag == DRIVERS) {
-                Intent intent = new Intent(this, AddViewEditDrivers.class);
-                intent.putExtra("mode", "add");
+            }else if(currFrag == DRIVERS){
+                Intent intent = new Intent(this,AddViewEditDrivers.class);
+                intent.putExtra("mode","add");
                 startActivity(intent);
-            } else if (currFrag == EXPENSES) {
-                Intent intent = new Intent(this, AddViewEditExpenses.class);
-                intent.putExtra("mode", "add");
+            }else if(currFrag == EXPENSES){
+                Intent intent = new Intent(this,AddViewEditExpenses.class);
+                intent.putExtra("mode","add");
+                startActivity(intent);
+            }else if(currFrag == TRIPS){
+                Intent intent = new Intent(this,TripAddtrips.class);
+                startActivity(intent);
+            }else if(currFrag == TRIPS){
+                Intent intent = new Intent(this,TripAddtrips.class);
                 startActivity(intent);
             }
         }
@@ -237,9 +246,11 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PurchaseFragment()).commit();
             toolbar.setTitle("Purchases");
             currFrag = PURCHASES;
-        } else if (id == R.id.nav_trips) {
+        }
+        else if (id == R.id.nav_trips) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TripFragment()).commit();
             toolbar.setTitle("Trips");
+            currFrag = TRIPS;
         } else if (id == R.id.nav_settings) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
             toolbar.setTitle("Settings");

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:color="#999999"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_intro_dash"
+        android:id ="@+id/intro_image"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorLightCard"
+        android:gravity="center"
+        android:text="Dashboard"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="30sp"
+        android:id ="@+id/intro_heading"
+        android:textColor="@color/colorWhite"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:id ="@+id/intro_description"
+        android:text="You can see your TOP FIVE machines in a Pie-chart and last five months income Bar statistics. There is also some important notices"
+        android:textSize="20sp"
+        android:textColor="@color/colorWhite" />
+
+</LinearLayout>

@@ -1,21 +1,25 @@
 package com.example.bimvendpro;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -23,6 +27,9 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +63,9 @@ public class Dashboard extends Fragment {
     ViewPager viewPager;
     serviceAdapter adapter;
     List<serviceNotificationItem> services;
+    List<Machine> machines = new ArrayList<>();
+    double totalCollection = 0;
+    List<PieEntry> pieEntries = new ArrayList<>();
 
     /**
      * Use this factory method to create a new instance of
@@ -125,11 +135,51 @@ public class Dashboard extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         viewPager =  getView().findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
 
-        createPieChart(view);
+        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").orderByChild("totalCollected").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                machines.clear();
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+
+                    machines.add(dsp.getValue(Machine.class)); //add result into array list
+                    totalCollection += dsp.getValue(Machine.class).getTotalCollected();
+
+
+                }
+                Log.d("total", "createPieChart: " + totalCollection);
+
+                double perc = 0.0;
+                float totalPerc = (float) 0.0;
+                int count = 0;
+                for(int i = machines.size() - 1; i >= 0 ;i--){
+
+                    perc = (machines.get(i).getTotalCollected()/totalCollection)*100;
+                    totalPerc+= perc;
+
+                    if(count == 5){
+                        break;
+                    }
+                    pieEntries.add(new PieEntry((float) perc,machines.get(i).getName()));
+                    count++;
+
+                }
+
+                if(count != 5){
+                    pieEntries.add(new PieEntry(100-totalPerc,"other"));
+                }
+
+
+                createPieChart(view);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
         createBarChart(view);
 
 
@@ -138,6 +188,9 @@ public class Dashboard extends Fragment {
 
     private void createBarChart(View view) {
         List<BarEntry> barEntries = new ArrayList<>();
+
+
+
 
         barEntries.add(new BarEntry(0f, 30f));
         barEntries.add(new BarEntry(1f, 80f));
@@ -156,20 +209,19 @@ public class Dashboard extends Fragment {
     }
 
     private void createPieChart( View view) {
-        List<PieEntry> pieEntries = new ArrayList<>();
 
-        pieEntries.add(new PieEntry(20f,"Sneckers"));
-        pieEntries.add(new PieEntry(28f,"Twix"));
-        pieEntries.add(new PieEntry(42f,"Coke"));
-        pieEntries.add(new PieEntry(10f,"Sprite"));
 
-        PieDataSet pieDataSet = new PieDataSet(pieEntries,"Top Products");
-        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        PieDataSet pieDataSet = new PieDataSet(pieEntries,"Top Machines");
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         PieData pieData = new PieData(pieDataSet);
 
 
         PieChart pieChart = (PieChart) view.findViewById(R.id.pieChart);
         pieChart.setData(pieData);
+        Description description = new Description();
+        description.setText("The top 5 machines");
+        pieChart.setDescription(description);
+        pieChart.setCenterTextColor(Color.WHITE);
         pieChart.invalidate();
     }
 

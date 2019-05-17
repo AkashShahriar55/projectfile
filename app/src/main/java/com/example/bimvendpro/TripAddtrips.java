@@ -3,6 +3,7 @@ package com.example.bimvendpro;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,10 +13,17 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,14 +48,18 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
     private RecyclerView recyclerViewAddLocation;
     private TripLocationAdapter mAdapter;
     private Spinner spinnerDriver;
-    private EditText editTextDate,editTextDescription;
+    private EditText editTextDate,editTextDescription,editTextName;
     private Button buttonAddLocation,buttonAdd,buttonCancel;
+    private ImageButton imageButton;
     private TextView textViewDummy;
     private List<Location> locationList = new ArrayList<>();
     private List<Machine> machineList = new ArrayList<>();
     private List<TripMachineProduct> tripMachineProducts = new ArrayList<>();
     private List<TripMachines> tripMachines = new ArrayList<>();
     private List<MachineIngredients> machineIngredients = new ArrayList<>();
+    private String Locations="";
+    private String Machines="";
+    private PopupWindow popupWindow;
 
     private static final String ALLOWED_CHARACTERS ="0123456789abcde";
 
@@ -64,6 +76,8 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
         loadMachinesToSpinner();
 
         editTextDate = findViewById(R.id.trip_date);
+        hideKeyboard();
+        TripAddtrips.this.setTitle("Add Trips");
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -80,6 +94,7 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
         editTextDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 new DatePickerDialog(TripAddtrips.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -101,6 +116,18 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
         buttonAdd = findViewById(R.id.trip_button_add);
         buttonCancel = findViewById(R.id.trip_button_cancel);
 
+        editTextName = findViewById(R.id.trip_name);
+        imageButton = findViewById(R.id.trip_get_location);
+
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupWindow popUp = popupWindowsort();
+                popUp.showAsDropDown(view, -10, 0); // show popup like dropdown list
+            }
+        });
+
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +143,16 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
         });
 
         initializeRecyclerView();
+
+    }
+
+    private void hideKeyboard() {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
 
     }
 
@@ -144,6 +181,7 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
                 String location = machineList.get(i).getMachineInstall().getLocation();
                 String type = machineList.get(i).getType();
                 String machineCode = machineList.get(i).getCode();
+                Machines += name + ",";
                 Log.d("data", "machine count: " + i);
                 if(machineList.get(i).getMachineIngredientsToList() !=null ){
                     machineIngredients = machineList.get(i).getMachineIngredientsToList();
@@ -156,7 +194,18 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
                     }
                 }
 
-                tripMachines.add(new TripMachines(name,location,type,tripMachineProducts,machineCode));
+                float commmission = (float) 0.0;
+                float tax = (float) 0.0;
+                String commissionType = "";
+                for(int j = 0 ; j < locationList.size(); j++){
+                    if(locationList.get(i).getCode().equals(location)){
+                        commmission = locationList.get(i).getCommission();
+                        tax = locationList.get(i).getTax();
+                        commissionType = locationList.get(i).getCommissionType();
+                    }
+                }
+
+                tripMachines.add(new TripMachines(name,location,type,tripMachineProducts,machineCode,commmission,tax,commissionType));
                 tripMachineProducts = new ArrayList<>();
             }
         }
@@ -175,11 +224,85 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
 
         String tripNumber = getTripNumber();
 
-
+        String tripName = editTextName.getText().toString();
+        if(TextUtils.isEmpty(tripName.trim())) {
+            editTextName.setError("Field mustn't be empty");
+            editTextName.requestFocus();
+            error = true;
+            return;
+        }
 
         if(!error){
-            writeDataToFirebase(new TripsItem(driverName,tripDate,tripDescription,noOfLocation,noOfMachine,tripNumber,tripMachines));
+            writeDataToFirebase(new TripsItem(driverName,tripDate,tripDescription,noOfLocation,noOfMachine,tripNumber,tripMachines,Locations,Machines,tripName));
         }
+    }
+
+    private PopupWindow popupWindowsort() {
+
+        // initialize a pop up window type
+        popupWindow = new PopupWindow(this);
+
+        final ArrayList<String> sortList = new ArrayList<String>();
+
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").orderByChild("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    Location m = dsp.getValue(Location.class); //add result into array list
+                    sortList.add(m.getLocation());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(TripAddtrips.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line,
+                sortList){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                // Get the current item from ListView
+                View view = super.getView(position,convertView,parent);
+
+                // Get the Layout Parameters for ListView Current Item View
+                ViewGroup.LayoutParams params = view.getLayoutParams();
+
+                // Set the height of the Item View
+                params.height = 100;
+                view.setLayoutParams(params);
+
+                return view;
+            }
+        };
+        // the drop down list is a list view
+        final ListView listViewSort = new ListView(this);
+
+        // set our adapter and pass our pop up window contents
+        listViewSort.setAdapter(adapter);
+
+        // set on item selected
+        listViewSort.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                editTextName.setText(adapterView.getItemAtPosition(i).toString());
+                popupWindow.dismiss();
+            }
+        });
+
+        // some other visual settings for popup window
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(500);
+        // popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+
+        // set the listview as popup content
+        popupWindow.setContentView(listViewSort);
+
+        return popupWindow;
     }
 
     private void writeDataToFirebase(TripsItem item) {
@@ -264,10 +387,10 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
         if(!hasAlready){
             noOfLocation += 1;
             locationList.add(location);
+            Locations += location.getLocation() + ",";
             if(location.getMachines() != null){
                 noOfMachine += location.getNoOfMachines();
                 machineList.addAll(location.getMachines());
-
             }
             Log.d("no of machine", "deleteClicked: " + machineList.size());
             textViewDummy.setVisibility(View.GONE);
