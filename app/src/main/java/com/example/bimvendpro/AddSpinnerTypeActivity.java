@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -101,10 +103,33 @@ public class AddSpinnerTypeActivity extends AppCompatActivity {
     }
 
     private void writeToFireBase(String str) {
+        addItemButton.setEnabled(false);
         if (type == PRODUCT) {
-            FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Types").child(str).setValue(true);
+            FirebaseUtilClass.getDatabaseReference().child("Inventory").child("Types").child(str).setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    itemNameEditText.setText("");
+                    addItemButton.setEnabled(true);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    addItemButton.setEnabled(true);
+                }
+            });
         } else if (type == MACHINE) {
-            FirebaseUtilClass.getDatabaseReference().child("Machine").child("Types").child(str).setValue(true);
+            FirebaseUtilClass.getDatabaseReference().child("Machine").child("Types").child(str).setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    itemNameEditText.setText("");
+                    addItemButton.setEnabled(true);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    addItemButton.setEnabled(true);
+                }
+            });
         }
     }
 
