@@ -32,7 +32,7 @@ public class SettingsFragment extends Fragment {
         addMachineType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), MachineAddActivity.class);
+                Intent intent = new Intent(getContext(), AddSpinnerTypeActivity.class);
                 intent.putExtra("type", AddSpinnerTypeActivity.MACHINE);
                 getContext().startActivity(intent);
             }
@@ -41,7 +41,7 @@ public class SettingsFragment extends Fragment {
         addProductType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), MachineAddActivity.class);
+                Intent intent = new Intent(getContext(), AddSpinnerTypeActivity.class);
                 intent.putExtra("type", AddSpinnerTypeActivity.PRODUCT);
                 getContext().startActivity(intent);
             }

@@ -46,6 +46,12 @@ public class AddSpinnerTypeActivity extends AppCompatActivity {
 
         type = getIntent().getIntExtra("type", PRODUCT);
 
+        if(type==PRODUCT){
+            getSupportActionBar().setTitle("Edit product types");
+        }else if(type==MACHINE){
+            getSupportActionBar().setTitle("Edit machine types");
+        }
+
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

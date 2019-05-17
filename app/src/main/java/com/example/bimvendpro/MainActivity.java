@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Trips");
         } else if (id == R.id.nav_settings) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-            toolbar.setTitle("Trips");
+            toolbar.setTitle("Settings");
         }else if (id == R.id.nav_about) {
             new AboutDialog(this).show();
         }
