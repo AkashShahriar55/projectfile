@@ -53,7 +53,10 @@
             android:name=".AddLocation"
             android:label="@string/title_activity_add_location" />
         <activity
-            android:name=".MachineAddDialogue"
+            android:name=".MachineAddActivity"
+            android:label="Add machine" />
+        <activity
+            android:name=".AddSpinnerTypeActivity"
             android:label="Add machine" />
         <activity
             android:name=".MainActivity"

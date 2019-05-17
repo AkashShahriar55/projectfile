@@ -46,10 +46,33 @@
                     style="@style/addItemDialogueTextView"
                     android:text="Product Type" />
 
-                <Spinner
-                    android:id="@+id/productTypeSpinner"
-                    style="@style/addItemDialogueSpinner"
-                    android:entries="@array/food_type" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ProgressBar
+                        android:layout_width="30dp"
+                        android:id="@+id/spinnerLoading"
+                        android:layout_height="30dp" />
+
+                    <Spinner
+                        android:id="@+id/productTypeSpinner"
+                        android:layout_width="0dp"
+                        android:layout_weight=".8"
+                        style="@style/addItemDialogueSpinner"
+                        />
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="5dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:id="@+id/addType"
+                        android:src="@drawable/ic_add"/>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -77,11 +100,11 @@
                         <EditText
                             android:id="@+id/inStockEditText"
                             style="@style/addItemDialogueEditTextView"
-                            android:hint="In Stock"
-                            android:focusable="false"
                             android:clickable="false"
-                            android:visibility="gone"
-                            android:inputType="none" />
+                            android:focusable="false"
+                            android:hint="In Stock"
+                            android:inputType="none"
+                            android:visibility="gone" />
                     </android.support.design.widget.TextInputLayout>
 
 
@@ -93,12 +116,11 @@
                         <EditText
                             android:id="@+id/inMachineEditText"
                             style="@style/addItemDialogueEditTextView"
-                            android:focusable="false"
                             android:clickable="false"
-                            android:inputType="none"
-                            android:visibility="gone"
+                            android:focusable="false"
                             android:hint="In Machine"
-                             />
+                            android:inputType="none"
+                            android:visibility="gone" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
@@ -109,8 +131,7 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">
 
                         <EditText
                             android:id="@+id/unitPerCaseEditText"
@@ -118,7 +139,6 @@
                             android:hint="Unit per case"
                             android:inputType="number" />
                     </android.support.design.widget.TextInputLayout>
-
 
 
                 </LinearLayout>

@@ -1,10 +1,7 @@
 package com.example.bimvendpro;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,17 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,18 +29,24 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-public class MachineAddDialogue extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MachineAddActivity extends AppCompatActivity {
     private Machine item;
     private EditText codeEditText, machineNameEditText, modelEditText;
     private Spinner machineTypeSpinner;
     private Button cancelButton, deleteButton, addButton;
-    private ProgressBar progressBar;
+    private ProgressBar progressBar, spinnerLoading;
     private Boolean editDlg = false;
     private ImageView addImage;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -54,8 +54,9 @@ public class MachineAddDialogue extends AppCompatActivity {
     private boolean hasImage = false;
     private String imageUrlStr = "";
     private Toolbar toolbar;
+    private ImageView addType;
 
-    public MachineAddDialogue() {
+    public MachineAddActivity() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
@@ -95,6 +96,7 @@ public class MachineAddDialogue extends AppCompatActivity {
 
 
     private void init() {
+        spinnerLoading = findViewById(R.id.spinnerLoading);
         codeEditText = findViewById(R.id.codeEditText);
         machineNameEditText = findViewById(R.id.machineNameEditTExt);
         machineTypeSpinner = findViewById(R.id.machineTypeSpinner);
@@ -104,6 +106,7 @@ public class MachineAddDialogue extends AppCompatActivity {
         addButton = findViewById(R.id.addButton);
         progressBar = findViewById(R.id.loadingProgressBar);
         addImage = findViewById(R.id.machineImageAdd);
+        addType = findViewById(R.id.addType);
 
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +127,16 @@ public class MachineAddDialogue extends AppCompatActivity {
             }
         });
 
+        addType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MachineAddActivity.this, AddSpinnerTypeActivity.class);
+                intent.putExtra("type", AddSpinnerTypeActivity.MACHINE);
+                MachineAddActivity.this.startActivity(intent);
+            }
+        });
+
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,9 +153,58 @@ public class MachineAddDialogue extends AppCompatActivity {
             }
         });
 
+        loadProductsToSpinner();
     }
 
 
+
+    private void loadProductsToSpinner() {
+        spinnerLoadingOn();
+
+        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Types").orderByKey().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> loc = new ArrayList<>();
+
+
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+
+                    String l = dsp.getKey(); //add result into array list
+                    loc.add(l);
+
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MachineAddActivity.this, android.R.layout.simple_spinner_item, loc);
+                ;
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                machineTypeSpinner.setAdapter(adapter);
+                if (editDlg) {
+                    machineTypeSpinner.setSelection(getIndexFromSpinner(machineTypeSpinner, item.getType()));
+                }
+                spinnerLoadingOff();
+                // mAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MachineAddActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                spinnerLoadingOff();
+            }
+        });
+    }
+
+    private void spinnerLoadingOn() {
+       machineTypeSpinner.setEnabled(false);
+       machineTypeSpinner.setVisibility(View.VISIBLE);
+        addButton.setEnabled(false);
+    }
+
+    private void spinnerLoadingOff() {
+        machineTypeSpinner.setEnabled(true);
+        spinnerLoading.setVisibility(View.GONE);
+        addButton.setEnabled(true);
+
+    }
     private void deleteItem() {
         loading();
         FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(item.getCode()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -155,13 +217,13 @@ public class MachineAddDialogue extends AppCompatActivity {
                         @Override
                         public void onComplete(@android.support.annotation.NonNull Task<Void> task) {
                             notLoading();
-                            MachineAddDialogue.this.finish();
+                            MachineAddActivity.this.finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@android.support.annotation.NonNull Exception e) {
                             notLoading();
-                            Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MachineAddActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -170,7 +232,7 @@ public class MachineAddDialogue extends AppCompatActivity {
             @Override
             public void onFailure(@android.support.annotation.NonNull Exception e) {
                 notLoading();
-                Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MachineAddActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -200,7 +262,7 @@ public class MachineAddDialogue extends AppCompatActivity {
 
 
     private void uploadFile(Uri imgUri, String code) {
-        final ProgressDialog dialog = ProgressDialog.show(MachineAddDialogue.this, "",
+        final ProgressDialog dialog = ProgressDialog.show(MachineAddActivity.this, "",
                 "Loading. Please wait...", true);
         dialog.show();
         if (imgUri != null) {
@@ -219,7 +281,7 @@ public class MachineAddDialogue extends AppCompatActivity {
                             }, 500);
 
 
-                            Toast.makeText(MachineAddDialogue.this, "Upload successful", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MachineAddActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
                             finish();
                             fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
@@ -236,7 +298,7 @@ public class MachineAddDialogue extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MachineAddActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -257,7 +319,7 @@ public class MachineAddDialogue extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.machine_add_dlg);
+        setContentView(R.layout.activity_machine_add);
 
 
         hideKeyboard();
@@ -345,7 +407,13 @@ public class MachineAddDialogue extends AppCompatActivity {
         String codeStr = codeEditText.getText().toString();
         String machineNameStr = machineNameEditText.getText().toString();
         String machineModelStr = modelEditText.getText().toString();
-        String machineType = machineTypeSpinner.getSelectedItem().toString();
+        String machineType;
+        if(machineTypeSpinner.getSelectedItem()==null || TextUtils.isEmpty(machineTypeSpinner.getSelectedItem().toString().trim())){
+            Toast.makeText(this,"Please add a machine type first",Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            machineType=machineTypeSpinner.getSelectedItem().toString();
+        }
 
 
         if (TextUtils.isEmpty(codeStr.trim())) {
@@ -387,7 +455,7 @@ public class MachineAddDialogue extends AppCompatActivity {
         FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(item.getCode()).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(MachineAddDialogue.this, "Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MachineAddActivity.this, "Updated", Toast.LENGTH_SHORT).show();
                 notLoading();
                 if (mImageUri != null) {
                     uploadFile(mImageUri, item.getCode());
@@ -400,7 +468,7 @@ public class MachineAddDialogue extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MachineAddDialogue.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MachineAddActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 notLoading();
             }
         });

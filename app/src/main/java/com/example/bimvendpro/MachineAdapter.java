@@ -204,7 +204,7 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
                                 new MachineInstallDialogue(context, item.getCode(), item.getMachineInstall()).show();
                                 break;
                             case 1:
-                                Intent intent = new Intent(context, MachineAddDialogue.class);
+                                Intent intent = new Intent(context, MachineAddActivity.class);
                                 intent.putExtra("item", item);
                                 context.startActivity(intent);
 
