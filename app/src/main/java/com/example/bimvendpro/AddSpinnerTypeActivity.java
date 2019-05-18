@@ -163,7 +163,7 @@ public class AddSpinnerTypeActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     itemList.clear();
                     for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                        itemList.add(dsp.getValue(String.class)); //add result into array list
+                        itemList.add(dsp.getKey()); //add result into array list
                     }
                     mAdapter.notifyDataSetChanged();
                     refreshlayout.setRefreshing(false);
