@@ -13,7 +13,7 @@ public class Machine implements Serializable {
     private String model;
     private String type;
     private String lastVisit;
-    private String note;
+    private String note="";
     private int daysInService;
     private float totalCollected;
     private float vendsPerDay;
