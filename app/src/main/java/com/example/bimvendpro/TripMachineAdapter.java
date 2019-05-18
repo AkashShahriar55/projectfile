@@ -21,11 +21,13 @@ public class TripMachineAdapter extends RecyclerView.Adapter<TripMachineAdapter.
     private List<TripMachines> itemList;
     private Context context;
     private String tripNumber;
+    private String status;
 
-    public TripMachineAdapter(List<TripMachines> itemList, Context context,String tripNumber) {
+    public TripMachineAdapter(List<TripMachines> itemList, Context context,String tripNumber,String status) {
         this.itemList = itemList;
         this.context = context;
         this.tripNumber = tripNumber;
+        this.status = status;
     }
 
     @NonNull
@@ -52,6 +54,7 @@ public class TripMachineAdapter extends RecyclerView.Adapter<TripMachineAdapter.
                 intent.putExtra("item",item);
                 intent.putExtra("tripNumber",tripNumber);
                 intent.putExtra("machineNumber",i);
+                intent.putExtra("status",status);
                 ((Activity)context).startActivityForResult(intent,1);
             }
         });

@@ -10,8 +10,30 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-
-
+    <string-array name="food_type">
+        <item>Beverage</item>
+        <item>Food</item>
+        <item>Hot Drink</item>
+        <item>Ingredient</item>
+    </string-array>
+    <string-array name="DWM">
+        <item>Days</item>
+        <item>Week</item>
+        <item>Month</item>
+    </string-array>
+    <string-array name="machine_type">
+        <item>Bulk</item>
+        <item>Cash Up Font</item>
+        <item>Cigarette</item>
+        <item>Coffee</item>
+        <item>Honor Box</item>
+        <item>Juice</item>
+        <item>Snack</item>
+        <item>Snack/Coffee</item>
+        <item>Soda</item>
+        <item>Soda/Snack</item>
+        <item>Toy Capsule</item>
+    </string-array>
     <string name="title_activity_add_location">Add Location</string>
     <string-array name="commission">
         <item>None</item>

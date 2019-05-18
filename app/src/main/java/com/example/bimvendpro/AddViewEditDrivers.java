@@ -471,7 +471,7 @@ public class AddViewEditDrivers extends AppCompatActivity implements DriverImage
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                            dialog.setMessage("Uploading Image: " + progress + "%");
+                            dialog.setMessage("Uploading Image "+ (float) progress);
                         }
                     });
 

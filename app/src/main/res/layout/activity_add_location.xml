@@ -558,12 +558,20 @@
                                 android:paddingRight="5dp"
                                 android:layout_margin="5dp" />
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="Week" />
+                                android:background="@drawable/round_shape">
+                                <Spinner
+                                    android:layout_width ="match_parent"
+                                    android:layout_height ="match_parent"
+                                    android:id="@+id/loc_spinner_DWM"
+                                    android:entries="@array/DWM">
+
+                                </Spinner>
+                            </LinearLayout>
                         </LinearLayout>
 
                         <Spinner

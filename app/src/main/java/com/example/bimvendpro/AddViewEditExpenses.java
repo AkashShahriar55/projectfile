@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -123,6 +124,7 @@ public class AddViewEditExpenses extends AppCompatActivity {
         loadMachinesToSpinner();
 
         mode = (String) getIntent().getExtras().getSerializable("mode");
+        expenseItem = (ExpenseItem) getIntent().getExtras().getSerializable("item");
 
         if(mode.equals("add")){
             initializeAddMode();
@@ -135,7 +137,7 @@ public class AddViewEditExpenses extends AppCompatActivity {
 
     private void initializeViewMode() {
 
-        expenseItem = (ExpenseItem) getIntent().getExtras().getSerializable("item");
+
         buttonAdd.setText("Edit");
         buttonCancel.setText("Delete");
         linearLayoutAddImage.setVisibility(GONE);
@@ -324,6 +326,9 @@ public class AddViewEditExpenses extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                if(!imageUrlStr.equals("")){
+                                    deleteImage();
+                                }
                                 finish();
                             }
                         })
@@ -364,7 +369,9 @@ public class AddViewEditExpenses extends AppCompatActivity {
 
         locationStr = spinnerLocation.getSelectedItem().toString();
 
-        if(mode == "add"){
+        Log.d("mode", "tryWriteData: " + mode);
+
+        if(mode.equals("add")){
             DatabaseReference databaseReference = FirebaseUtilClass.getDatabaseReference().child("Expense").child("Expenses");
             codeStr = databaseReference.push().getKey();
         }
@@ -405,11 +412,20 @@ public class AddViewEditExpenses extends AppCompatActivity {
         imageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                imageViewReceipt.setImageResource(0);
-                imageUrlStr = "";
-                hasImage = false;
-                buttonAddImage.setText("add");
-                buttonAddImage.setTextColor(getResources().getColor(R.color.colorhighlight2));
+                if(expenseItem != null){
+                    FirebaseUtilClass.getDatabaseReference().child("Expense").child("Expenses").child(expenseItem.getCode()).child("attachment").setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            imageViewReceipt.setImageResource(0);
+                            imageUrlStr = "";
+                            expenseItem.setAttachment(imageUrlStr);
+                            hasImage = false;
+                            buttonAddImage.setText("add");
+                            buttonAddImage.setTextColor(getResources().getColor(R.color.colorhighlight2));
+                        }
+                    });
+                }
+
             }
         });
     }
@@ -532,7 +548,7 @@ public class AddViewEditExpenses extends AppCompatActivity {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                             double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                            dialog.setMessage("Uploading Image: " + progress + "%");
+                            dialog.setMessage(String.format("Uploading Image: %.2f%", progress));
                         }
                     });
 

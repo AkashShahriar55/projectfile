@@ -1,6 +1,7 @@
 package com.example.bimvendpro;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
     private double cashCollected;
     private Button buttonSave,buttonCancel;
     private String tripNumber;
+    private String status;
     private int machineNumber;
     private sendMachineData sendMachineData;
 
@@ -43,10 +47,16 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
         tripMachines = (TripMachines) getIntent().getExtras().getSerializable("item");
         tripNumber = (String) getIntent().getExtras().getSerializable("tripNumber");
         machineNumber = (int) getIntent().getExtras().getSerializable("machineNumber");
+        status = (String) getIntent().getExtras().getSerializable("status");
+
         if(tripMachines.getTripMachineProducts()!= null){
             tripMachineProduct = tripMachines.getTripMachineProducts();
 
         }
+
+        hideKeyboard();
+
+        TripMachineEnterResult.this.setTitle("Machine Code - "+ tripMachines.getCode());
 
         editTextAdjustInput = findViewById(R.id.trip_machine_adjust_input);
         editTextName = findViewById(R.id.trip_machine_name);
@@ -76,6 +86,11 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
         });
 
         init();
+
+        if(status.equals("posted")){
+            buttonSave.setVisibility(View.GONE);
+            buttonCancel.setText("back");
+        }
 
         TextWatcher updateEditTexts = new TextWatcher() {
             @Override
@@ -147,6 +162,16 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
         editTextCoinsInput.addTextChangedListener(updateEditTexts);
         editTextBillsInput.addTextChangedListener(updateEditTexts);
         editTextAdjustInput.addTextChangedListener(updateEditTexts);
+
+    }
+
+    private void hideKeyboard() {
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+
 
     }
 

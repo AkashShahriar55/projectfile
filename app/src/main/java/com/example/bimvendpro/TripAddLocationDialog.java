@@ -147,7 +147,7 @@ public class TripAddLocationDialog extends DialogFragment {
 
     private void populateListFromDatabase() {
 
-        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").orderByChild("location").addValueEventListener(new ValueEventListener() {
+        FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").orderByChild("location").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {

@@ -8,14 +8,18 @@ public class TripMachines implements Serializable {
     private String location;
     private String type;
     private double cashCollected;
+    private float commission;
+    private float tax;
+    private float revenue;
     private int coins;
     private int bills;
     private String adjust;
     private String comment;
     private String code;
+    private String commissionType;
     private List<TripMachineProduct> tripMachineProducts;
 
-    public TripMachines(String name, String location, String type, List<TripMachineProduct> tripMachineProducts,String code) {
+    public TripMachines(String name, String location, String type, List<TripMachineProduct> tripMachineProducts,String code,float commission,float tax,String commissionType) {
         this.name = name;
         this.location = location;
         this.type = type;
@@ -26,13 +30,47 @@ public class TripMachines implements Serializable {
         this.bills = 0;
         this.adjust = "+0.0";
         this.code = code;
+        this.commission = commission;
+        this.tax = tax;
+        this.commissionType = commissionType;
     }
 
 
 
 
-
     public TripMachines() {
+    }
+
+    public String getCommissionType() {
+        return commissionType;
+    }
+
+    public void setCommissionType(String commissionType) {
+        this.commissionType = commissionType;
+    }
+
+    public float getCommission() {
+        return commission;
+    }
+
+    public void setCommission(float commission) {
+        this.commission = commission;
+    }
+
+    public float getTax() {
+        return tax;
+    }
+
+    public void setTax(float tax) {
+        this.tax = tax;
+    }
+
+    public float getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(float revenue) {
+        this.revenue = revenue;
     }
 
     public String getCode() {

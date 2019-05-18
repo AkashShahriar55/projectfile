@@ -2,9 +2,11 @@ package com.example.bimvendpro;
 
 import android.content.Intent;
 import android.media.Image;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -25,11 +27,16 @@ public class SplashActivity extends AppCompatActivity {
 
         textView.setAlpha((float) 0.0);
 
+        // Making notification bar transparent
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashActivity.this,MainActivity.class);
+                Intent i = new Intent(SplashActivity.this,IntroScreenActivity.class);
                 startActivity(i);
                 finish();
             }

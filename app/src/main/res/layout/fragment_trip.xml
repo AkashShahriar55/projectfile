@@ -10,34 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/colorBar"
-        android:padding="10dp">
+        android:padding="7dp">
 
         <SearchView
             android:id="@+id/trip_search"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="3"
-            android:background="@color/colorWhite" />
-
-
-
-        <LinearLayout
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorWhite"></LinearLayout>
-
-        <ImageView
-            android:id="@+id/trip_add_item_button"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_add"
-            android:tint="@color/colorWhite" />
+            android:background="@drawable/round_shape" />
 
 
     </LinearLayout>

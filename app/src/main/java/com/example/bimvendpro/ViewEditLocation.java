@@ -22,6 +22,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -50,7 +52,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,7 +69,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
     private TextView textViewMode;
 
-    private Spinner commissionSpinner,daysSpinner;
+    private Spinner commissionSpinner,daysSpinner,dwmSpinner;
 
     private Button buttonEdit,buttonDelete,buttonUpdateLocation,buttonInstallMachine;
     private Boolean editmode;
@@ -115,6 +120,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
         commissionSpinner = findViewById(R.id.loc_spinner_commission);
         daysSpinner = findViewById(R.id.loc_spinner_days);
+        dwmSpinner = findViewById(R.id.loc_spinner_DWM);
 
         buttonEdit = findViewById(R.id.loc_button_add);
         buttonDelete = findViewById(R.id.loc_button_cancel);
@@ -170,12 +176,28 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         editTextEmail.setText(item.getContactEmail());
         editTextNotes.setText(item.getNotes());
         editTextWorkingHour.setText(item.getWorkingHour());
-        editTextWeek.setText(String.valueOf(item.getIntervalDay()/7));
+
         editTextCommissionPercent.setText(String.valueOf(item.getCommission()));
         editTextTax.setText(String.valueOf(item.getTax()));
 
         commissionSpinner.setSelection(getIndexFromSpinner(commissionSpinner,item.getCommissionType()));
-        daysSpinner.setSelection(getIndexFromSpinner(daysSpinner,item.getTheDay()));
+
+        if(item.getTheDay().equals("day")){
+            dwmSpinner.setSelection(0);
+            daysSpinner.setVisibility(View.GONE);
+            editTextWeek.setText(String.valueOf(item.getIntervalDay()));
+        }else if(item.getTheDay().equals("month")){
+            dwmSpinner.setSelection(2);
+            daysSpinner.setVisibility(View.GONE);
+            editTextWeek.setText(String.valueOf(item.getIntervalDay()/30));
+        }
+        else{
+            dwmSpinner.setSelection(1);
+            daysSpinner.setVisibility(View.VISIBLE);
+            editTextWeek.setText(String.valueOf(item.getIntervalDay()/7));
+            daysSpinner.setSelection(getIndexFromSpinner(daysSpinner,item.getTheDay()));
+        }
+
 
         longitude = item.getLongitude();
         latitude = item.getLatitude();
@@ -282,6 +304,26 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
             @Override
             public void onClick(View v) {
                 new LocationInstallMachineDialog(ViewEditLocation.this,item.getCode(),noOfMachine).show();
+
+            }
+        });
+
+        dwmSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 0){
+                    daysSpinner.setVisibility(View.GONE);
+                }
+                else if(i == 2){
+                    daysSpinner.setVisibility(View.GONE);
+                }
+                else{
+                    daysSpinner.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
@@ -397,7 +439,19 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
         int intervalday;
         try {
-            intervalday = Integer.parseInt(editTextWeek.getText().toString()) * 7;
+            if(dwmSpinner.getSelectedItem().equals("Days")){
+                intervalday = Integer.parseInt(editTextWeek.getText().toString());
+            }
+            else if(dwmSpinner.getSelectedItem().equals("Week")){
+                intervalday = Integer.parseInt(editTextWeek.getText().toString()) * 7;
+            }
+            else if(dwmSpinner.getSelectedItem().equals("Month")){
+                intervalday = Integer.parseInt(editTextWeek.getText().toString()) * 30;
+            }
+            else{
+                intervalday = Integer.parseInt(editTextWeek.getText().toString());
+            }
+
         }
         catch (NumberFormatException e){
             editTextWeek.setError("Give a service interval");
@@ -406,13 +460,85 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
             return;
         }
 
-        String day = daysSpinner.getSelectedItem().toString();
+        String nextVisit;
+        String day;
+
+        if(dwmSpinner.getSelectedItem().equals("Days")){
+            day = "day";
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.DAY_OF_MONTH, intervalday);
+            DateFormat df = new SimpleDateFormat("dd-MM-yy");
+            nextVisit = df.format(date.getTime());
+        }
+        else if(dwmSpinner.getSelectedItem().equals("Week")){
+            day = daysSpinner.getSelectedItem().toString();
+
+
+            int dow = daysSpinner.getSelectedItemPosition()+1;
+            Calendar date = Calendar.getInstance();
+            int diff = dow - date.get(Calendar.DAY_OF_WEEK);
+            if (diff <= 0) {
+                diff += intervalday;
+            }
+            date.add(Calendar.DAY_OF_MONTH, diff);
+            DateFormat df = new SimpleDateFormat("dd-MM-yy");
+            nextVisit = df.format(date.getTime());
+        }
+        else{
+            day = "month";
+
+
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.DAY_OF_MONTH, intervalday);
+            DateFormat df = new SimpleDateFormat("dd-MM-yy");
+            nextVisit = df.format(date.getTime());
+        }
 
         item.setNoOfMachines(noOfMachine);
+        item.setState(status);
+        item.setAddress(address);
+        item.setCity(city);
+        item.setState(state);
+        item.setCountry(country);
+        item.setZip(zip);
+        item.setLocation(location);
+        item.setContactName(name);
+        item.setContactPhone(phone);
+        item.setContactEmail(email);
+        item.setCommissionType(commissiontype);
+        item.setCommission(commission);
+        item.setTax(tax);
+        item.setWorkingHour(workinghours);
+        item.setIntervalDay(intervalday);
+        item.setTheDay(day);
+        item.setLatitude(latitude);
+        item.setLongitude(longitude);
+        item.setNotes(notes);
+        item.setNextVisit(nextVisit);
+
+
 
         if(!error){
-            writeDataToFirebase(new Location(status,code,address,city,state,zip,country,location,name,phone,email,commissiontype,commission,tax,workinghours,intervalday,day,longitude,latitude,notes),isCodeChanged);
+            writeDataToFirebase(item,isCodeChanged);
         }
+
+        for(int i =0;i<machineInstallList.size();i++){
+            FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(code).child("machineInstall").child(machineInstallList.get(i).getLocation()).setValue(machineInstallList.get(i).getInstallationDate()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+
+                }
+
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(ViewEditLocation.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
 
     }
 
@@ -461,6 +587,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
         commissionSpinner.setEnabled(bool);
         daysSpinner.setEnabled(bool);
+        dwmSpinner.setEnabled(bool);
 
     }
 
