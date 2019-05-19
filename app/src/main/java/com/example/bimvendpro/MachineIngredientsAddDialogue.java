@@ -92,14 +92,40 @@ public class MachineIngredientsAddDialogue extends Dialog {
             public void onClick(View v) {
 
                 hideKeyboard();
-                Double canis = Double.parseDouble(canisterEditText.getText().toString());
-                int maxcap = Integer.parseInt(maxEditText.getText().toString());
+                Double canis;
+                try {
+                    canis= Double.parseDouble(canisterEditText.getText().toString());
+                }catch (Exception e){
+                    canisterEditText.setError("Not a valid decimal number");
+                    return;
+                }
+
+                int maxcap;
+                try {
+                    maxcap= Integer.parseInt(maxEditText.getText().toString());
+                }catch (Exception e){
+                    maxEditText.setError("Not a valid integer number");
+                    return;
+                }
+
+                if(ingredientsSpinner.getSelectedItem()==null){
+                    Toast.makeText(getContext(),"Please, add products in inventory.",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String compositeStr = ingredientsSpinner.getSelectedItem().toString();
                 String codeWithBracket = compositeStr.split("\\[")[1];
                 String code = codeWithBracket.substring(0, codeWithBracket.length() - 1);
                 int index = compositeStr.lastIndexOf(" ");
                 String proname = compositeStr.substring(0, index);
-                Integer lastStr = Integer.parseInt(lastCountEditText.getText().toString());
+                Integer lastStr;
+                try {
+                    lastStr= Integer.parseInt(lastCountEditText.getText().toString());
+                }catch (Exception e){
+                    lastCountEditText.setError("Not a valid integer number");
+                    return;
+                }
+
 
                 if (lastStr > maxcap) {
                     lastCountEditText.setError("Last count can't be greater than max capacity");

@@ -57,6 +57,12 @@ public class MachineFragment extends Fragment {
         noIngredientsTextView = view.findViewById(R.id.noIngredentsMsg);
 
         searchViewExpense = view.findViewById(R.id.search);
+        searchViewExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchViewExpense.setIconified(false);
+            }
+        });
         searchViewExpense.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
