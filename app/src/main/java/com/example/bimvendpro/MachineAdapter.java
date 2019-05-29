@@ -34,7 +34,7 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
 
     public class MachineViewHolder extends RecyclerView.ViewHolder {
         private TextView codeTextView, locationTextView, totalCollectedTextView, modelTextView, lastVisitTextView, nameTextView, typeTextView, installedTextView, inServiceTextView,
-                ventsPerDayTextView;
+                ventsPerDayTextView,lastMeterReadingTextView,hasStickerTextBox;
         private Machine item;
         private LinearLayout parent, expandedLayout;
         private ImageView machineImage;
@@ -54,6 +54,8 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
             parent = view.findViewById(R.id.parent);
             expandedLayout = view.findViewById(R.id.expandedLayout);
             machineImage = view.findViewById(R.id.machineimage);
+            lastMeterReadingTextView = view.findViewById(R.id.lastMeterReadings);
+            hasStickerTextBox = view.findViewById(R.id.hasSticker);
         }
 
         public Machine getItem() {
@@ -160,9 +162,15 @@ public class MachineAdapter extends RecyclerView.Adapter<MachineAdapter.MachineV
         }
         holder.nameTextView.setText(item.getName());
         holder.typeTextView.setText(item.getType());
-
+        holder.lastMeterReadingTextView.setText(String.valueOf(item.getLastMeterReadings()));
         holder.inServiceTextView.setText(String.valueOf(item.getDaysInService()));
         holder.ventsPerDayTextView.setText(String.valueOf(item.getVendsPerDay()));
+
+        if(item.isHasSticker()){
+            holder.hasStickerTextBox.setText("Yes");
+        }else{
+            holder.hasStickerTextBox.setText("No");
+        }
 
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("uploads").child("Machine").child(item.getCode());

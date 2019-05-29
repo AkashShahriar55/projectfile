@@ -82,6 +82,20 @@
                         style="@style/addItemDialogueEditTextView"
                         android:hint="Model" />
                 </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/lastMeterEditText"
+                        style="@style/addItemDialogueEditTextView"
+                        android:hint="Last Meter Reading" />
+                </android.support.design.widget.TextInputLayout>
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Has government sticker"
+                    android:id="@+id/hasGovtStickerCheckBox"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

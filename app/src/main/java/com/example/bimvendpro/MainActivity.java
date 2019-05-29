@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -28,17 +29,29 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback {
     Toolbar toolbar;
     public static final int DASHBOARD = 1, MACHINE = 2, LOCATIONS = 3, INVENTORY = 4, INGREDIENTS = 5, PURCHASES = 6, PRODUCTS = 7,ROUTES = 8,TRIPS = 9,DRIVERS = 10,EXPENSES = 11, SHOW_NAVDRAWER = 100, HIDE_NAVDRAWER = 101;
     private String neededCode;
     private DrawerLayout drawer;
     private Drawable navIcon;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        if(isStoragePermissionGranted()){
+            GeneratePDF generatePDF = new GeneratePDF(this);
+            generatePDF.openDocument();
+            generatePDF.addMetaData("test", "test", "test");
+            generatePDF.addTitle("test", "test");
+            generatePDF.closeDocument();
+        }
+
+
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -63,6 +76,27 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v("permission","Permission is granted");
+                return true;
+            } else {
+
+                Log.v("permission","Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("permission","Permission is granted");
+            return true;
+        }
+    }
+
+
+
     @Override
     public void onBackPressed() {
         if (currFrag == INGREDIENTS || currFrag==PRODUCTS) {
@@ -81,6 +115,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -161,6 +196,16 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if(requestCode == 2){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.v("permission","Permission: "+permissions[0]+ "was "+grantResults[0]);
+                GeneratePDF generatePDF = new GeneratePDF(this);
+                generatePDF.openDocument();
+                generatePDF.addMetaData("test", "test", "test");
+                generatePDF.addTitle("test", "test");
+                generatePDF.closeDocument();
             }
         }
     }
@@ -256,6 +301,11 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitle("Settings");
         }else if (id == R.id.nav_about) {
             new AboutDialog(this).show();
+        }
+        else if (id == R.id.nav_reports) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReportFragment()).commit();
+            toolbar.setTitle("Reports");
+            menu.getItem(0).setEnabled(false);
         }
 
 

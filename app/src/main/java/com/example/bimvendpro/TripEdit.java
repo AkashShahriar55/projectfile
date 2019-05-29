@@ -299,6 +299,8 @@ public class TripEdit extends AppCompatActivity{
                 String mcode = tripMachinesList.get(i).getCode();
                 String lcode = tripMachinesList.get(i).getLocation();
                 final double cashCollectd = tripMachinesList.get(i).getCashCollected();
+                int currentMeter = tripMachinesList.get(i).getCurrentMeterReading();
+                FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(mcode).child("lastMeterReadings").setValue(currentMeter);
 
                 FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(mcode).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -308,6 +310,7 @@ public class TripEdit extends AppCompatActivity{
                         double totalCollected = Double.parseDouble(dataSnapshot.child("totalCollected").getValue().toString());
                         totalCollected += cashCollectd;
                         FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(dataSnapshot.getKey()).child("totalCollected").setValue(totalCollected);
+
                     }
 
                     @Override
@@ -319,35 +322,37 @@ public class TripEdit extends AppCompatActivity{
                 FirebaseUtilClass.getDatabaseReference().child("Location").child("Locations").child(lcode).child("lastVisit").setValue(tripsItem.getTripDate());
 
 
+                if(tripMachinesList.get(i).getTripMachineProducts()!= null){
+                    for(int j = 0; j<tripMachinesList.get(i).getTripMachineProducts().size();j++){
+                        flag = false;
+                        TripMachineProduct machineProduct = tripMachinesList.get(i).getTripMachineProducts().get(j);
+                        final String pcode = machineProduct.getCode();
+                        final int pnewCount = machineProduct.getNewCount();
 
-                for(int j = 0; j<tripMachinesList.get(i).getTripMachineProducts().size();j++){
-                    flag = false;
-                    TripMachineProduct machineProduct = tripMachinesList.get(i).getTripMachineProducts().get(j);
-                    final String pcode = machineProduct.getCode();
-                    final int pnewCount = machineProduct.getNewCount();
+                        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(mcode).child("machineIngredients").child(pcode).child("lastCount").setValue(pnewCount);
 
-                    FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").child(mcode).child("machineIngredients").child(pcode).child("lastCount").setValue(pnewCount);
+                        boolean flag = false;
+                        for(int k =0 ; k<tempProducts.size();k++){
+                            if(machineProduct.getCode().equals(tempProducts.get(k).getCode())){
+                                flag = true;
+                                int sold = tempProducts.get(k).getSoldOrWin();
+                                int filled = tempProducts.get(k).getFilled();
 
-                    boolean flag = false;
-                    for(int k =0 ; k<tempProducts.size();k++){
-                        if(machineProduct.getCode().equals(tempProducts.get(k).getCode())){
-                            flag = true;
-                            int sold = tempProducts.get(k).getSoldOrWin();
-                            int filled = tempProducts.get(k).getFilled();
+                                tempProducts.get(k).setFilled(filled + machineProduct.getFilled());
+                                tempProducts.get(k).setSoldOrWin(sold+machineProduct.getSoldOrWin());
 
-                            tempProducts.get(k).setFilled(filled + machineProduct.getFilled());
-                            tempProducts.get(k).setSoldOrWin(sold+machineProduct.getSoldOrWin());
-
+                            }
                         }
+
+                        if(!flag){
+                            tempProducts.add(machineProduct);
+                        }
+
+
+
                     }
-
-                    if(!flag){
-                        tempProducts.add(machineProduct);
-                    }
-
-
-
                 }
+
             }
 
             FirebaseUtilClass.getDatabaseReference().child("Trip").child("Trips").child(tripsItem.getTripNumber()).child("status").setValue("posted");

@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -43,12 +44,13 @@ import java.util.List;
 
 public class MachineAddActivity extends AppCompatActivity {
     private Machine item;
-    private EditText codeEditText, machineNameEditText, modelEditText;
+    private EditText codeEditText, machineNameEditText, modelEditText,lastMeterRatingsEditText;
     private Spinner machineTypeSpinner;
     private Button cancelButton, deleteButton, addButton;
     private ProgressBar progressBar, spinnerLoading;
     private Boolean editDlg = false;
     private ImageView addImage;
+    private CheckBox hasGovtStickerCheckBox;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri mImageUri;
     private boolean hasImage = false;
@@ -107,6 +109,8 @@ public class MachineAddActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.loadingProgressBar);
         addImage = findViewById(R.id.machineImageAdd);
         addType = findViewById(R.id.addType);
+        lastMeterRatingsEditText = findViewById(R.id.lastMeterEditText);
+        hasGovtStickerCheckBox =findViewById(R.id.hasGovtStickerCheckBox);
 
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -340,12 +344,13 @@ public class MachineAddActivity extends AppCompatActivity {
             codeEditText.setText(item.getCode());
             machineNameEditText.setText(String.valueOf(item.getName()));
             modelEditText.setText(String.valueOf(item.getModel()));
-
+            lastMeterRatingsEditText.setText(String.valueOf(item.getLastMeterReadings()));
             machineTypeSpinner.setSelection(getIndexFromSpinner(machineTypeSpinner, item.getType()));
             addButton.setText("Update");
             deleteButton.setVisibility(View.VISIBLE);
             editDlg = true;
             codeEditText.setEnabled(false);
+            hasGovtStickerCheckBox.setChecked(item.isHasSticker());
         }
 
         if (item != null) {
@@ -407,7 +412,9 @@ public class MachineAddActivity extends AppCompatActivity {
         String codeStr = codeEditText.getText().toString();
         String machineNameStr = machineNameEditText.getText().toString();
         String machineModelStr = modelEditText.getText().toString();
+        String lastMeterReadingStr = lastMeterRatingsEditText.getText().toString();
         String machineType;
+        boolean hasSticker = hasGovtStickerCheckBox.isChecked();
         if(machineTypeSpinner.getSelectedItem()==null || TextUtils.isEmpty(machineTypeSpinner.getSelectedItem().toString().trim())){
             Toast.makeText(this,"Please add a machine type first",Toast.LENGTH_SHORT).show();
             return;
@@ -436,13 +443,25 @@ public class MachineAddActivity extends AppCompatActivity {
 
             return;
         }
+
+        int lastMeterReadings;
+        try {
+            lastMeterReadings = Integer.parseInt(lastMeterReadingStr);
+        }catch (NumberFormatException e){
+            lastMeterRatingsEditText.setError("Please Give Valid Input");
+            lastMeterRatingsEditText.requestFocus();
+            return;
+        }
+
         if (editDlg) {
             item.setName(machineNameStr);
             item.setModel(machineModelStr);
             item.setType(machineType);
+            item.setLastMeterReadings(lastMeterReadings);
+            item.setHasSticker(hasSticker);
             writeDataToFirebase(item);
         } else {
-            writeDataToFirebase(new Machine(codeStr, machineNameStr, machineModelStr, machineType));
+            writeDataToFirebase(new Machine(codeStr, machineNameStr, machineModelStr, machineType,lastMeterReadings,hasSticker));
         }
 
 

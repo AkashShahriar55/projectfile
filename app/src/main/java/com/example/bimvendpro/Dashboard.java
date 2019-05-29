@@ -15,6 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -60,12 +64,16 @@ public class Dashboard extends Fragment {
     }
 
 
-    ViewPager viewPager;
-    serviceAdapter adapter;
-    List<serviceNotificationItem> services;
     List<Machine> machines = new ArrayList<>();
+    List<String> machineType = new ArrayList<>();
+    List<Integer> inWarehouse = new ArrayList<>();
+    List<Integer> inLocation = new ArrayList<>();
+
     double totalCollection = 0;
     List<PieEntry> pieEntries = new ArrayList<>();
+
+    Spinner spinner;
+    TextView textViewInWareHouse,textViewInLoaction;
 
     /**
      * Use this factory method to create a new instance of
@@ -108,14 +116,6 @@ public class Dashboard extends Fragment {
     @Override
     public void onAttach(Context context) {
 
-        services = new ArrayList<>();
-        services.add(new serviceNotificationItem("location 1"));
-        services.add(new serviceNotificationItem("location 2"));
-        services.add(new serviceNotificationItem("location 3"));
-        services.add(new serviceNotificationItem("location 4"));
-
-        adapter = new serviceAdapter(services,context);
-
 
         super.onAttach(context);
     }
@@ -136,10 +136,12 @@ public class Dashboard extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
-        viewPager =  getView().findViewById(R.id.viewPager);
-        viewPager.setAdapter(adapter);
 
-        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").orderByChild("totalCollected").addValueEventListener(new ValueEventListener() {
+        spinner = view.findViewById(R.id.your_machines_spinner);
+        textViewInWareHouse = view.findViewById(R.id.your_machines_inWarehouse);
+        textViewInLoaction = view.findViewById(R.id.your_machines_inLocation);
+
+        FirebaseUtilClass.getDatabaseReference().child("Machine").child("Items").orderByChild("totalCollected").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 machines.clear();
@@ -174,6 +176,7 @@ public class Dashboard extends Fragment {
 
 
                 createPieChart(view);
+                updateSpinner();
             }
 
             @Override
@@ -183,7 +186,59 @@ public class Dashboard extends Fragment {
         createBarChart(view);
 
 
+
+
+
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private  void updateSpinner(){
+        for(int i = 0; i<machines.size();i++){
+            if(machineType.contains(machines.get(i).getType())){
+                int index = machineType.indexOf(machines.get(i).getType());
+                if(machines.get(i).getMachineInstall()!= null){
+                    inLocation.set(index, inLocation.get(index)+1);
+                }else{
+                    inWarehouse.set(index, inWarehouse.get(index) + 1);
+                }
+            }else{
+                machineType.add(machines.get(i).getType());
+                if(machines.get(i).getMachineInstall()!= null){
+                    inLocation.add(1);
+                    inWarehouse.add(0);
+                }else{
+                    inLocation.add(0);
+                    inWarehouse.add(1);
+                }
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                machineType
+        );
+
+        spinner.setAdapter(adapter);
+        textViewInWareHouse.setText(String.valueOf(inWarehouse.get(0)));
+        textViewInLoaction.setText(String.valueOf(inLocation.get(0)));
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinner.setSelection(position);
+                textViewInWareHouse.setText(String.valueOf(inWarehouse.get(position)));
+                textViewInLoaction.setText(String.valueOf(inLocation.get(position)));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                spinner.setSelection(0);
+                textViewInWareHouse.setText(String.valueOf(inWarehouse.get(0)));
+                textViewInLoaction.setText(String.valueOf(inLocation.get(0)));
+            }
+        });
     }
 
     private void createBarChart(View view) {

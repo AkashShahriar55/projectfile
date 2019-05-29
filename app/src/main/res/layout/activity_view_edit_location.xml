@@ -57,6 +57,13 @@
                 android:layout_gravity="end"
                 android:textColor="@color/colorGrayDark"
                 android:id="@+id/loc_update_location" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Direction"
+                android:layout_gravity="end"
+                android:textColor="@color/colorGrayDark"
+                android:id="@+id/loc_get_direction" />
 
             <LinearLayout
                 android:layout_width="match_parent"

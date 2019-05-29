@@ -5,11 +5,13 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -71,7 +73,7 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
 
     private Spinner commissionSpinner,daysSpinner,dwmSpinner;
 
-    private Button buttonEdit,buttonDelete,buttonUpdateLocation,buttonInstallMachine;
+    private Button buttonEdit,buttonDelete,buttonUpdateLocation,buttonInstallMachine,buttonGetDirection;
     private Boolean editmode;
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -126,6 +128,8 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
         buttonDelete = findViewById(R.id.loc_button_cancel);
         buttonUpdateLocation =findViewById(R.id.loc_update_location);
         buttonInstallMachine = findViewById(R.id.loc_install_machine);
+
+        buttonGetDirection = findViewById(R.id.loc_get_direction);
 
         init();
 
@@ -305,6 +309,15 @@ public class ViewEditLocation extends FragmentActivity implements OnMapReadyCall
             public void onClick(View v) {
                 new LocationInstallMachineDialog(ViewEditLocation.this,item.getCode(),noOfMachine).show();
 
+            }
+        });
+
+        buttonGetDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?daddr="+item.getLatitude()+","+item.getLongitude()));
+                startActivity(intent);
             }
         });
 

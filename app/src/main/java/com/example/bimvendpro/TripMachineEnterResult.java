@@ -29,7 +29,7 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
 
     private TripMachines tripMachines;
     private List<TripMachineProduct> tripMachineProduct = new ArrayList<>();
-    private EditText editTextName,editTextType,editTextLocation,editTextCash,editTextComment,editTextCashInput,editTextCoinsInput,editTextBillsInput,editTextAdjustInput;
+    private EditText editTextName,editTextType,editTextLocation,editTextCash,editTextComment,editTextCashInput,editTextCoinsInput,editTextBillsInput,editTextAdjustInput,editTextLastMeter,editTextCurrentMeter;
     private RecyclerView recyclerViewProducts;
     private TripMachineProductInputAdapter mAdapter;
     private double cashCollected;
@@ -67,6 +67,8 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
         editTextCashInput = findViewById(R.id.trip_machine_cash_input);
         editTextCoinsInput = findViewById(R.id.trip_machine_Coins_input);
         editTextBillsInput = findViewById(R.id.trip_machine_bills_input);
+        editTextLastMeter = findViewById(R.id.trip_machine_lastMeter_input);
+        editTextCurrentMeter = findViewById(R.id.trip_machine_currentMeter_input);
 
         buttonSave = findViewById(R.id.trip_button_add);
         buttonCancel = findViewById(R.id.trip_button_cancel);
@@ -158,10 +160,56 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
         };
 
 
-        
+
         editTextCoinsInput.addTextChangedListener(updateEditTexts);
         editTextBillsInput.addTextChangedListener(updateEditTexts);
         editTextAdjustInput.addTextChangedListener(updateEditTexts);
+        editTextCurrentMeter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int lastMeter,currentMeter;
+
+                try {
+                    lastMeter = Integer.parseInt(editTextLastMeter.getText().toString());
+                } catch (Exception e) {
+                    lastMeter = 0;
+                }
+
+                currentMeter = lastMeter;
+                String str = editTextCurrentMeter.getText().toString();
+                if(str.matches("[0-9.]+")){
+
+                    try {
+                        currentMeter = Integer.parseInt(str);
+                    } catch (Exception e) {
+                        currentMeter = lastMeter;
+                    }
+                }
+                else{
+                    editTextCurrentMeter.setError("give a valid input");
+                    editTextCurrentMeter.requestFocus();
+                }
+
+                if(currentMeter > lastMeter){
+                    editTextCoinsInput.setText(String.valueOf(currentMeter-lastMeter));
+                    tripMachines.setCurrentMeterReading(currentMeter);
+                }else{
+                    editTextCurrentMeter.setError("Meter value can't be less than last one");
+                    editTextCurrentMeter.requestFocus();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 
@@ -200,8 +248,10 @@ public class TripMachineEnterResult extends AppCompatActivity implements TripMac
         editTextCashInput.setText(String.valueOf(tripMachines.getCashCollected()));
         editTextCoinsInput.setText(String.valueOf(tripMachines.getCoins()));
         editTextBillsInput.setText(String.valueOf(tripMachines.getBills()));
+        editTextLastMeter.setText(String.valueOf(tripMachines.getLastMeterReading()));
+        editTextCurrentMeter.setText(String.valueOf(tripMachines.getCurrentMeterReading()));
 
-
+        editTextLastMeter.setEnabled(false);
 
         initializeRecyclerView();
     }

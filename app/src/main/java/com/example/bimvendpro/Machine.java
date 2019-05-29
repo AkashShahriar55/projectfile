@@ -19,8 +19,10 @@ public class Machine implements Serializable {
     private float vendsPerDay;
     private MachineInstall machineInstall;
     private HashMap<String, MachineIngredients> machineIngredients;
+    private int lastMeterReadings;
+    private boolean hasSticker;
 
-    public Machine(String code, String name, String model, String type) {
+    public Machine(String code, String name, String model, String type,int lastMeterReadings,boolean hasSticker) {
         if(code.charAt(0)=='M'){
             this.code=code;
         }else {
@@ -29,8 +31,8 @@ public class Machine implements Serializable {
         this.name = name;
         this.model = model;
         this.type = type;
-
-
+        this.lastMeterReadings = lastMeterReadings;
+        this.hasSticker = hasSticker;
     }
 
     public Machine(String code, String name, String model, String type, String lastVisit, String note, int daysInService, float totalCollected, float vendsPerDay, MachineInstall machineInstall) {
@@ -71,6 +73,22 @@ public class Machine implements Serializable {
 
     public Machine() {
 
+    }
+
+    public boolean isHasSticker() {
+        return hasSticker;
+    }
+
+    public void setHasSticker(boolean hasSticker) {
+        this.hasSticker = hasSticker;
+    }
+
+    public int getLastMeterReadings() {
+        return lastMeterReadings;
+    }
+
+    public void setLastMeterReadings(int lastMeterReadings) {
+        this.lastMeterReadings = lastMeterReadings;
     }
 
     public String getCode() {

@@ -13,13 +13,15 @@ public class TripMachines implements Serializable {
     private float revenue;
     private int coins;
     private int bills;
+    private int lastMeterReading;
+    private int currentMeterReading;
     private String adjust;
     private String comment;
     private String code;
     private String commissionType;
     private List<TripMachineProduct> tripMachineProducts;
 
-    public TripMachines(String name, String location, String type, List<TripMachineProduct> tripMachineProducts,String code,float commission,float tax,String commissionType) {
+    public TripMachines(String name, String location, String type, List<TripMachineProduct> tripMachineProducts,String code,float commission,float tax,String commissionType,int lastMeterReading,int currentMeterReading) {
         this.name = name;
         this.location = location;
         this.type = type;
@@ -33,12 +35,30 @@ public class TripMachines implements Serializable {
         this.commission = commission;
         this.tax = tax;
         this.commissionType = commissionType;
+        this.lastMeterReading = lastMeterReading;
+        this.currentMeterReading = currentMeterReading;
     }
 
 
 
 
     public TripMachines() {
+    }
+
+    public int getLastMeterReading() {
+        return lastMeterReading;
+    }
+
+    public void setLastMeterReading(int lastMeterReading) {
+        this.lastMeterReading = lastMeterReading;
+    }
+
+    public int getCurrentMeterReading() {
+        return currentMeterReading;
+    }
+
+    public void setCurrentMeterReading(int currentMeterReading) {
+        this.currentMeterReading = currentMeterReading;
     }
 
     public String getCommissionType() {

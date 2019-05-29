@@ -42,7 +42,6 @@ public class TripMachineAdapter extends RecyclerView.Adapter<TripMachineAdapter.
     @Override
     public void onBindViewHolder(@NonNull TripMachineAdapter.TripMachineViewHolder tripMachineViewHolder, final int i) {
         final TripMachines item = itemList.get(i);
-        Log.d("list size", "initializeRecyclerView: list size " + item.getTripMachineProducts().size());
         tripMachineViewHolder.textViewName.setText(String.valueOf(item.getName()));
         tripMachineViewHolder.textViewType.setText(String.valueOf(item.getType()));
         tripMachineViewHolder.textViewLocation.setText(String.valueOf(item.getLocation()));

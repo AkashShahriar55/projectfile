@@ -11,23 +11,110 @@
         android:layout_height="wrap_content"
 
         tools:context=".Dashboard">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:clipToPadding="false"
-            android:foregroundGravity="top"
-            android:overScrollMode="never">
+            android:layout_height="200dp"
+            app:cardCornerRadius="7dp"
+            android:layout_margin="10dp"
+            android:id="@+id/your_machines">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Your Machines"
+                    android:background="@color/colorCardBack"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:padding="5dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_shape"
+                    android:backgroundTint="@color/lightgray"
+                    android:layout_margin="5dp">
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:id="@+id/your_machines_spinner"
+                        >
 
-        </android.support.v4.view.ViewPager>
+                    </Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="In warehouse"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:layout_margin="10dp"
+                            android:textColor="@color/colorhighlight2"
+                            />
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+
+                            android:src="@drawable/ic_warehouse"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="000"
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:textColor="@color/colorCardBack"
+                            android:id="@+id/your_machines_inWarehouse"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Installed in location"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:layout_margin="10dp"
+                            android:textColor="@color/colorPink"/>
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_location"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="000"
+                            android:gravity="center"
+                            android:layout_margin="10dp"
+                            android:textColor="@color/colorCardBack"
+                            android:id="@+id/your_machines_inLocation"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:id="@+id/topproducts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="10dp"
-            android:layout_below="@+id/viewPager"
+            android:layout_below="@+id/your_machines"
             android:layout_margin="10dp">
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -181,6 +181,8 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
                 String location = machineList.get(i).getMachineInstall().getLocation();
                 String type = machineList.get(i).getType();
                 String machineCode = machineList.get(i).getCode();
+                int lastMeterReading = machineList.get(i).getLastMeterReadings();
+                int currentMeterReading = 0;
                 Machines += name + ",";
                 Log.d("data", "machine count: " + i);
                 if(machineList.get(i).getMachineIngredientsToList() !=null ){
@@ -198,14 +200,14 @@ public class TripAddtrips extends AppCompatActivity implements TripAddLocationDi
                 float tax = (float) 0.0;
                 String commissionType = "";
                 for(int j = 0 ; j < locationList.size(); j++){
-                    if(locationList.get(i).getCode().equals(location)){
-                        commmission = locationList.get(i).getCommission();
-                        tax = locationList.get(i).getTax();
-                        commissionType = locationList.get(i).getCommissionType();
+                    if(locationList.get(j).getCode().equals(location)){
+                        commmission = locationList.get(j).getCommission();
+                        tax = locationList.get(j).getTax();
+                        commissionType = locationList.get(j).getCommissionType();
                     }
                 }
 
-                tripMachines.add(new TripMachines(name,location,type,tripMachineProducts,machineCode,commmission,tax,commissionType));
+                tripMachines.add(new TripMachines(name,location,type,tripMachineProducts,machineCode,commmission,tax,commissionType,lastMeterReading,currentMeterReading));
                 tripMachineProducts = new ArrayList<>();
             }
         }

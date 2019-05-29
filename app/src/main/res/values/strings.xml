@@ -39,6 +39,7 @@
         <item>None</item>
         <item>% of Gross Sales</item>
         <item>% of Gross Profit</item>
+        <item>Flat rate</item>
     </string-array>
     <string-array name="days">
         <item>Sunday</item>
